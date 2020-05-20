@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace ExamProjectFirstYear
 {
@@ -10,10 +11,38 @@ namespace ExamProjectFirstYear
 	/// </summary>
 	public class GameWorld : Game
 	{
-		GraphicsDeviceManager graphics;
-		SpriteBatch spriteBatch;
+		#region FIELDS
+		private GraphicsDeviceManager graphics;
+		private SpriteBatch spriteBatch;
 
-		public GameWorld()
+		//For singleton pattern
+		private static GameWorld instance;
+
+		#endregion
+
+		#region PROPERTIES
+		//-----PROPERTIES-----
+
+		//For singletong pattern
+		public static GameWorld Instance
+		{
+			get
+			{
+				if (instance == null)
+				{
+					instance = new GameWorld();
+				}
+
+				return instance;
+			}
+		}
+
+		public List<GameObject> GameObjects { get; private set; } = new List<GameObject>();
+		public List<Collider> Colliders { get; set; } = new List<Collider>();
+
+		#endregion
+
+		private GameWorld()
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
