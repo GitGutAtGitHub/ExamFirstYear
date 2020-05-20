@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace ExamProjectFirstYear
 {
@@ -64,8 +63,6 @@ namespace ExamProjectFirstYear
 				Exit();
 
 			// TODO: Add your update logic here
-
-			Console.WriteLine("Hello stinna");
 
 			base.Update(gameTime);
 		}
