@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 
 namespace ExamProjectFirstYear
@@ -94,8 +93,6 @@ namespace ExamProjectFirstYear
 
 			// TODO: Add your update logic here
 
-			Console.WriteLine("Hello stinna");
-
 			base.Update(gameTime);
 		}
 
@@ -110,6 +107,15 @@ namespace ExamProjectFirstYear
 			// TODO: Add your drawing code here
 
 			base.Draw(gameTime);
+		}
+
+		/// <summary>
+		/// Removes a GameObject from the list of all GameObjects, so that the garbage collector can pick it up. 
+		/// </summary>
+		/// <param name="gameObject"></param>
+		public void DeleteGameObject(GameObject gameObject)
+		{
+			GameObjects.Remove(gameObject);
 		}
 	}
 }

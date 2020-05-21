@@ -10,6 +10,7 @@ namespace ExamProjectFirstYear
 	{
 		COLLIDER,
 		SPRITERENDERER,
+		GAMEOBJECT,
 		PLAYER
 	}
 }
