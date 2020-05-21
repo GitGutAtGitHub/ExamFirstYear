@@ -19,7 +19,7 @@ namespace ExamProjectFirstYear
 
 		#region PROPERTIES
 		public Transform Transform { get; private set; } = new Transform();
-
+		public string SpriteName { get; set; }
 		public Tag Tag { get; private set; }
 
 		#endregion
@@ -37,7 +37,7 @@ namespace ExamProjectFirstYear
 		public void AddComponent(Component component)
 		{
 			components.Add(component.ToEnum(), component);
-			if (component.ToEnum() == Tag.SPRITERENDERER)
+			if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER)
 			{
 				drawnComponents.Add(component.ToEnum(), component);
 			}

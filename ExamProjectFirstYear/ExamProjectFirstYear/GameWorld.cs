@@ -102,6 +102,24 @@ namespace ExamProjectFirstYear
 				GameObjects[i].Update(gameTime);
 			}
 
+			//Makes a copy of the collider list, to avoid any exception when removing from the collider list. 
+			//OnColliding and OnNoLongerColliding is run from here rather than an Update method in Colliders, as they need a parameter
+			//for other Collider. 
+
+
+			// NOTE!!!!!!!! MÅSKE SKAL VI PRØVE AT SE OM VI KAN FÅ DET TIL AT KØRE I COLLIDERS UPDATE MED EN CHECKCOLLISION METODE KIG EVT. 
+			//PÅ DET SENERE - EMMA
+			Collider[] tmpColliders = Colliders.ToArray();
+
+			for (int i = 0; i < tmpColliders.Length; i++)
+			{
+				for (int j = 0; j < tmpColliders.Length; j++)
+				{
+					tmpColliders[i].OnColliding(tmpColliders[j]);
+					tmpColliders[i].OnNoLongerColliding(tmpColliders[j]);
+				}
+			}
+
 			base.Update(gameTime);
 		}
 
