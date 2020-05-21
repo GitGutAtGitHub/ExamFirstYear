@@ -42,9 +42,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Tag.cs" />
-    <Compile Include="Collider.cs" />
+    <Compile Include="Components\Collider.cs" />
     <Compile Include="Components\Component.cs" />
-    <Compile Include="GameObject.cs" />
+    <Compile Include="Components\GameObject.cs" />
     <Compile Include="GameWorld.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

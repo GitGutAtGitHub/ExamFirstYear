@@ -7,5 +7,6 @@ namespace ExamProjectFirstYear
 {
 	public class Collider
 	{
+
 	}
 }
