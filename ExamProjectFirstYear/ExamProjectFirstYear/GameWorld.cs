@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System;
 
 namespace ExamProjectFirstYear
 {
@@ -102,12 +103,12 @@ namespace ExamProjectFirstYear
 				GameObjects[i].Update(gameTime);
 			}
 
-			//Makes a copy of the collider list, to avoid any exception when removing from the collider list. 
+			//Makes a copy of the collider list, to avoid any exception when removing from the collider list.
 			//OnColliding and OnNoLongerColliding is run from here rather than an Update method in Colliders, as they need a parameter
-			//for other Collider. 
+			//for other Collider.
 
 
-			// NOTE!!!!!!!! MÅSKE SKAL VI PRØVE AT SE OM VI KAN FÅ DET TIL AT KØRE I COLLIDERS UPDATE MED EN CHECKCOLLISION METODE KIG EVT. 
+			// NOTE!!!!!!!! MÅSKE SKAL VI PRØVE AT SE OM VI KAN FÅ DET TIL AT KØRE I COLLIDERS UPDATE MED EN CHECKCOLLISION METODE KIG EVT.
 			//PÅ DET SENERE - EMMA
 			Collider[] tmpColliders = Colliders.ToArray();
 
@@ -119,6 +120,8 @@ namespace ExamProjectFirstYear
 					tmpColliders[i].OnNoLongerColliding(tmpColliders[j]);
 				}
 			}
+
+			SQLiteHandler.Instance.TestMethod();
 
 			base.Update(gameTime);
 		}
