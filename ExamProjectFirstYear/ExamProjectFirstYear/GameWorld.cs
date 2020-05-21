@@ -55,7 +55,10 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
+			for (int i = 0; i < GameObjects.Count; i++)
+			{
+				GameObjects[i].Awake();
+			}
 
 			base.Initialize();
 		}
@@ -69,7 +72,10 @@ namespace ExamProjectFirstYear
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			// TODO: use this.Content to load your game content here
+			for (int i = 0; i < GameObjects.Count; i++)
+			{
+				GameObjects[i].Start();
+			}
 		}
 
 		/// <summary>
@@ -91,7 +97,10 @@ namespace ExamProjectFirstYear
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			// TODO: Add your update logic here
+			for (int i = 0; i < GameObjects.Count; i++)
+			{
+				GameObjects[i].Update(gameTime);
+			}
 
 			base.Update(gameTime);
 		}
@@ -104,7 +113,14 @@ namespace ExamProjectFirstYear
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			// TODO: Add your drawing code here
+			spriteBatch.Begin();
+
+			for (int i = 0; i < GameObjects.Count; i++)
+			{
+				GameObjects[i].Draw(spriteBatch);
+			}
+
+			spriteBatch.End();
 
 			base.Draw(gameTime);
 		}
