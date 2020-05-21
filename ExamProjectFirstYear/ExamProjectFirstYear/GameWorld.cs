@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 using System;
 
 namespace ExamProjectFirstYear
@@ -10,10 +11,38 @@ namespace ExamProjectFirstYear
 	/// </summary>
 	public class GameWorld : Game
 	{
-		GraphicsDeviceManager graphics;
-		SpriteBatch spriteBatch;
+		#region FIELDS
+		private GraphicsDeviceManager graphics;
+		private SpriteBatch spriteBatch;
 
-		public GameWorld()
+		//For singleton pattern
+		private static GameWorld instance;
+
+		#endregion
+
+		#region PROPERTIES
+		//-----PROPERTIES-----
+
+		//For singletong pattern
+		public static GameWorld Instance
+		{
+			get
+			{
+				if (instance == null)
+				{
+					instance = new GameWorld();
+				}
+
+				return instance;
+			}
+		}
+
+		public List<GameObject> GameObjects { get; private set; } = new List<GameObject>();
+		public List<Collider> Colliders { get; set; } = new List<Collider>();
+
+		#endregion
+
+		private GameWorld()
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -27,7 +56,10 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
+			for (int i = 0; i < GameObjects.Count; i++)
+			{
+				GameObjects[i].Awake();
+			}
 
 			base.Initialize();
 		}
@@ -41,7 +73,10 @@ namespace ExamProjectFirstYear
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			// TODO: use this.Content to load your game content here
+			for (int i = 0; i < GameObjects.Count; i++)
+			{
+				GameObjects[i].Start();
+			}
 		}
 
 		/// <summary>
@@ -63,7 +98,28 @@ namespace ExamProjectFirstYear
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			// TODO: Add your update logic here
+			for (int i = 0; i < GameObjects.Count; i++)
+			{
+				GameObjects[i].Update(gameTime);
+			}
+
+			//Makes a copy of the collider list, to avoid any exception when removing from the collider list.
+			//OnColliding and OnNoLongerColliding is run from here rather than an Update method in Colliders, as they need a parameter
+			//for other Collider.
+
+
+			// NOTE!!!!!!!! MÅSKE SKAL VI PRØVE AT SE OM VI KAN FÅ DET TIL AT KØRE I COLLIDERS UPDATE MED EN CHECKCOLLISION METODE KIG EVT.
+			//PÅ DET SENERE - EMMA
+			Collider[] tmpColliders = Colliders.ToArray();
+
+			for (int i = 0; i < tmpColliders.Length; i++)
+			{
+				for (int j = 0; j < tmpColliders.Length; j++)
+				{
+					tmpColliders[i].OnColliding(tmpColliders[j]);
+					tmpColliders[i].OnNoLongerColliding(tmpColliders[j]);
+				}
+			}
 
 			SQLiteHandler.Instance.TestMethod();
 
@@ -78,9 +134,25 @@ namespace ExamProjectFirstYear
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			// TODO: Add your drawing code here
+			spriteBatch.Begin();
+
+			for (int i = 0; i < GameObjects.Count; i++)
+			{
+				GameObjects[i].Draw(spriteBatch);
+			}
+
+			spriteBatch.End();
 
 			base.Draw(gameTime);
+		}
+
+		/// <summary>
+		/// Removes a GameObject from the list of all GameObjects, so that the garbage collector can pick it up.
+		/// </summary>
+		/// <param name="gameObject"></param>
+		public void DeleteGameObject(GameObject gameObject)
+		{
+			GameObjects.Remove(gameObject);
 		}
 	}
 }
