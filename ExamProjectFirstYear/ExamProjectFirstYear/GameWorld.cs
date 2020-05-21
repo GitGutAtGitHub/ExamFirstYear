@@ -126,7 +126,7 @@ namespace ExamProjectFirstYear
 		}
 
 		/// <summary>
-		/// Removes a GameObject from the list of all GameObjects, so that the garbage collector can pick it up. 
+		/// Removes a GameObject from the list of all GameObjects, so that the garbage collector can pick it up.
 		/// </summary>
 		/// <param name="gameObject"></param>
 		public void DeleteGameObject(GameObject gameObject)
