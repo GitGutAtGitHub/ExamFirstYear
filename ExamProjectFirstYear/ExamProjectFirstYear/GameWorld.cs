@@ -52,12 +52,12 @@ namespace ExamProjectFirstYear
 
 		private GameWorld()
 		{
-			graphics = new GraphicsDeviceManager(this);
-			//{
-			//	PreferredBackBufferWidth = GraphicsDevice.Viewport.Width,
-			//	PreferredBackBufferHeight = GraphicsDevice.Viewport.Height
-			//};
-			//graphics.ApplyChanges();
+			graphics = new GraphicsDeviceManager(this)
+			{
+				PreferredBackBufferWidth = GraphicsDevice.Viewport.Width,
+				PreferredBackBufferHeight = GraphicsDevice.Viewport.Height
+			};
+			graphics.ApplyChanges();
 			GetScreenSize();
 
 			Content.RootDirectory = "Content";
@@ -87,8 +87,6 @@ namespace ExamProjectFirstYear
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			CreateObject(Tag.PLAYER);
-
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
 				GameObjects[i].Awake();
@@ -97,7 +95,9 @@ namespace ExamProjectFirstYear
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
 				GameObjects[i].Start();
-			}			
+			}
+
+			CreateObject(Tag.PLAYER);
 		}
 
 		/// <summary>
