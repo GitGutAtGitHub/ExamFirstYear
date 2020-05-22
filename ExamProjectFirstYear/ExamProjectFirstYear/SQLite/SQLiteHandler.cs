@@ -249,7 +249,7 @@ namespace ExamProjectFirstYear
                 Console.WriteLine("Button pressed");
 
                 //Insert the method you want to test here.
-                SQLiteHandler.Instance.SaveGame(20, 1, 10, 5, 1);
+                SQLiteHandler.Instance.SaveGame(5, 0, 15, 20, 1);
             }
         }
     }

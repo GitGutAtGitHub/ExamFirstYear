@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
+using ExamProjectFirstYear.PathFinding;
 
 namespace ExamProjectFirstYear
 {
@@ -59,6 +60,15 @@ namespace ExamProjectFirstYear
 				GameObjects[i].Awake();
 			}
 
+			graphics.PreferredBackBufferWidth = 1920;
+			graphics.PreferredBackBufferHeight = 1080;
+			graphics.ApplyChanges();
+			IsMouseVisible = true;
+		
+
+			NodeManager.Instance.InitializeGrid();
+			NodeManager.Instance.UpdateGrid();
+
 			base.Initialize();
 		}
 
@@ -75,6 +85,8 @@ namespace ExamProjectFirstYear
 			{
 				GameObjects[i].Start();
 			}
+
+			NodeManager.Instance.LoadContent(Content);
 		}
 
 		/// <summary>
@@ -138,6 +150,8 @@ namespace ExamProjectFirstYear
 			{
 				GameObjects[i].Draw(spriteBatch);
 			}
+
+			NodeManager.Instance.Draw(spriteBatch);
 
 			spriteBatch.End();
 

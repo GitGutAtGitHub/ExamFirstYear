@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +14,12 @@ namespace ExamProjectFirstYear.PathFinding
         #region FIELDS
 
         private static NodeManager instance;
-
+        Texture2D gridSprite;
+        Texture2D chosenPathgridSprite;
         private List<Node> grid;
-        private static int cellRowCount = 22;
+        private static int cellRowCount = 20;
         private float cellSize = 96;
+        private Stack<Node> path;
 
         //SKAL RETTES TIL GAMEWORLD ELLER ANDET SENERE, SÅ DET ER NEMMERE AT REDIGERE STØRRELSE SENERE.
         private Node[,] nodes = new Node[cellRowCount, cellRowCount];
@@ -50,10 +54,8 @@ namespace ExamProjectFirstYear.PathFinding
 
         #region METHODS
 
-        public  void /*List<Node>*/ InitializeGrid()
+        public  void InitializeGrid()
         {
-            //grid = new List<Node>();
-
             //Checks both Y and X rows.
             for (int y = 0; y < CellRowCount; y++)
             {
@@ -61,11 +63,8 @@ namespace ExamProjectFirstYear.PathFinding
                 {
                     Node tmpNode = new Node(new Vector2(x * CellSize, y * CellSize), true);
                     Nodes[x, y] = tmpNode;
-
-                    grid.Add(tmpNode);
                 }
             }
-           // return grid;
         }
 
         /// <summary>
@@ -99,5 +98,32 @@ namespace ExamProjectFirstYear.PathFinding
             }
         }
         #endregion
+
+
+        #region DRAW NODES FOR DEBUG ONLY
+        public void LoadContent(ContentManager contentManager)
+        {
+           gridSprite = contentManager.Load<Texture2D>("NodeGridTexture");
+           chosenPathgridSprite = contentManager.Load<Texture2D>("ChoosenPathTexture");
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            PathFinder pf = new PathFinder();
+
+            path = pf.FindPath(Nodes[0, 0], Nodes[8, 8]);
+
+            foreach (Node node in Nodes)
+            {
+                spriteBatch.Draw(gridSprite, node.Position, Color.White);
+            }
+
+            foreach (Node node in path)
+            {
+                spriteBatch.Draw(chosenPathgridSprite, node.Position, Color.White);
+            }
+
+        }
+        #endregion 
     }
 }
