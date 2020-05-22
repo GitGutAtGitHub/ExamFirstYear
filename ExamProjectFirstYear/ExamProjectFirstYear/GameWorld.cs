@@ -17,11 +17,9 @@ namespace ExamProjectFirstYear
 
 		//For singleton pattern
 		private static GameWorld instance;
-
 		#endregion
 
 		#region PROPERTIES
-		//-----PROPERTIES-----
 
 		//For singletong pattern
 		public static GameWorld Instance
@@ -39,8 +37,8 @@ namespace ExamProjectFirstYear
 
 		public List<GameObject> GameObjects { get; private set; } = new List<GameObject>();
 		public List<Collider> Colliders { get; set; } = new List<Collider>();
-
 		#endregion
+
 
 		private GameWorld()
 		{

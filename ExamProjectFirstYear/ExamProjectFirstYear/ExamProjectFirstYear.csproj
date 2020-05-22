@@ -49,9 +49,13 @@
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\InputHandler.cs" />
     <Compile Include="CommandPattern\MoveCommand.cs" />
+    <Compile Include="Components\TmpPlatform.cs" />
     <Compile Include="ObserverPattern\GameEvent.cs" />
     <Compile Include="ObserverPattern\IGameListener.cs" />
     <Compile Include="Components\SpriteRenderer.cs" />
+    <Compile Include="PathFinding\Node.cs" />
+    <Compile Include="PathFinding\NodeManager.cs" />
+    <Compile Include="PathFinding\PathFinder.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="Components\Collider.cs" />

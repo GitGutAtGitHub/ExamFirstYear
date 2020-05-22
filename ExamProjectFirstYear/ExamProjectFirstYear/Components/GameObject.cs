@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExamProjectFirstYear.PathFinding;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +8,20 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-	public class GameObject : Component
+	public class GameObject
 	{
 		#region FIELDS
 		private Dictionary<Tag, Component> components = new Dictionary<Tag, Component>();
 		//drawnComponents is used in the Draw method, so that only components that need to be drawn
 		// such as SpriteRenderer call their Draw method.
 		private Dictionary<Tag, Component> drawnComponents = new Dictionary<Tag, Component>();
-
 		#endregion
 
 		#region PROPERTIES
 		public Transform Transform { get; private set; } = new Transform();
 		public string SpriteName { get; set; }
 		public Tag Tag { get; private set; }
-
+		public Dictionary<Tag, Component> Components { get => components; }
 		#endregion
 
 		#region METHODS
@@ -36,7 +36,7 @@ namespace ExamProjectFirstYear
 		/// <param name="component"></param>
 		public void AddComponent(Component component)
 		{
-			components.Add(component.ToEnum(), component);
+			Components.Add(component.ToEnum(), component);
 			if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER)
 			{
 				drawnComponents.Add(component.ToEnum(), component);
@@ -51,15 +51,15 @@ namespace ExamProjectFirstYear
 		/// <returns></returns>
 		public Component GetComponent(Tag tag)
 		{
-			return components[tag];
+			return Components[tag];
 		}
 
 		/// <summary>
 		/// Calls Awake for all the components in the GameObject.
 		/// </summary>
-		public override void Awake()
+		public void Awake()
 		{
-			foreach (Component component in components.Values)
+			foreach (Component component in Components.Values)
 			{
 				component.Awake();
 			}
@@ -68,9 +68,9 @@ namespace ExamProjectFirstYear
 		/// <summary>
 		/// Calls Start for all the components in the GameObject
 		/// </summary>
-		public override void Start()
+		public  void Start()
 		{
-			foreach (Component component in components.Values)
+			foreach (Component component in Components.Values)
 			{
 				component.Start();
 			}
@@ -80,7 +80,7 @@ namespace ExamProjectFirstYear
 		/// Calls Update for all the components in the GameObject
 		/// </summary>
 		/// <param name="gameTime"></param>
-		public override void Update(GameTime gameTime)
+		public  void Update(GameTime gameTime)
 		{
 			foreach (Component component in drawnComponents.Values)
 			{
@@ -93,7 +93,7 @@ namespace ExamProjectFirstYear
 		/// 
 		/// </summary>
 		/// <param name="spriteBatch"></param>
-		public override void Draw(SpriteBatch spriteBatch)
+		public  void Draw(SpriteBatch spriteBatch)
 		{
 			foreach (Component component in drawnComponents.Values)
 			{
@@ -104,9 +104,9 @@ namespace ExamProjectFirstYear
 		/// <summary>
 		/// Ensures that every Component in the GameObject is destroyed before the GameObject is deleted. 
 		/// </summary>
-		public override void Destroy()
+		public void Destroy()
 		{
-			foreach (Component component in components.Values)
+			foreach (Component component in Components.Values)
 			{
 				component.Destroy();
 			}
@@ -114,11 +114,25 @@ namespace ExamProjectFirstYear
 			GameWorld.Instance.DeleteGameObject(this);
 		}
 
-		public override Tag ToEnum()
+		public Tag ToEnum()
 		{
 			return Tag = Tag.GAMEOBJECT;
 		}
 
+		/// <summary>
+		/// Returns how many nodes that object is occupying
+		/// </summary>
+		/// <param name="spriteRenderer"></param>
+		/// <returns></returns>
+		public float GetObjectWidthInCellSize(SpriteRenderer spriteRenderer)
+		{
+			return spriteRenderer.Sprite.Width / NodeManager.Instance.CellSize;
+		}
+
+		public Vector2 GetCoordinate()
+        {
+            return Transform.Position / NodeManager.Instance.CellSize;
+        }
 		#endregion
 	}
 }

@@ -14,7 +14,6 @@ namespace ExamProjectFirstYear
         public Vector2 Position { get; set; }
         #endregion
 
-
         #region METHODS
         /// <summary>
         /// Used to set and update the position of a GameObject.
