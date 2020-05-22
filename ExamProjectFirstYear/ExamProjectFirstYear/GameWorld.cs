@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
+using ExamProjectFirstYear.PathFinding;
 
 namespace ExamProjectFirstYear
 {
@@ -24,7 +25,6 @@ namespace ExamProjectFirstYear
 		#endregion
 
 		#region PROPERTIES
-		//-----PROPERTIES-----
 
 		//For singletong pattern
 		public static GameWorld Instance
@@ -78,6 +78,15 @@ namespace ExamProjectFirstYear
 
 			player = new Player();
 
+			graphics.PreferredBackBufferWidth = 1920;
+			graphics.PreferredBackBufferHeight = 1080;
+			graphics.ApplyChanges();
+			IsMouseVisible = true;
+
+
+			NodeManager.Instance.InitializeGrid();
+			NodeManager.Instance.UpdateGrid();
+
 			base.Initialize();
 		}
 
@@ -101,6 +110,8 @@ namespace ExamProjectFirstYear
 			}
 
 			CreateObject(Tag.PLAYER);
+			NodeManager.Instance.LoadContent(Content);
+			
 		}
 
 		/// <summary>
@@ -168,6 +179,8 @@ namespace ExamProjectFirstYear
 			{
 				GameObjects[i].Draw(spriteBatch);
 			}
+
+			NodeManager.Instance.Draw(spriteBatch);
 
 			spriteBatch.End();
 

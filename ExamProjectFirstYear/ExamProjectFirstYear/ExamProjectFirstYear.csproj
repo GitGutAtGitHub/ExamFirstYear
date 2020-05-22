@@ -50,6 +50,10 @@
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\InputHandler.cs" />
     <Compile Include="CommandPattern\MoveCommand.cs" />
+    <Compile Include="Components\TmpPlatform.cs" />
+    <Compile Include="PathFinding\Node.cs" />
+    <Compile Include="PathFinding\NodeManager.cs" />
+    <Compile Include="PathFinding\PathFinder.cs" />
     <Compile Include="CommandPattern\InteractCommand.cs" />
     <Compile Include="CommandPattern\JumpCommand.cs" />
     <Compile Include="ObserverPattern\GameEvent.cs" />

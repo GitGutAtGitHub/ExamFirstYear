@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExamProjectFirstYear.PathFinding;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,6 @@ namespace ExamProjectFirstYear
 		//drawnComponents is used in the Draw method, so that only components that need to be drawn
 		// such as SpriteRenderer call their Draw method.
 		private Dictionary<Tag, Component> drawnComponents = new Dictionary<Tag, Component>();
-
 		#endregion
 
 
@@ -22,7 +22,7 @@ namespace ExamProjectFirstYear
 		public Transform Transform { get; private set; } = new Transform();
 		public string SpriteName { get; set; }
 		public Tag Tag { get; set; }
-
+		public Dictionary<Tag, Component> Components { get => components; }
 		#endregion
 
 
@@ -38,7 +38,7 @@ namespace ExamProjectFirstYear
 		/// <param name="component"></param>
 		public void AddComponent(Component component)
 		{
-			components.Add(component.ToEnum(), component);
+			Components.Add(component.ToEnum(), component);
 			if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER)
 			{
 				drawnComponents.Add(component.ToEnum(), component);
@@ -53,7 +53,7 @@ namespace ExamProjectFirstYear
 		/// <returns></returns>
 		public Component GetComponent(Tag tag)
 		{
-			return components[tag];
+			return Components[tag];
 		}
 
 		/// <summary>
@@ -61,7 +61,7 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		public void Awake()
 		{
-			foreach (Component component in components.Values)
+			foreach (Component component in Components.Values)
 			{
 				component.Awake();
 			}
@@ -72,7 +72,7 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		public void Start()
 		{
-			foreach (Component component in components.Values)
+			foreach (Component component in Components.Values)
 			{
 				component.Start();
 			}
@@ -92,10 +92,12 @@ namespace ExamProjectFirstYear
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="spriteBatch"></param>
+
 		public void Draw(SpriteBatch spriteBatch)
+
 		{
 			foreach (Component component in drawnComponents.Values)
 			{
@@ -104,11 +106,11 @@ namespace ExamProjectFirstYear
 		}
 
 		/// <summary>
-		/// Ensures that every Component in the GameObject is destroyed before the GameObject is deleted. 
+		/// Ensures that every Component in the GameObject is destroyed before the GameObject is deleted.
 		/// </summary>
 		public void Destroy()
 		{
-			foreach (Component component in components.Values)
+			foreach (Component component in Components.Values)
 			{
 				component.Destroy();
 			}
@@ -116,11 +118,27 @@ namespace ExamProjectFirstYear
 			GameWorld.Instance.DeleteGameObject(this);
 		}
 
+
 		//public override Tag ToEnum()
 		//{
 		//	//return Tag = Tag.GAMEOBJECT;
 		//}
 
+
+		/// <summary>
+		/// Returns how many nodes that object is occupying
+		/// </summary>
+		/// <param name="spriteRenderer"></param>
+		/// <returns></returns>
+		public float GetObjectWidthInCellSize(SpriteRenderer spriteRenderer)
+		{
+			return spriteRenderer.Sprite.Width / NodeManager.Instance.CellSize;
+		}
+
+		public Vector2 GetCoordinate()
+        {
+            return Transform.Position / NodeManager.Instance.CellSize;
+        }
 		#endregion
 	}
 }
