@@ -12,11 +12,12 @@ namespace ExamProjectFirstYear
 	public class GameWorld : Game
 	{
 		#region FIELDS
-		private GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
 
 		//For singleton pattern
 		private static GameWorld instance;
+
+		GraphicsDeviceManager graphics;
 
 		private Player player;
 
@@ -54,13 +55,13 @@ namespace ExamProjectFirstYear
 		{
 			graphics = new GraphicsDeviceManager(this)
 			{
-				PreferredBackBufferWidth = GraphicsDevice.Viewport.Width,
-				PreferredBackBufferHeight = GraphicsDevice.Viewport.Height
+				PreferredBackBufferHeight = 1000,
+				PreferredBackBufferWidth = 1500
 			};
 			graphics.ApplyChanges();
-			GetScreenSize();
 
 			Content.RootDirectory = "Content";
+			GetScreenSize();
 		}
 
         #endregion
@@ -74,6 +75,8 @@ namespace ExamProjectFirstYear
         protected override void Initialize()
 		{
 			TimeElapsed = 0;
+
+			player = new Player();
 
 			base.Initialize();
 		}
@@ -145,6 +148,8 @@ namespace ExamProjectFirstYear
 					tmpColliders[i].OnNoLongerColliding(tmpColliders[j]);
 				}
 			}
+
+			SQLiteHandler.Instance.TestMethod();
 
 			base.Update(gameTime);
 		}
