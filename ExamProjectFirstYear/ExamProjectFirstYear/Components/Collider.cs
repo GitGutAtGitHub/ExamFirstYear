@@ -31,9 +31,9 @@ namespace ExamProjectFirstYear
 			{
 				return new Rectangle
 				(
-					(int)(GO.Transform.Position.X - origin.X),
+					(int)(GameObject.Transform.Position.X - origin.X),
 
-					(int)(GO.Transform.Position.Y - origin.Y),
+					(int)(GameObject.Transform.Position.Y - origin.Y),
 
 					(int)size.X,
 					(int)size.Y

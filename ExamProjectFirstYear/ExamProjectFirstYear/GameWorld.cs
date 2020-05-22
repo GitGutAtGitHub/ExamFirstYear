@@ -18,6 +18,8 @@ namespace ExamProjectFirstYear
 		//For singleton pattern
 		private static GameWorld instance;
 
+		private Player player;
+
 		#endregion
 
 		#region PROPERTIES
@@ -39,27 +41,39 @@ namespace ExamProjectFirstYear
 
 		public List<GameObject> GameObjects { get; private set; } = new List<GameObject>();
 		public List<Collider> Colliders { get; set; } = new List<Collider>();
+		public float DeltaTime { get; set; }
+		public float TimeElapsed { get; set; }
+		public Vector2 ScreenSize { get; private set; }
 
 		#endregion
+
+
+		#region Constructors
 
 		private GameWorld()
 		{
 			graphics = new GraphicsDeviceManager(this);
+			//{
+			//	PreferredBackBufferWidth = GraphicsDevice.Viewport.Width,
+			//	PreferredBackBufferHeight = GraphicsDevice.Viewport.Height
+			//};
+			//graphics.ApplyChanges();
+			GetScreenSize();
+
 			Content.RootDirectory = "Content";
 		}
 
-		/// <summary>
-		/// Allows the game to perform any initialization it needs to before starting to run.
-		/// This is where it can query for any required services and load any non-graphic
-		/// related content.  Calling base.Initialize will enumerate through any components
-		/// and initialize them as well.
-		/// </summary>
-		protected override void Initialize()
+        #endregion
+
+        /// <summary>
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
+        /// </summary>
+        protected override void Initialize()
 		{
-			for (int i = 0; i < GameObjects.Count; i++)
-			{
-				GameObjects[i].Awake();
-			}
+			TimeElapsed = 0;
 
 			base.Initialize();
 		}
@@ -73,10 +87,17 @@ namespace ExamProjectFirstYear
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
+			CreateObject(Tag.PLAYER);
+
+			for (int i = 0; i < GameObjects.Count; i++)
+			{
+				GameObjects[i].Awake();
+			}
+
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
 				GameObjects[i].Start();
-			}
+			}			
 		}
 
 		/// <summary>
@@ -97,6 +118,10 @@ namespace ExamProjectFirstYear
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
+
+			TimeHandler(gameTime);
+
+			InputHandler.Instance.Execute(player);
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
@@ -120,8 +145,6 @@ namespace ExamProjectFirstYear
 					tmpColliders[i].OnNoLongerColliding(tmpColliders[j]);
 				}
 			}
-
-			SQLiteHandler.Instance.TestMethod();
 
 			base.Update(gameTime);
 		}
@@ -153,6 +176,63 @@ namespace ExamProjectFirstYear
 		public void DeleteGameObject(GameObject gameObject)
 		{
 			GameObjects.Remove(gameObject);
+		}
+
+		/// <summary>
+		/// Handles the timer in-game.
+		/// </summary>
+		/// <param name="gameTime"></param>
+		private void TimeHandler(GameTime gameTime)
+		{
+			DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+			TimeElapsed += DeltaTime;
+		}
+
+		/// <summary>
+		/// Get the screen size of the monitor.
+		/// </summary>
+		/// <returns></returns>
+		private Vector2 GetScreenSize()
+		{
+			ScreenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+			return ScreenSize;
+		}
+
+		/// <summary>
+		/// Method for creating component objects.
+		/// </summary>
+		/// <param name="tag"></param>
+		public void CreateObject(Tag tag)
+		{
+			GameObject createdObject = new GameObject();
+			SpriteRenderer spriteRenderer = new SpriteRenderer();
+			Collider collider;
+
+			switch (tag)
+			{
+				case Tag.PLAYER:
+					createdObject.AddComponent(player);
+					break;
+			}
+
+			createdObject.AddComponent(spriteRenderer);
+			createdObject.Awake();
+			createdObject.Start();
+
+			if (tag == Tag.PLAYER)
+			{
+				collider = new Collider(spriteRenderer, player) { CheckCollisionEvents = true };
+			}
+			else
+			{
+				collider = new Collider(spriteRenderer);
+			}
+
+			createdObject.AddComponent(collider);
+
+			Colliders.Add(collider);
+			GameObjects.Add(createdObject);
 		}
 	}
 }

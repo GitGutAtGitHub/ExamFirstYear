@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-	public class GameObject : Component
+	public class GameObject
 	{
 		#region FIELDS
 		private Dictionary<Tag, Component> components = new Dictionary<Tag, Component>();
@@ -17,12 +17,14 @@ namespace ExamProjectFirstYear
 
 		#endregion
 
+
 		#region PROPERTIES
 		public Transform Transform { get; private set; } = new Transform();
 		public string SpriteName { get; set; }
-		public Tag Tag { get; private set; }
+		public Tag Tag { get; set; }
 
 		#endregion
+
 
 		#region METHODS
 		public GameObject()
@@ -41,7 +43,7 @@ namespace ExamProjectFirstYear
 			{
 				drawnComponents.Add(component.ToEnum(), component);
 			}
-			component.GO = this;
+			component.GameObject = this;
 		}
 
 		/// <summary>
@@ -57,7 +59,7 @@ namespace ExamProjectFirstYear
 		/// <summary>
 		/// Calls Awake for all the components in the GameObject.
 		/// </summary>
-		public override void Awake()
+		public void Awake()
 		{
 			foreach (Component component in components.Values)
 			{
@@ -68,7 +70,7 @@ namespace ExamProjectFirstYear
 		/// <summary>
 		/// Calls Start for all the components in the GameObject
 		/// </summary>
-		public override void Start()
+		public void Start()
 		{
 			foreach (Component component in components.Values)
 			{
@@ -80,7 +82,7 @@ namespace ExamProjectFirstYear
 		/// Calls Update for all the components in the GameObject
 		/// </summary>
 		/// <param name="gameTime"></param>
-		public override void Update(GameTime gameTime)
+		public void Update(GameTime gameTime)
 		{
 			foreach (Component component in drawnComponents.Values)
 			{
@@ -93,7 +95,7 @@ namespace ExamProjectFirstYear
 		/// 
 		/// </summary>
 		/// <param name="spriteBatch"></param>
-		public override void Draw(SpriteBatch spriteBatch)
+		public void Draw(SpriteBatch spriteBatch)
 		{
 			foreach (Component component in drawnComponents.Values)
 			{
@@ -104,7 +106,7 @@ namespace ExamProjectFirstYear
 		/// <summary>
 		/// Ensures that every Component in the GameObject is destroyed before the GameObject is deleted. 
 		/// </summary>
-		public override void Destroy()
+		public void Destroy()
 		{
 			foreach (Component component in components.Values)
 			{
@@ -114,10 +116,10 @@ namespace ExamProjectFirstYear
 			GameWorld.Instance.DeleteGameObject(this);
 		}
 
-		public override Tag ToEnum()
-		{
-			return Tag = Tag.GAMEOBJECT;
-		}
+		//public override Tag ToEnum()
+		//{
+		//	//return Tag = Tag.GAMEOBJECT;
+		//}
 
 		#endregion
 	}

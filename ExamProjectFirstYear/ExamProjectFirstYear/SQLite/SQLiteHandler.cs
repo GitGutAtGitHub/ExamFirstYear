@@ -239,18 +239,18 @@ namespace ExamProjectFirstYear
         /// <summary>
 		/// Method for testing database logic.
 		/// </summary>
-		public void TestMethod()
-        {
-            previousMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
+		//public void TestMethod()
+  //      {
+  //          previousMouseState = currentMouseState;
+  //          currentMouseState = Mouse.GetState();
 
-            if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
-            {
-                Console.WriteLine("Button pressed");
+  //          if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
+  //          {
+  //              Console.WriteLine("Button pressed");
 
-                //Insert the method you want to test here.
-                SQLiteHandler.Instance.SaveGame(20, 1, 10, 5, 1);
-            }
-        }
+  //              //Insert the method you want to test here.
+  //              SQLiteHandler.Instance.SaveGame(20, 1, 10, 5, 1);
+  //          }
+  //      }
     }
 }
