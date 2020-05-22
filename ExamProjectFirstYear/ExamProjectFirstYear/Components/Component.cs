@@ -14,7 +14,7 @@ namespace ExamProjectFirstYear
         /// <summary>
         /// Property used to get and set a gameObject outside of the Component class.
         /// </summary>
-        public GameObject GO { get; set; }
+        public GameObject GameObject { get; set; }
 
 		#endregion
 

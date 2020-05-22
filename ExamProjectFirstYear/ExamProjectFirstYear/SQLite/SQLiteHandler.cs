@@ -57,7 +57,7 @@ namespace ExamProjectFirstYear
         /// <returns></returns>
         public static string LoadSQLiteConnectionString()
         {
-            return ConfigurationManager.ConnectionStrings["ExamProjectFirstYear"].ConnectionString;
+            return ConfigurationManager.ConnectionStrings["ExamProjectFirstYearDB"].ConnectionString;
         }
 
         /// <summary>
@@ -229,7 +229,6 @@ namespace ExamProjectFirstYear
             //Her skal man også definere at parametrene er tilsvarende properties som er defineret for spiller.
             //Altså at f.eks.  positionX = Player.Position.X
             //Eller at  openDoor = Door.Open
-
             UpdateTable("Journal", $"Health={health}, OpenDoor={openDoor}, PositionX={positionX}, PositionY={positionY}", $"ID={ID}");
         }
 
@@ -249,7 +248,7 @@ namespace ExamProjectFirstYear
                 Console.WriteLine("Button pressed");
 
                 //Insert the method you want to test here.
-                SQLiteHandler.Instance.SaveGame(20, 1, 10, 5, 1);
+                SaveGame(100, 0, 50, 50, 1);
             }
         }
     }

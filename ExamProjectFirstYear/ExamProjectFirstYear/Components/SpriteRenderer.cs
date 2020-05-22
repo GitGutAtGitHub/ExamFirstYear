@@ -38,12 +38,12 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		public void SetSprite()
 		{
-			Sprite = GameWorld.Instance.Content.Load<Texture2D>(GO.SpriteName);
+			Sprite = GameWorld.Instance.Content.Load<Texture2D>(GameObject.SpriteName);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(Sprite, GO.Transform.Position, null, Color.White, 0, Origin, 1, SpriteEffects.None, 0);
+			spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color.White, 0, Origin, 1, SpriteEffects.None, 0);
 		}
 
 		public override Tag ToEnum()

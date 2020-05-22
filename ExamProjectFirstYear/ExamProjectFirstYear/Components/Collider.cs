@@ -31,9 +31,9 @@ namespace ExamProjectFirstYear
 			{
 				return new Rectangle
 				(
-					(int)(GO.Transform.Position.X - origin.X),
+					(int)(GameObject.Transform.Position.X - origin.X),
 
-					(int)(GO.Transform.Position.Y - origin.Y),
+					(int)(GameObject.Transform.Position.Y - origin.Y),
 
 					(int)size.X,
 					(int)size.Y
@@ -65,9 +65,9 @@ namespace ExamProjectFirstYear
 		{
 			collidingEvent.Attach(listener);
 			noLongerCollidingEvent.Attach(listener);
-			collisionTexture = GameWorld.Instance.Content.Load<Texture2D>("");
-			this.origin = spriteRenderer.Origin;
-			this.size = new Vector2(spriteRenderer.Sprite.Width, spriteRenderer.Sprite.Height);
+			collisionTexture = GameWorld.Instance.Content.Load<Texture2D>("CollisionBox");
+			origin = spriteRenderer.Origin;
+			size = new Vector2(spriteRenderer.Sprite.Width, spriteRenderer.Sprite.Height);
 		}
 
 		/// <summary>
@@ -114,7 +114,7 @@ namespace ExamProjectFirstYear
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			//Draws the collision boxes around objects. Re-insert for debugging.
-			//spriteBatch.Draw(texture, CollisionBox, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+			spriteBatch.Draw(collisionTexture, CollisionBox, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
 		}
 
 		public override Tag ToEnum()

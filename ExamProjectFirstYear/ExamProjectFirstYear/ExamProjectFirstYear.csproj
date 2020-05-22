@@ -52,8 +52,8 @@
     <Compile Include="ObserverPattern\GameEvent.cs" />
     <Compile Include="ObserverPattern\IGameListener.cs" />
     <Compile Include="Components\SpriteRenderer.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Tag.cs" />
+    <Compile Include="Components\Player.cs" />
+    <Compile Include="Components\Tag.cs" />
     <Compile Include="Components\Collider.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\GameObject.cs" />
