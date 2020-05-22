@@ -20,7 +20,7 @@ namespace ExamProjectFirstYear
 		/// <param name="player"></param>
 		public void Execute(Player player)
 		{
-
+			// TODO: Kald på Players Move metode her!
 		}
 	}
 }

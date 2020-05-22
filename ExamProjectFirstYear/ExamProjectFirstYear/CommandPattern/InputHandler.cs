@@ -38,9 +38,17 @@ namespace ExamProjectFirstYear
         private InputHandler()
         {
             // Moves player left when pressing A.
-            keyBinds.Add(Keys.A, new MoveCommand(new Vector2(-1, 0)));
+            keyBinds.Add(Keys.Left, new MoveCommand(new Vector2(-1, 0)));
             // Moves player right when pressing D.
-            keyBinds.Add(Keys.D, new MoveCommand(new Vector2(1, 0)));
+            keyBinds.Add(Keys.Right, new MoveCommand(new Vector2(1, 0)));
+			// Player jumps when pressing space.
+			keyBinds.Add(Keys.Space, new JumpCommand());
+			// Player uses a melee attack when pressing x.
+			keyBinds.Add(Keys.X, new AttackCommand(1));
+			// Player uses a ranged attack when pressing z.
+			keyBinds.Add(Keys.Z, new AttackCommand(2));
+			// Player interacts when pressing a.
+			keyBinds.Add(Keys.A, new InteractCommand());
         }
 
 		/// <summary>
