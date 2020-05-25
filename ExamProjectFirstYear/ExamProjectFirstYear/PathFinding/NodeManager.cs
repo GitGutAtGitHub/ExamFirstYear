@@ -85,13 +85,11 @@ namespace ExamProjectFirstYear.PathFinding
 
                             if(gO.Components.ContainsKey(Tag.PLATFORM))
                             {
-                                Nodes[x, y].Walkable = false;
-                                /*
-                                Nodes[x+1, y].Walkable = false;
-                                Nodes[x+2, y].Walkable = false;
-                                */
+                                for (int i = 0; i < (int)Math.Round(gO.GetObjectWidthInCellSize((SpriteRenderer)gO.GetComponent(Tag.SPRITERENDERER))); i++)
+                                {
+                                    Nodes[x + i, y].Walkable = false;
+                                }
                             }
-
                         }
                     }
                 } 
@@ -118,10 +116,12 @@ namespace ExamProjectFirstYear.PathFinding
                 spriteBatch.Draw(gridSprite, node.Position, Color.White);
             }
 
+            
             foreach (Node node in path)
             {
                 spriteBatch.Draw(chosenPathgridSprite, node.Position, Color.White);
             }
+            
 
         }
         #endregion 

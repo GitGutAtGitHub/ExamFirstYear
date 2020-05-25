@@ -1,0 +1,22 @@
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ExamProjectFirstYear
+{
+    class SpriteSheetCutter
+    {
+        private Texture2D spritesheet;
+
+
+    }
+
+    struct SpriteSize
+    {
+        int Width;
+        int height;
+    }
+}
