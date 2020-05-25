@@ -48,7 +48,6 @@ namespace ExamProjectFirstYear
 
 		#endregion
 
-
 		#region Constructors
 
 		private GameWorld()
