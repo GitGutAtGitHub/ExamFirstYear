@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.PathFinding;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,8 +116,11 @@ namespace ExamProjectFirstYear
         /// <param name="startNode"></param>
         /// <param name="targetNode"></param>
         /// <returns></returns>
-        public Stack<Node> FindPath(Node startNode, Node targetNode)
+        public Stack<Node> FindPath(Vector2 startPosition, Vector2 targetPosition)
         {
+            Node startNode = NodeManager.Instance.Nodes[(int)(startPosition.X/NodeManager.Instance.CellSize), (int)(startPosition.Y / NodeManager.Instance.CellSize)];
+            Node targetNode = NodeManager.Instance.Nodes[(int)(targetPosition.X / NodeManager.Instance.CellSize), (int)(targetPosition.Y / NodeManager.Instance.CellSize)];
+
             Stack<Node> pathStack = new Stack<Node>();
 
             //List with all cells, with calculated fCost.

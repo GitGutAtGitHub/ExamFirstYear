@@ -48,6 +48,7 @@ namespace ExamProjectFirstYear
 
 		#endregion
 
+
 		#region Constructors
 
 		private GameWorld()
@@ -63,15 +64,15 @@ namespace ExamProjectFirstYear
 			GetScreenSize();
 		}
 
-        #endregion
+		#endregion
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
+		/// <summary>
+		/// Allows the game to perform any initialization it needs to before starting to run.
+		/// This is where it can query for any required services and load any non-graphic
+		/// related content.  Calling base.Initialize will enumerate through any components
+		/// and initialize them as well.
+		/// </summary>
+		protected override void Initialize()
 		{
 			TimeElapsed = 0;
 
@@ -84,7 +85,7 @@ namespace ExamProjectFirstYear
 
 
 			NodeManager.Instance.InitializeGrid();
-			
+
 
 			base.Initialize();
 		}
@@ -112,7 +113,7 @@ namespace ExamProjectFirstYear
 			NodeManager.Instance.UpdateGrid();
 			//CreateObject(Tag.PLAYER);
 			NodeManager.Instance.LoadContent(Content);
-			
+
 		}
 
 		/// <summary>

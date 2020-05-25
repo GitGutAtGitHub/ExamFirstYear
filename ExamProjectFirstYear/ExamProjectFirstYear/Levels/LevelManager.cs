@@ -9,125 +9,136 @@ using System.Drawing;
 namespace ExamProjectFirstYear
 {
     class LevelManager
-	{
+    {
 
-	
-		//string path2 = "..\\..\\" + "Levels\\TestLevel.bmp";
 
-		private static LevelManager instance;
-		private bool[,] SpotOccupied;
+        //string path2 = "..\\..\\" + "Levels\\TestLevel.bmp";
 
-		public static LevelManager Instance
-		{
-			get
-			{
-				if (instance == null)
-				{
-					instance = new LevelManager();
-				}
+        private static LevelManager instance;
+        private bool[,] SpotOccupied;
 
-				return instance;
-			}
-		}
+        public static LevelManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new LevelManager();
+                }
 
-		public string GetPath(string filename)
-		{
-			return Environment.CurrentDirectory + ($"\\Levels\\{filename}.bmp");
+                return instance;
+            }
+        }
 
-		}
+        public string GetPath(string filename)
+        {
+            return Environment.CurrentDirectory + ($"\\Levels\\{filename}.bmp");
 
-		Bitmap TestLevel;
+        }
 
-		private void LoadBitmap()
-		{
-			TestLevel = (Bitmap)Image.FromFile(GetPath("TestLevel"));
-		}
+        Bitmap TestLevel;
 
-		public void InitializeLevel()
-		{
-			LoadBitmap();
-			PopulateLevel(TestLevel);
-		}
+        private void LoadBitmap()
+        {
+            TestLevel = (Bitmap)Image.FromFile(GetPath("TestLevel"));
+        }
 
-		/// <summary>
-		/// Scans the entire bitmap and places objects depending on the color of a pixel
-		/// </summary>
-		/// <param name="level"></param>
-		private void PopulateLevel(Bitmap level)
-		{
-			SpotOccupied = new bool[level.Width, level.Width];
+        public void InitializeLevel()
+        {
+            LoadBitmap();
+            PopulateLevel(TestLevel);
+        }
 
-			for (int y = 0; y < level.Height; y++)
-			{
-				for (int x = 0; x < level.Width; x++)
-				{
-					//Saves the current pixels color as a Color field.
-					System.Drawing.Color input = level.GetPixel(x, y);
+        /// <summary>
+        /// Scans the entire bitmap and places objects depending on the color of a pixel
+        /// </summary>
+        /// <param name="level"></param>
+        private void PopulateLevel(Bitmap level)
+        {
+            SpotOccupied = new bool[level.Width, level.Width];
 
-					//if the pixel is black
-					if (input.R == 0 && input.G == 0 && input.B == 0 && SpotOccupied[x,y] == false)
-					{
-						//add a platform
-						CreateObject(Tag.PLATFORM, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize,x,y);
-					}
+            for (int y = 0; y < level.Height; y++)
+            {
+                for (int x = 0; x < level.Width; x++)
+                {
+                    //Saves the current pixels color as a Color field.
+                    System.Drawing.Color input = level.GetPixel(x, y);
 
-					//if the pixel is Red
-					if (input.R == 0 && input.G == 255 && input.B == 0)
-					{
-						//add a platform
-						 CreateObject(Tag.PLAYER, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize,x,y);
-					}
-				}
-			}
-		}
+                    //if the pixel is black
+                    if (input.R == 0 && input.G == 0 && input.B == 0 && SpotOccupied[x, y] == false)
+                    {
+                        //add a platform
+                        CreateObject(Tag.PLATFORM, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
 
-		
+                    //if the pixel is Red
+                    if (input.R == 255 && input.G == 0 && input.B == 0)
+                    {
+                        //add a flying
+                        CreateObject(Tag.FLYINGENEMY, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
 
-		public void CreateObject(Tag tag, int posX, int posY, int forLoopX, int forLoopY)
-		{
-			GameObject createdObject = new GameObject();
-			SpriteRenderer spriteRenderer = new SpriteRenderer();
-			Collider collider;
+                    //if the pixel is green
+                    if (input.R == 0 && input.G == 255 && input.B == 0)
+                    {
+                        //add a platform
+                        CreateObject(Tag.PLAYER, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
+                }
+            }
+        }
 
-			switch (tag)
-			{
-				case Tag.PLAYER:
-					createdObject.AddComponent(GameWorld.Instance.player);
-					break;
 
-				case Tag.PLATFORM:
-					createdObject.AddComponent(new Platform());
-					break;
-			}
 
-			createdObject.AddComponent(spriteRenderer);
-			createdObject.Awake();
-			createdObject.Start();
+        public void CreateObject(Tag tag, int posX, int posY, int forLoopX, int forLoopY)
+        {
+            GameObject createdObject = new GameObject();
+            SpriteRenderer spriteRenderer = new SpriteRenderer();
+            Collider collider;
 
-			createdObject.Transform.Position = new Vector2(posX, posY);
+            switch (tag)
+            {
+                case Tag.PLAYER:
+                    createdObject.AddComponent(GameWorld.Instance.player);
+                    break;
 
-			if (tag == Tag.PLAYER)
-			{
-				collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
-			}
-			else
-			{
-				collider = new Collider(spriteRenderer);
-			}
+                case Tag.PLATFORM:
+                    createdObject.AddComponent(new Platform());
+                    break;
 
-			createdObject.AddComponent(collider);
+                case Tag.FLYINGENEMY:
+                    createdObject.AddComponent(new FlyingEnemy());
+                    break;
+            }
 
-			GameWorld.Instance.Colliders.Add(collider);
-			GameWorld.Instance.GameObjects.Add(createdObject);
+            createdObject.AddComponent(spriteRenderer);
+            createdObject.Awake();
+            createdObject.Start();
 
-			//Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.
-			for (int x = 0; x < (int)Math.Round(createdObject.GetObjectWidthInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); x++)
-			{
-				for (int y = 0; y < (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
-				{
-					SpotOccupied[forLoopX + x, forLoopY + y] = true;
-				}
-			}
-		}
-	}
+            createdObject.Transform.Position = new Vector2(posX, posY);
+
+            if (tag == Tag.PLAYER)
+            {
+                collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
+            }
+            else
+            {
+                collider = new Collider(spriteRenderer);
+            }
+
+            createdObject.AddComponent(collider);
+
+            GameWorld.Instance.Colliders.Add(collider);
+            GameWorld.Instance.GameObjects.Add(createdObject);
+
+            //Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.
+            for (int x = 0; x <= (int)Math.Round(createdObject.GetObjectWidthInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); x++)
+            {
+                for (int y = 0; y <= (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
+                {
+                    SpotOccupied[forLoopX + x, forLoopY + y] = true;
+                }
+            }
+        }
+    }
 }

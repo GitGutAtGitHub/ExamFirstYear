@@ -78,7 +78,10 @@
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\InputHandler.cs" />
     <Compile Include="CommandPattern\MoveCommand.cs" />
+    <Compile Include="Components\Enemy.cs" />
+    <Compile Include="Components\FlyingEnemy.cs" />
     <Compile Include="Components\Platform.cs" />
+    <Compile Include="IEntity.cs" />
     <Compile Include="Levels\LevelManager.cs" />
     <Compile Include="PathFinding\Node.cs" />
     <Compile Include="PathFinding\NodeManager.cs" />
@@ -97,6 +100,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteSheetCutter.cs" />
+    <Compile Include="StatePattern\EnemyAttackState.cs" />
+    <Compile Include="StatePattern\EnemyIdleState.cs" />
+    <Compile Include="StatePattern\IState.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="SQLite\SQLiteHandler.cs" />
   </ItemGroup>
@@ -132,9 +138,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="StatePattern\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
