@@ -51,7 +51,7 @@ namespace ExamProjectFirstYear
 		/// <param name="spriteRenderer"></param>
 		public Collider(SpriteRenderer spriteRenderer)
 		{
-			collisionTexture = GameWorld.Instance.Content.Load<Texture2D>("");
+			collisionTexture = GameWorld.Instance.Content.Load<Texture2D>("CollisionBox");
 			this.origin = spriteRenderer.Origin;
 			this.size = new Vector2(spriteRenderer.Sprite.Width, spriteRenderer.Sprite.Height);
 		}

@@ -54,7 +54,9 @@ namespace ExamProjectFirstYear
         public override void Awake()
         {
             //Define start position here
-            GameObject.Transform.Position = new Vector2(ScreenSizeX / 2, ScreenSizeY / 2);
+
+            //GameObject.Transform.Position = new Vector2(ScreenSizeX / 2, ScreenSizeY / 2);
+            
             GameObject.Tag = Tag.PLAYER;
             GameObject.SpriteName = "OopPlayerSprite2";
         }

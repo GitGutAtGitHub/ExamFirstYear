@@ -20,7 +20,7 @@ namespace ExamProjectFirstYear
 
 		GraphicsDeviceManager graphics;
 
-		private Player player;
+		public Player player;
 
 		#endregion
 
@@ -85,7 +85,7 @@ namespace ExamProjectFirstYear
 
 
 			NodeManager.Instance.InitializeGrid();
-			NodeManager.Instance.UpdateGrid();
+			
 
 			base.Initialize();
 		}
@@ -109,7 +109,9 @@ namespace ExamProjectFirstYear
 				GameObjects[i].Start();
 			}
 
-			CreateObject(Tag.PLAYER);
+			LevelManager.Instance.InitializeLevel();
+			NodeManager.Instance.UpdateGrid();
+			//CreateObject(Tag.PLAYER);
 			NodeManager.Instance.LoadContent(Content);
 			
 		}

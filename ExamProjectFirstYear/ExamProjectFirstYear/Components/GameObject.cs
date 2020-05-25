@@ -1,6 +1,7 @@
 ﻿using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,11 +79,13 @@ namespace ExamProjectFirstYear
 			}
 		}
 
-		/// <summary>
-		/// Calls Update for all the components in the GameObject
-		/// </summary>
-		/// <param name="gameTime"></param>
-		public void Update(GameTime gameTime)
+     
+
+        /// <summary>
+        /// Calls Update for all the components in the GameObject
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public void Update(GameTime gameTime)
 		{
 			foreach (Component component in drawnComponents.Values)
 			{
@@ -134,6 +137,12 @@ namespace ExamProjectFirstYear
 		{
 			return spriteRenderer.Sprite.Width / NodeManager.Instance.CellSize;
 		}
+
+		public float GetObjectHeightInCellSize(SpriteRenderer spriteRenderer)
+		{
+			return spriteRenderer.Sprite.Height / NodeManager.Instance.CellSize;
+		}
+
 
 		public Vector2 GetCoordinate()
         {
