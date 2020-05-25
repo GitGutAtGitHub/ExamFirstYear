@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using ExamProjectFirstYear.PathFinding;
+using ExamProjectFirstYear.Components;
 
 namespace ExamProjectFirstYear
 {
@@ -161,7 +162,7 @@ namespace ExamProjectFirstYear
 				}
 			}
 
-			SQLiteHandler.Instance.TestMethod();
+			//SQLiteHandler.Instance.TestMethod();
 
 			base.Update(gameTime);
 		}
@@ -227,11 +228,15 @@ namespace ExamProjectFirstYear
 			GameObject createdObject = new GameObject();
 			SpriteRenderer spriteRenderer = new SpriteRenderer();
 			Collider collider;
-
+			Gravity gravity = new Gravity();
+			Movement movement = new Movement();
+			
 			switch (tag)
 			{
 				case Tag.PLAYER:
 					createdObject.AddComponent(player);
+					createdObject.AddComponent(gravity);
+					createdObject.AddComponent(movement);
 					break;
 			}
 

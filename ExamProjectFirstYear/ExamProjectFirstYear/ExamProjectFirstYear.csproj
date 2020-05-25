@@ -71,13 +71,15 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CommandPattern\AttackCommand.cs" />
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\InputHandler.cs" />
     <Compile Include="CommandPattern\MoveCommand.cs" />
+    <Compile Include="Components\Gravity.cs" />
+    <Compile Include="Components\Movement.cs" />
     <Compile Include="Components\Platform.cs" />
     <Compile Include="Levels\LevelManager.cs" />
     <Compile Include="PathFinding\Node.cs" />
