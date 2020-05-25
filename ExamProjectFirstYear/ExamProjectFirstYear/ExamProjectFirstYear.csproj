@@ -73,6 +73,9 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="CommandPattern\AttackCommand.cs" />
     <Compile Include="CommandPattern\ICommand.cs" />
