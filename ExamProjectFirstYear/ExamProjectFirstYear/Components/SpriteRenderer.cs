@@ -24,12 +24,17 @@ namespace ExamProjectFirstYear
 
 		}
 
+		public SpriteRenderer(string spriteName)
+		{
+			SetSprite(spriteName);
+		}
+
 		/// <summary>
 		/// SpriteRenderers Start runs the SetSprite method and Sets the Origin.
 		/// </summary>
 		public override void Start()
 		{
-			SetSprite();
+			SetSprite(GameObject.SpriteName);
 
 			//har ændret deault origin til at være i hjørnet igen, ellers er det svært at lave level design med bitmap
 			//det kan bare ændres specifikt til player osv
@@ -39,14 +44,19 @@ namespace ExamProjectFirstYear
 		/// <summary>
 		/// Sets the sprite based on the spritename belonging to the GameObject the SpriteRenderer is a component of.
 		/// </summary>
-		public void SetSprite()
+		public void SetSprite(string spriteName)
 		{
-			Sprite = GameWorld.Instance.Content.Load<Texture2D>(GameObject.SpriteName);
+			Sprite = GameWorld.Instance.Content.Load<Texture2D>(spriteName);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color.White, 0, Origin, 1, SpriteEffects.None, 0);
+		}
+
+		public SpriteRenderer Clone()
+		{
+			return (SpriteRenderer)this.MemberwiseClone();
 		}
 
 		public override Tag ToEnum()
