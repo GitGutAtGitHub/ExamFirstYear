@@ -24,7 +24,6 @@ namespace ExamProjectFirstYear
 
 		public override void Update(GameTime gameTime)
 		{
-			Move();
 		}
 
 		public override void Destroy()
