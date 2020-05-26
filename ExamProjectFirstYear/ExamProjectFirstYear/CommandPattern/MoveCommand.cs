@@ -34,7 +34,7 @@ namespace ExamProjectFirstYear
 		/// <param name="player"></param>
 		public void Execute(Player player)
 		{
-			player.Move(velocity);
+			player.Movement.Move(velocity);
 		}
 
         #endregion

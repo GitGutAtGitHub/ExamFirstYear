@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExamProjectFirstYear.Components;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +8,14 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-	/// <summary>
-	/// The Player Character class.
-	/// </summary>
-	public class Player : Component, IGameListener
-	{
+    /// <summary>
+    /// The Player Character class.
+    /// </summary>
+    public class Player : Component, IGameListener
+    {
         #region Fields
 
-        private float speed;
 
-        private float ScreenSizeX = GameWorld.Instance.ScreenSize.X;
-        private float ScreenSizeY = GameWorld.Instance.ScreenSize.Y;
 
         #endregion
 
@@ -26,6 +24,7 @@ namespace ExamProjectFirstYear
 
         public int Health { get; set; }
         public int JournalID { get; set; }
+        public Movement Movement { get; private set; }
 
         #endregion
 
@@ -37,7 +36,6 @@ namespace ExamProjectFirstYear
         /// </summary>
         public Player()
         {
-            speed = 500;
             //Lav en ny instans af JournalDB her.
         }
 
@@ -53,43 +51,24 @@ namespace ExamProjectFirstYear
 
         public override void Awake()
         {
-            //Define start position here
-
-            //GameObject.Transform.Position = new Vector2(ScreenSizeX / 2, ScreenSizeY / 2);
-            
             GameObject.Tag = Tag.PLAYER;
             GameObject.SpriteName = "OopPlayerSprite2";
         }
 
         public override void Start()
         {
+            Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
 
+            Movement.Momentum = GameWorld.Instance.ScreenSize.Y / 28 /*35*/;
+            Movement.Speed = 500;
         }
 
         public void Notify(GameEvent gameEvent, Component component)
         {
-          
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-
-        }
-
-        /// <summary>
-        /// Makes the player move.
-        /// </summary>
-        /// <param name="velocity"></param>
-        public void Move(Vector2 velocity)
-        {
-            if (velocity != Vector2.Zero)
+            if (gameEvent.Title == "Collision" && component.GameObject.Tag == Tag.PLATFORM)
             {
-                velocity.Normalize();
+
             }
-
-            velocity *= speed;
-
-            GameObject.Transform.Translate(velocity * GameWorld.Instance.DeltaTime);
         }
 
         /// <summary>
@@ -98,7 +77,7 @@ namespace ExamProjectFirstYear
         /// <param name="attackNumber"></param>
         public void Attack(int attackNumber)
         {
-            switch(attackNumber)
+            switch (attackNumber)
             {
                 case 1:
                     MeleeAttak();
@@ -125,6 +104,8 @@ namespace ExamProjectFirstYear
         {
 
         }
+
+        
 
         #endregion
     }

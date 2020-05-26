@@ -83,6 +83,7 @@
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\InputHandler.cs" />
     <Compile Include="CommandPattern\MoveCommand.cs" />
+    <Compile Include="Components\Movement.cs" />
     <Compile Include="Components\Platform.cs" />
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="Levels\LevelManager.cs" />
@@ -132,7 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
-    <None Include="ExamProjectFirstYear_TemporaryKey.pfx" />
+    <None Include="ExamProjectFirstYear_TemporaryKey.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="SQLite\App.config" />
     <None Include="app.manifest" />
     <None Include="SQLite\EksamensprojektDB.db">
