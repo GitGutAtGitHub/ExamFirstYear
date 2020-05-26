@@ -77,6 +77,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\Door.cs" />
+    <Compile Include="Components\LightSource.cs" />
     <Compile Include="ObjectPools\EnemyProjectilePool.cs" />
     <Compile Include="ObjectPools\BossProjectilePool.cs" />
     <Compile Include="CommandPattern\AttackCommand.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="Levels\LevelManager.cs" />
     <Compile Include="ObjectPools\ObjectPool.cs" />
+    <Compile Include="ObjectPools\PlayerMeleeAttackPool.cs" />
     <Compile Include="PathFinding\Node.cs" />
     <Compile Include="PathFinding\NodeManager.cs" />
     <Compile Include="PathFinding\PathFinder.cs" />

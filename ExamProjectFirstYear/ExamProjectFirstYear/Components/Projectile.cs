@@ -7,14 +7,11 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-	public class Projectile : Component
+	public class Projectile : Component, IGameListener
 	{
-		private float speed;
-		private Vector2 velocity;
 
-		public Projectile(float speed)
+		public Projectile()
 		{
-			this.speed = speed;
 		}
 
 		public Projectile Clone()
@@ -24,6 +21,7 @@ namespace ExamProjectFirstYear
 
 		public override void Update(GameTime gameTime)
 		{
+
 		}
 
 		public override void Destroy()
@@ -37,5 +35,12 @@ namespace ExamProjectFirstYear
 			return Tag.PROJECTILE;
 		}
 
+		public void Notify(GameEvent gameEvent, Component component)
+		{
+			if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
+			{
+				Destroy();
+			}
+		}
 	}
 }

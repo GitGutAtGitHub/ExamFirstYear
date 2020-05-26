@@ -35,6 +35,7 @@ namespace ExamProjectFirstYear
 		public void Execute(Player player)
 		{
 			player.Movement.Move(velocity);
+			player.Direction = velocity;
 		}
 
         #endregion

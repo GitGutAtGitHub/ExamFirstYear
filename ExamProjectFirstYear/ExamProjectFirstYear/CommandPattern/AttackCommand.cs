@@ -8,14 +8,15 @@ namespace ExamProjectFirstYear
 {
 	class AttackCommand : ICommand
 	{
+		private int attackNumber;
 		public AttackCommand(int attackNumber)
 		{
-
+			this.attackNumber = attackNumber;
 		}
 
 		public void Execute(Player player)
 		{
-			//TODO: Kald på Attackmetode fra Player her
+			player.Attack(attackNumber);
 		}
 	}
 }
