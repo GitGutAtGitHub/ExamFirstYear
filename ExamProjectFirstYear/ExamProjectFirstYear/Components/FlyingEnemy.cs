@@ -22,12 +22,14 @@ namespace ExamProjectFirstYear.Components
         public PathFinder EnemyPathFinder { get => enemyPathFinder; set => EnemyPathFinder = value; }
         public Vector2 TargetPosition { get; set; }
         public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
+        public bool CanFollowPlayer { get; set; }
 
         protected override void ThreadUpdate()
         {
+            SwitchState(new EnemyAttackState());
+
             while (alive == true)
             {
-                SwitchState(new EnemyAttackState());
                 currentState.Execute();
                 Move();
             }
@@ -36,7 +38,7 @@ namespace ExamProjectFirstYear.Components
         public override void Awake()
         {
             enemyPathFinder = new PathFinder();
-            SightRadius = 30 * NodeManager.Instance.CellSize;
+            SightRadius = 6 * NodeManager.Instance.CellSize;
             alive = true;
             speed = 20;
             GameObject.Tag = Tag.FLYINGENEMY;
@@ -49,7 +51,12 @@ namespace ExamProjectFirstYear.Components
             GameObject.SpriteName = "smol";
         }
 
-        protected override void SwitchState(IState newState)
+        /// <summary>
+        /// SKAL VÆRE PUBLIC FOR AT KUNNE VIRKE TIL STATES
+        /// Used to switch between states and enter the "Enter" method in whichever state the enemy is in.
+        /// </summary>
+        /// <param name="newState"></param>
+        public override void SwitchState(IState newState)
         {
             // Makes sure the state isn't null when exiting a state.
             // This is done to avoid an exception.
@@ -59,15 +66,19 @@ namespace ExamProjectFirstYear.Components
             }
 
             currentState = newState;
-            // This means the FlyingEnemy.
+            // "This" means the FlyingEnemy.
             currentState.Enter(this);
         }
+
 
         protected override void Notify()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Used to enable to enemy to move.
+        /// </summary>
         protected override void Move()
         {
             if (Velocity != Vector2.Zero)

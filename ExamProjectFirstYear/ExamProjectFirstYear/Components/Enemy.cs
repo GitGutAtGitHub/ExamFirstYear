@@ -44,7 +44,7 @@ namespace ExamProjectFirstYear.Components
 
         protected abstract void ThreadUpdate();
 
-        protected abstract void SwitchState(IState newState);
+        public abstract void SwitchState(IState newState);
 
         protected abstract void Notify();
 

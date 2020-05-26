@@ -164,22 +164,22 @@ namespace ExamProjectFirstYear
                     //if that node is not walkable, like and obstruction, or has already been reviewed and is on the closed list
                     //skip that node
 
-                    if (neighbour.Walkable != true || closedList.Contains(neighbour))
+                    //if (neighbour.Walkable != true || closedList.Contains(neighbour))
+                    //{
+                    //    continue;
+                    //}
+
+                    //Kan måske udskifte ovenstående if-sætning. Giver mening at tilføje not walkable neighbor til closedList.
+                    if (closedList.Contains(neighbour))
                     {
                         continue;
                     }
 
-                    //Kan måske udskifte ovenstående if-sætning. Giver mening at tilføje not walkable neighbor til closedList.
-                    //if (closedList.Contains(neighbour))
-                    //{
-                    //    continue;
-                    //}
-
-                    //if (neighbour.Walkable != true)
-                    //{
-                    //    closedList.Add(neighbour);
-                    //    continue;
-                    //}
+                    if (neighbour.Walkable != true)
+                    {
+                        closedList.Add(neighbour);
+                        continue;
+                    }
 
                     // The G-cost is recalculated here (or if it is the first run through 'calculated')
                     int recalculatedGCostNeighbor = currentNode.GCost + CalculateDistance(currentNode, neighbour);
