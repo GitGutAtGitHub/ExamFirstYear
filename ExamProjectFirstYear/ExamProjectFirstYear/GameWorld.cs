@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using ExamProjectFirstYear.PathFinding;
+using ExamProjectFirstYear.Components;
 
 namespace ExamProjectFirstYear
 {
@@ -161,7 +162,7 @@ namespace ExamProjectFirstYear
 				}
 			}
 
-			SQLiteHandler.Instance.TestMethod();
+			//SQLiteHandler.Instance.TestMethod();
 
 			base.Update(gameTime);
 		}
@@ -222,36 +223,40 @@ namespace ExamProjectFirstYear
 		/// Method for creating component objects.
 		/// </summary>
 		/// <param name="tag"></param>
-		public void CreateObject(Tag tag)
-		{
-			GameObject createdObject = new GameObject();
-			SpriteRenderer spriteRenderer = new SpriteRenderer();
-			Collider collider;
+		//public void CreateObject(Tag tag)
+		//{
+		//	GameObject createdObject = new GameObject();
+		//	SpriteRenderer spriteRenderer = new SpriteRenderer();
+		//	Collider collider;
+		//	Gravity gravity = new Gravity();
+		//	//Movement movement = new Movement();
+			
+		//	switch (tag)
+		//	{
+		//		case Tag.PLAYER:
+		//			createdObject.AddComponent(player);
+		//			createdObject.AddComponent(gravity);
+		//			//createdObject.AddComponent(movement);
+		//			break;
+		//	}
 
-			switch (tag)
-			{
-				case Tag.PLAYER:
-					createdObject.AddComponent(player);
-					break;
-			}
+		//	createdObject.AddComponent(spriteRenderer);
+		//	createdObject.Awake();
+		//	createdObject.Start();
 
-			createdObject.AddComponent(spriteRenderer);
-			createdObject.Awake();
-			createdObject.Start();
+		//	if (tag == Tag.PLAYER)
+		//	{
+		//		collider = new Collider(spriteRenderer, player) { CheckCollisionEvents = true };
+		//	}
+		//	else
+		//	{
+		//		collider = new Collider(spriteRenderer);
+		//	}
 
-			if (tag == Tag.PLAYER)
-			{
-				collider = new Collider(spriteRenderer, player) { CheckCollisionEvents = true };
-			}
-			else
-			{
-				collider = new Collider(spriteRenderer);
-			}
+		//	createdObject.AddComponent(collider);
 
-			createdObject.AddComponent(collider);
-
-			Colliders.Add(collider);
-			GameObjects.Add(createdObject);
-		}
+		//	Colliders.Add(collider);
+		//	GameObjects.Add(createdObject);
+		//}
 	}
 }

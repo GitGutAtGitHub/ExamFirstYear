@@ -16,6 +16,9 @@ namespace ExamProjectFirstYear
 
 		#endregion
 
+
+		#region Constructors
+
 		/// <summary>
 		/// Constructor for SpriteRenderer
 		/// </summary>
@@ -23,6 +26,11 @@ namespace ExamProjectFirstYear
 		{
 
 		}
+
+		#endregion
+
+
+		#region Methods
 
 		/// <summary>
 		/// SpriteRenderers Start runs the SetSprite method and Sets the Origin.
@@ -53,5 +61,7 @@ namespace ExamProjectFirstYear
 		{
 			return Tag.SPRITERENDERER;
 		}
-	}
+
+        #endregion
+    }
 }

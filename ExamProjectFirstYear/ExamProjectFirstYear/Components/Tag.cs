@@ -21,6 +21,7 @@ namespace ExamProjectFirstYear
 		PLATFORM,
 		DOOR,
 		GRAVITY,
-		LIGHTSOURCE
+		LIGHTSOURCE,
+		MOVEMENT
 	}
 }

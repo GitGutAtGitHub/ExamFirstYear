@@ -15,7 +15,7 @@ namespace ExamProjectFirstYear
 
 		public void Execute(Player player)
 		{
-			//TODO: Kald på jumpmetode fra player her
+			player.Movement.Jump();
 		}
 	}
 }
