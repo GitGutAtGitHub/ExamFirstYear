@@ -9,22 +9,31 @@ namespace ExamProjectFirstYear.Components
 {
     public class Movement : Component
     {
-		#region Properties
+		#region Fields
 
-		public float Speed { get; set; }
-		public float Momentum { get; set; }
+		private float speed;
+		private float momentum;
+
+        #endregion
+
+
+        #region Properties
+
 		public static float Force { get; set; }
 
 		public bool Grounded { get; set; }
+		public bool GravityOn { get; set; }
 
 		#endregion
 
 
 		#region Contstructors
 
-		public Movement()
+		public Movement(bool gravityOn, float momentum, float speed)
 		{
-
+			GravityOn = gravityOn;
+			this.momentum = GameWorld.Instance.ScreenSize.Y / momentum;
+			this.speed = speed;
 		}
 
 		#endregion
@@ -39,8 +48,11 @@ namespace ExamProjectFirstYear.Components
 
 		public override void Update(GameTime gameTime)
 		{
-			CheckGrounded();
-			GravityHandling();
+			if (GravityOn == true)
+			{
+				CheckGrounded();
+				GravityHandling();
+			}
 		}
 
 		/// <summary>
@@ -54,7 +66,7 @@ namespace ExamProjectFirstYear.Components
 				velocity.Normalize();
 			}
 
-			velocity *= Speed;
+			velocity *= speed;
 
 			GameObject.Transform.Translate(velocity * GameWorld.Instance.DeltaTime);
 		}
@@ -64,12 +76,8 @@ namespace ExamProjectFirstYear.Components
 		/// </summary>
 		private void GravityHandling()
 		{
-			/// If the players position is above the bottom of the screen and isgrounded is false (if the player is not on a platform) player will be pulled
-			/// down by the value of force.
 			if (GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.Y && Grounded == false)
 			{
-				/// As long as force is a higher value than -20 it will be lowered.
-				/// This ensures that force will not become so low that it can pull the player throough a platform in a single frame.
 				if (Force >= -20f)
 				{
 					Force--;
@@ -101,7 +109,7 @@ namespace ExamProjectFirstYear.Components
 		{
 			if (Grounded == true)
 			{
-				Force = Momentum;
+				Force = momentum;
 
 				GameObject.Transform.Translate(new Vector2(0, -Force));
 			}

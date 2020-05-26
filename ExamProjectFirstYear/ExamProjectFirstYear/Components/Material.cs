@@ -1,43 +1,33 @@
-﻿using ExamProjectFirstYear.Components;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear
+namespace ExamProjectFirstYear.Components
 {
-    /// <summary>
-    /// The Player Character class.
-    /// </summary>
-    public class Player : Component, IGameListener
+    public class Material : Component, IGameListener
     {
         #region Fields
 
-        private int journalID;
+        private Movement movement;
 
         #endregion
 
 
         #region Properties
 
-        public int Health { get; set; }
-        public int JournalID { get; set; }
-        public Movement Movement { get; private set; }
-        public int JournalID1 { get => journalID; set => journalID = value; }
+        public MaterialType MaterialType { get; set; }
 
         #endregion
 
 
         #region Constructors
 
-        /// <summary>
-        /// Constructor for the Player Character component.
-        /// </summary>
-        public Player(int journalID)
+        public Material(MaterialType materialType)
         {
-            this.journalID = journalID;
+            MaterialType = materialType;
         }
 
         #endregion
@@ -47,35 +37,23 @@ namespace ExamProjectFirstYear
 
         public override Tag ToEnum()
         {
-            return Tag.PLAYER;
+            return Tag.MATERIAL;
         }
 
         public override void Awake()
         {
-            GameObject.Tag = Tag.PLAYER;
-            GameObject.SpriteName = "OopPlayerSprite2";
+            GameObject.Tag = Tag.MATERIAL;
+            GameObject.SpriteName = "OopBossProjectileSprite2";
         }
 
         public override void Start()
         {
-            Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+            movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+            GameObject.Transform.Translate(new Vector2(500, 10));
         }
 
         public void Notify(GameEvent gameEvent, Component component)
         {
-            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MATERIAL)
-            {
-                Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
-
-                switch (componentMaterial.MaterialType)
-                {
-                    case MaterialType.LightBulb:
-                        component.GameObject.Destroy();
-                        SQLiteHandler.Instance.IncreaseAmountStoredMaterial(1);
-                        break;
-                }
-            }
-
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
             {
                 Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
@@ -88,7 +66,7 @@ namespace ExamProjectFirstYear
                     if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
                     {
                         GameObject.Transform.Translate(new Vector2(0, -intersection.Height));
-                        Movement.Grounded = true;
+                        movement.Grounded = true;
                     }
 
                     //Bottom platform.
@@ -115,42 +93,6 @@ namespace ExamProjectFirstYear
                 }
             }
         }
-
-        /// <summary>
-        /// Players method for attacking.
-        /// </summary>
-        /// <param name="attackNumber"></param>
-        public void Attack(int attackNumber)
-        {
-            switch (attackNumber)
-            {
-                case 1:
-                    MeleeAttak();
-                    break;
-
-                case 2:
-                    RangedAttack();
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Melee attack for Player.
-        /// </summary>
-        private void MeleeAttak()
-        {
-            //Insert melee attack here.
-        }
-
-        /// <summary>
-        /// Ranged attack for Player.
-        /// </summary>
-        private void RangedAttack()
-        {
-            //Insert ranged attack here.
-        }
-
-
 
         #endregion
     }
