@@ -102,7 +102,7 @@ namespace ExamProjectFirstYear
         /// </summary>
         private void RangedAttack()
         {
-            //Insert ranged attack here.
+
         }
 
         
