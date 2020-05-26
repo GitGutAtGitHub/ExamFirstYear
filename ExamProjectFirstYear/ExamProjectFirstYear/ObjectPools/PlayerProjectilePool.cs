@@ -8,6 +8,21 @@ namespace ExamProjectFirstYear
 {
 	class PlayerProjectilePool : ObjectPool
 	{
+		private static PlayerProjectilePool instance;
+
+		public static PlayerProjectilePool Instance
+		{
+			get
+			{
+				if (instance == null)
+				{
+					instance = new PlayerProjectilePool();
+				}
+
+				return instance;
+			}
+		}
+
 		protected override void CleanUp(GameObject gameObject)
 		{
 			// Tilføj cleanup kode her

@@ -27,6 +27,7 @@ namespace ExamProjectFirstYear
 		public SpriteRenderer(string spriteName)
 		{
 			SetSprite(spriteName);
+
 		}
 
 		/// <summary>

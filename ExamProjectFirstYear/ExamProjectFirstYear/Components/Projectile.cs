@@ -27,18 +27,6 @@ namespace ExamProjectFirstYear
 			Move();
 		}
 
-		protected void Move()
-		{
-			if (velocity != Vector2.Zero)
-			{
-				velocity.Normalize();
-			}
-
-			velocity *= speed;
-
-			GameObject.Transform.Translate(velocity * GameWorld.Instance.DeltaTime);
-		}
-
 		public override void Destroy()
 		{
 			// Use GameEvent and Notify, if(OnHitObject, OnPastBorders) then destroy collider
