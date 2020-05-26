@@ -15,7 +15,7 @@ namespace ExamProjectFirstYear
 
 		public void Execute(Player player)
 		{
-			player.Jump();
+			player.Movement.Jump();
 		}
 	}
 }

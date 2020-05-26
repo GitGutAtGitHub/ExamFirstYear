@@ -88,14 +88,12 @@ namespace ExamProjectFirstYear
 			GameObject createdObject = new GameObject();
 			SpriteRenderer spriteRenderer = new SpriteRenderer();
 			Collider collider;
-			Gravity gravity = new Gravity();
 			Movement movement = new Movement();
 
 			switch (tag)
 			{
 				case Tag.PLAYER:
 					createdObject.AddComponent(GameWorld.Instance.player);
-					createdObject.AddComponent(gravity);
 					createdObject.AddComponent(movement);
 					break;
 
