@@ -162,7 +162,7 @@ namespace ExamProjectFirstYear
 				}
 			}
 
-			SQLiteHandler.Instance.TestMethod();
+			//SQLiteHandler.Instance.TestMethod(); FUCK AF
 
 			base.Update(gameTime);
 		}

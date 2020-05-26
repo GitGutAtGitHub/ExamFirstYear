@@ -22,6 +22,7 @@ namespace ExamProjectFirstYear.PathFinding
         private static int cellRowCount = 20;
         private int cellSize = 96;
         private Stack<Node> path;
+        public int debugcount = 0;
 
         //SKAL RETTES TIL GAMEWORLD ELLER ANDET SENERE, SÅ DET ER NEMMERE AT REDIGERE STØRRELSE SENERE.
         private Node[,] nodes = new Node[cellRowCount, cellRowCount];

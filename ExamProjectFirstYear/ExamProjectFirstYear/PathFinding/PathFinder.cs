@@ -10,6 +10,8 @@ namespace ExamProjectFirstYear
 {
     class PathFinder
     {
+        // All of the code from this class is taken from a former project made by the same group.
+
         #region Astar Pathfinding
         /// <summary>
         /// Calculates the distance between two nodes
@@ -19,7 +21,6 @@ namespace ExamProjectFirstYear
         /// <returns></returns>
         private int CalculateDistance(Node inputNode, Node targetNode)
         {
-
             //distance between the two nodes, x and y
             int dstX = Math.Abs((int)inputNode.GetCoordinate().X - (int)targetNode.GetCoordinate().X);
             int dstY = Math.Abs((int)inputNode.GetCoordinate().Y - (int)targetNode.GetCoordinate().Y);
@@ -167,6 +168,18 @@ namespace ExamProjectFirstYear
                     {
                         continue;
                     }
+
+                    //Kan måske udskifte ovenstående if-sætning. Giver mening at tilføje not walkable neighbor til closedList.
+                    //if (closedList.Contains(neighbour))
+                    //{
+                    //    continue;
+                    //}
+
+                    //if (neighbour.Walkable != true)
+                    //{
+                    //    closedList.Add(neighbour);
+                    //    continue;
+                    //}
 
                     // The G-cost is recalculated here (or if it is the first run through 'calculated')
                     int recalculatedGCostNeighbor = currentNode.GCost + CalculateDistance(currentNode, neighbour);

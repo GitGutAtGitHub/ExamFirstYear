@@ -16,25 +16,25 @@ namespace ExamProjectFirstYear.Components
         private PathFinder enemyPathFinder;
         private Vector2 targetPosition;
         private Stack<Node> flyingPath;
+        private Vector2 prevNode = new Vector2(0,0);
 
         public Stack<Node> FlyingPath { get => flyingPath; set => flyingPath = value; }
         public PathFinder EnemyPathFinder { get => enemyPathFinder; set => EnemyPathFinder = value; }
         public Vector2 TargetPosition { get; set; }
+        public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
 
-       protected override void ThreadUpdate()
+        protected override void ThreadUpdate()
         {
             while (alive == true)
             {
                 SwitchState(new EnemyAttackState());
                 currentState.Execute();
                 Move();
-
             }
         }
 
         public override void Awake()
         {
-            
             enemyPathFinder = new PathFinder();
             SightRadius = 30 * NodeManager.Instance.CellSize;
             alive = true;
@@ -46,7 +46,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void Start()
         {
-            GameObject.SpriteName = "FlyingEnemy";
+            GameObject.SpriteName = "smol";
         }
 
         protected override void SwitchState(IState newState)
