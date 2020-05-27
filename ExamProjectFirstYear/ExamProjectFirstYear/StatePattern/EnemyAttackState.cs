@@ -70,14 +70,13 @@ namespace ExamProjectFirstYear.StatePattern
                     (int)enemy.Target.Transform.Position.X / NodeManager.Instance.CellSize,
                     (int)enemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize);
             }
-        }
 
 
             //to avoid null exception
             if ((enemy as FlyingEnemy).FlyingPath.Count > 0)
-                {
-                    (enemy as FlyingEnemy).TargetPosition = new Vector2(((enemy as FlyingEnemy).FlyingPath.Peek().Position.X + NodeManager.Instance.CellSize / 2),
-                                                                        ((enemy as FlyingEnemy).FlyingPath.Peek().Position.Y + NodeManager.Instance.CellSize / 2));
+            {
+                (enemy as FlyingEnemy).TargetPosition = new Vector2(((enemy as FlyingEnemy).FlyingPath.Peek().Position.X + NodeManager.Instance.CellSize / 2),
+                                                                    ((enemy as FlyingEnemy).FlyingPath.Peek().Position.Y + NodeManager.Instance.CellSize / 2));
 
                 // These if-statements makes sure the enemy moves in the intended direction,
                 // depending on where the target is.
@@ -99,7 +98,11 @@ namespace ExamProjectFirstYear.StatePattern
                     enemy.Velocity.Y = -1f;
                 }
 
-                NodeManager.Instance.DebugPath.AddRange((enemy as FlyingEnemy).FlyingPath);
+                if (enemy.GameObject.Transform.Position.Y <= (enemy as FlyingEnemy).TargetPosition.Y &&
+                    enemy.GameObject.Transform.Position.Y <= (enemy as FlyingEnemy).TargetPosition.Y)
+                {
+                    enemy.Velocity.Y = 1f;
+                }
 
                 //checking the distance between the enemy and the targetposition.
                 dstX = Math.Abs(enemy.GameObject.Transform.Position.X - (enemy as FlyingEnemy).TargetPosition.X);
@@ -150,5 +153,14 @@ namespace ExamProjectFirstYear.StatePattern
         {
 
         }
+
+
+
+
+
     }
+
 }
+
+
+
