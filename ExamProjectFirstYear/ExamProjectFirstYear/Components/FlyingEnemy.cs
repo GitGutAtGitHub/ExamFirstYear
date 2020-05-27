@@ -12,24 +12,26 @@ namespace ExamProjectFirstYear.Components
 {
     class FlyingEnemy : Enemy
     {
-
         private PathFinder enemyPathFinder;
-        private Vector2 targetPosition;
+     
         private Stack<Node> flyingPath;
-        private Vector2 prevNode = new Vector2(0,0);
+        private Vector2 prevNode = new Vector2(0, 0);
 
         public Stack<Node> FlyingPath { get => flyingPath; set => flyingPath = value; }
         public PathFinder EnemyPathFinder { get => enemyPathFinder; set => EnemyPathFinder = value; }
-        public Vector2 TargetPosition { get; set; }
         public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
+
 
         protected override void ThreadUpdate()
         {
-            while (alive == true)
+            while (Alive == true)
             {
-                SwitchState(new EnemyAttackState());
-                currentState.Execute();
-                Move();
+                //to make sure that it only runs 60 times a second
+                if (GameWorld.Instance.TimeElapsed % 1.16f == 0)
+                {
+                    currentState.Execute();
+                    Move();
+                }
             }
         }
 
@@ -37,12 +39,16 @@ namespace ExamProjectFirstYear.Components
         {
             enemyPathFinder = new PathFinder();
             SightRadius = 30 * NodeManager.Instance.CellSize;
-            alive = true;
-            speed = 20;
+            Alive = true;
+            speed = 200f;
             GameObject.Tag = Tag.FLYINGENEMY;
+            SwitchState(new EnemyAttackState());
+
             Thread flyingEnemyThread = new Thread(ThreadUpdate);
+            
             flyingEnemyThread.Start();
         }
+
 
         public override void Start()
         {
@@ -63,10 +69,21 @@ namespace ExamProjectFirstYear.Components
             currentState.Enter(this);
         }
 
+
+
+        public override void Update(GameTime gameTime)
+        {
+            currentState.Execute();
+            Move();
+        }
+
+
         protected override void Notify()
         {
             throw new NotImplementedException();
         }
+
+
 
         protected override void Move()
         {

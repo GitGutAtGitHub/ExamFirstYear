@@ -19,7 +19,7 @@ namespace ExamProjectFirstYear.PathFinding
         Texture2D chosenPathgridSprite;
         Texture2D unwalkableSprite;
         private List<Node> grid;
-        private static int cellRowCount = 20;
+        private static int cellRowCount = 30;
         private int cellSize = 96;
         private Stack<Node> path;
         public int debugcount = 0;

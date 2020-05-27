@@ -13,20 +13,22 @@ namespace ExamProjectFirstYear.Components
     {
         #region FIELDS
 
-        protected int speed;
+        protected float speed;
         protected int health;
         private int sightRadius;
-     
+        private Vector2 targetPosition;
+
 
         //it is a public variable, to be able to edit the specific X and Y values, it has to be a variable.
         public Vector2 Velocity;
         //LOOK AT THIS LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        protected bool alive = true;
-     
+        private bool alive = true;
+
         protected IState currentState;
         protected Thread EnemyThread;
         private GameObject target = GameWorld.Instance.player.GameObject;
+        public Vector2 TargetPosition { get; set; }
 
         #endregion
 
@@ -36,12 +38,16 @@ namespace ExamProjectFirstYear.Components
         public int SightRadius { get => sightRadius; set => sightRadius = value; }
         //public Vector2 Velocity { get; set; }
         public GameObject Target { get => target; set => target = value; }
+        public bool Alive { get => alive; set => alive = value; }
 
         #endregion
 
 
         #region METHODS
 
+        /// <summary>
+        /// Update Loop for the enemy threads.
+        /// </summary>
         protected abstract void ThreadUpdate();
 
         protected abstract void SwitchState(IState newState);
