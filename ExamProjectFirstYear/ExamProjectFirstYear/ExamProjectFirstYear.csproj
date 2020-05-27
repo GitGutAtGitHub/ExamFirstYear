@@ -77,6 +77,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CommandPattern\CommandTag.cs" />
+    <Compile Include="CommandPattern\ReleaseCommand.cs" />
     <Compile Include="Components\Door.cs" />
     <Compile Include="Components\LightSource.cs" />
     <Compile Include="ObjectPools\EnemyProjectilePool.cs" />

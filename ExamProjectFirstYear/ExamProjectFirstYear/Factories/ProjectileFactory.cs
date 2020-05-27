@@ -41,7 +41,7 @@ namespace ExamProjectFirstYear
 		{
 			CreateProjectilePrototype(ref bossProjectile, ref bossProjectileRenderer, "OopPlayerSprite2");
 			CreateProjectilePrototype(ref playerProjectile, ref playerProjectileRenderer, "OopPlayerSprite2");
-			CreateProjectilePrototype(ref playerMeleeObject, ref playerMeleeObjectRenderer, "OopPlayerSprite2");
+			CreateProjectilePrototype(ref playerMeleeObject, ref playerMeleeObjectRenderer, "MeleeObject");
 			CreateProjectilePrototype(ref enemyProjectile, ref enemyProjectileRenderer, "OopPlayerSprite2");
 		}
 
@@ -61,24 +61,24 @@ namespace ExamProjectFirstYear
 				case Tag.BOSSPROJECTILE:
 					gameObject.AddComponent(bossProjectile.Clone());
 					gameObject.AddComponent(bossProjectileRenderer.Clone());
-					gameObject.AddComponent(new Collider(bossProjectileRenderer, bossProjectile));
+					gameObject.AddComponent(new Collider(bossProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
 					break;
 				case Tag.PLAYERPROJECTILE:
 					gameObject.AddComponent(playerProjectile.Clone());
 					gameObject.AddComponent(playerProjectileRenderer.Clone());
-					gameObject.AddComponent(new Collider(playerProjectileRenderer, playerProjectile));
+					gameObject.AddComponent(new Collider(playerProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
 					gameObject.AddComponent(new Movement(false));
 					break;
 				case Tag.PLAYERMELEEATTACK:
 					gameObject.AddComponent(playerMeleeObject.Clone());
 					gameObject.AddComponent(playerMeleeObjectRenderer.Clone());
-					gameObject.AddComponent(new Collider(playerMeleeObjectRenderer, playerMeleeObject));
-					gameObject.AddComponent(new Movement(false));
+					gameObject.AddComponent(new Collider(playerMeleeObjectRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
+					//gameObject.AddComponent(new Movement(false));
 					break;
 				case Tag.ENEMYPROJECTILE:
 					gameObject.AddComponent(enemyProjectile.Clone());
 					gameObject.AddComponent(enemyProjectileRenderer.Clone());
-					gameObject.AddComponent(new Collider(enemyProjectileRenderer, enemyProjectile));
+					gameObject.AddComponent(new Collider(enemyProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
 					break;
 			}
 

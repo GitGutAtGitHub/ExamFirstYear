@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.ObjectPools;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,9 @@ namespace ExamProjectFirstYear
 		public int JournalID { get; set; }
 		public Movement Movement { get; private set; }
 		public Vector2 Direction { get; set; } = new Vector2(1, 0);
+		public bool canAttack { get; set; } = true;
+		public bool canShoot { get; set; } = true;
+
 
 		#endregion
 
@@ -64,11 +68,24 @@ namespace ExamProjectFirstYear
 
 		public void Notify(GameEvent gameEvent, Component component)
 		{
-			if (gameEvent.Title == "Collision" && component.GameObject.Tag == Tag.PLATFORM)
+			if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
 			{
 
 			}
 		}
+
+		public void ReleaseAttack(int attackNumber)
+		{
+			if (attackNumber == 1)
+			{
+				canAttack = true;
+			}
+			if (attackNumber == 2)
+			{
+				canShoot = true;
+			}
+		}
+
 
 		/// <summary>
 		/// Players method for attacking.
@@ -93,12 +110,16 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		private void MeleeAttak()
 		{
-			GameObject tmpMeleeObject = PlayerProjectilePool.Instance.GetObject();
-			SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
-			Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
-			tmpMeleeObject.Transform.Position = this.GameObject.Transform.Position+(new Vector2(Direction.X*tmpMeleeRenderer.Sprite.Width,Direction.Y));
-			GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
-			GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
+			if (canAttack)
+			{
+				GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
+				SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
+				Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
+				tmpMeleeObject.Transform.Position = this.GameObject.Transform.Position + (new Vector2(Direction.X * tmpMeleeRenderer.Sprite.Width, Direction.Y));
+				GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
+				GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
+				canAttack = false;
+			}
 		}
 
 		/// <summary>
@@ -108,13 +129,18 @@ namespace ExamProjectFirstYear
 		{
 			//MANGLER KODE DER FORHINDRER AT MAN KAN LAVE MERE END ÉT ANGREB AF GANGEN 
 			//MANGLER OGSÅ KODE DER SØRGER FOR AT SPILLEREN MISTER LYS/MANA.
-			GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject();
-			tmpProjectileObject.Transform.Position = this.GameObject.Transform.Position;
-			Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
-			tmpMovement.Velocity = Direction;
-			tmpMovement.Speed = 1000f;
-			GameWorld.Instance.GameObjects.Add(tmpProjectileObject);
-
+			if (canShoot)
+			{
+				GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject();
+				Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
+				tmpProjectileObject.Transform.Position = this.GameObject.Transform.Position;
+				Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
+				tmpMovement.Velocity = Direction;
+				//tmpMovement.Speed = 1000f;
+				GameWorld.Instance.Colliders.Add(tmpProjectileCollider);
+				GameWorld.Instance.GameObjects.Add(tmpProjectileObject);
+				canShoot = false;
+			}
 		}
 
 

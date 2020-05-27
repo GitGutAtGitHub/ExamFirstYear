@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear
+namespace ExamProjectFirstYear.CommandPattern
 {
 	class MoveCommand : ICommand
 	{
@@ -38,6 +38,10 @@ namespace ExamProjectFirstYear
 			player.Direction = velocity;
 		}
 
-        #endregion
-    }
+		public CommandTag GetCommandTag()
+		{
+			return CommandTag.KEYDOWN;
+		}
+		#endregion
+	}
 }

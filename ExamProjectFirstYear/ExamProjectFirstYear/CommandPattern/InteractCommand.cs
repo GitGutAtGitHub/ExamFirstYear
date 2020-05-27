@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear
+namespace ExamProjectFirstYear.CommandPattern
 {
 	class InteractCommand : ICommand
 	{
@@ -16,6 +16,11 @@ namespace ExamProjectFirstYear
 		public void Execute(Player player)
 		{
 			//TODO : kald på Players interactmetode her
+		}
+
+		public CommandTag GetCommandTag()
+		{
+			return CommandTag.KEYDOWN;
 		}
 	}
 }
