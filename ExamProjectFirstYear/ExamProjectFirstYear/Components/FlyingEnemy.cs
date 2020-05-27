@@ -13,13 +13,14 @@ namespace ExamProjectFirstYear.Components
     class FlyingEnemy : Enemy
     {
         private PathFinder enemyPathFinder;
-     
+
         private Stack<Node> flyingPath;
         private Vector2 prevNode = new Vector2(0, 0);
 
         public Stack<Node> FlyingPath { get => flyingPath; set => flyingPath = value; }
         public PathFinder EnemyPathFinder { get => enemyPathFinder; set => EnemyPathFinder = value; }
         public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
+        public bool CanFollowPlayer { get; set; }
 
 
         protected override void ThreadUpdate()
@@ -45,7 +46,7 @@ namespace ExamProjectFirstYear.Components
             SwitchState(new EnemyAttackState());
 
             Thread flyingEnemyThread = new Thread(ThreadUpdate);
-            
+
             flyingEnemyThread.Start();
         }
 
@@ -55,7 +56,12 @@ namespace ExamProjectFirstYear.Components
             GameObject.SpriteName = "smol";
         }
 
-        protected override void SwitchState(IState newState)
+        /// <summary>
+        /// SKAL VÆRE PUBLIC FOR AT KUNNE VIRKE TIL STATES
+        /// Used to switch between states and enter the "Enter" method in whichever state the enemy is in.
+        /// </summary>
+        /// <param name="newState"></param>
+        public override void SwitchState(IState newState)
         {
             // Makes sure the state isn't null when exiting a state.
             // This is done to avoid an exception.
@@ -65,7 +71,7 @@ namespace ExamProjectFirstYear.Components
             }
 
             currentState = newState;
-            // This means the FlyingEnemy.
+            // "This" means the FlyingEnemy.
             currentState.Enter(this);
         }
 
