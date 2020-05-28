@@ -109,14 +109,14 @@ namespace ExamProjectFirstYear
                     //Top platform.
                     if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, -intersection.Height));
+                        GameObject.Transform.Translate(new Vector2(0, -intersection.Height + 1));
                         Movement.Grounded = true;
                     }
 
                     //Bottom platform.
                     if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height));
+                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height -1));
                     }
                 }
 
@@ -135,6 +135,10 @@ namespace ExamProjectFirstYear
                         GameObject.Transform.Translate(new Vector2(-intersection.Width, 0));
                     }
                 }
+            }
+            if (gameEvent.Title == "NoLongerColliding" && component.GameObject.Tag == Tag.PLATFORM)
+            {
+                Movement.Grounded = false;
             }
         }
 

@@ -119,6 +119,8 @@ namespace ExamProjectFirstYear.Components
                 Force = momentum;
 
                 GameObject.Transform.Translate(new Vector2(0, -Force));
+
+                Grounded = false;
             }
         }
 
