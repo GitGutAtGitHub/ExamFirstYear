@@ -18,7 +18,7 @@ namespace ExamProjectFirstYear.CommandPattern
 		{
 			//player.Movement.Jump();
 			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
-			playerMovement.ManageMomentum();
+			//playerMovement.ManageMomentum();
 			playerMovement.Jump();
 		}
 

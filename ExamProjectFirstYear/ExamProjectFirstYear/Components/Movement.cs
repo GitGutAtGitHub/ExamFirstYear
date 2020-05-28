@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-	public class Movement : Component
+	public class Movement : Component, IGameListener
 	{
 		#region Fields
 
 		private float speed;
-		private float momentum;
+		private float maxMomentum;
 
 		#endregion
 
@@ -20,10 +20,10 @@ namespace ExamProjectFirstYear.Components
 		#region Properties
 
 		public Vector2 Velocity { get; set; }
-		//public float Speed { get; set; }
 		public float Momentum { get; set; }
 		public static float Force { get; set; }
 		public bool Grounded { get; set; }
+		public bool HasJumped { get; set; } = true;
 		public bool GravityOn { get; set; }
 
 		#endregion
@@ -31,17 +31,12 @@ namespace ExamProjectFirstYear.Components
 
 		#region Contstructors
 
-		public Movement(bool gravityOn, float momentum, float speed)
+		public Movement(bool gravityOn, float maxMomentum, float speed)
 		{
 			GravityOn = gravityOn;
-			this.momentum = GameWorld.Instance.ScreenSize.Y / momentum;
+			this.maxMomentum = maxMomentum;
 			this.speed = speed;
-		}
 
-		public Movement(bool gravityOn, float speed)
-		{
-			GravityOn = gravityOn;
-			this.speed = speed;
 		}
 
 		#endregion
@@ -58,11 +53,9 @@ namespace ExamProjectFirstYear.Components
 		{
 			if (GravityOn == true)
 			{
-				//CheckGrounded();
 				GravityHandling();
 			}
 			Move(Velocity);
-			Console.WriteLine(momentum);
 		}
 
 		/// <summary>
@@ -121,23 +114,59 @@ namespace ExamProjectFirstYear.Components
 		/// </summary>
 		public void Jump()
 		{
-			//if (Grounded == true)
-			//{
-			Force = Momentum;
-
-			GameObject.Transform.Translate(new Vector2(0, -Force));
-
-			//Grounded = false;
-			//}
-		}
-		public void ManageMomentum()
-		{
-			Grounded = false;
-			if (Momentum <= 20)
+			if (Momentum < maxMomentum)
 			{
-				Momentum += 1f;
+				Momentum++;
+			}
+
+			if (Momentum >= maxMomentum)
+			{
+				HasJumped = true;
+				Momentum = 0;
+			}
+
+			if (HasJumped == false)
+			{
+				Force = Momentum;
+
+				GameObject.Transform.Translate(new Vector2(0, -Momentum));
+
+				Grounded = false;
+			}
+
+		}
+
+		/// <summary>
+		/// VIRKER IKKE!!! Har prøvet at lave en notify for movement så den selv kan køre sin notify logik i stedet for at player skal gøre det
+		/// Men skidtet virker ikke
+		/// </summary>
+		/// <param name="gameEvent"></param>
+		/// <param name="component"></param>
+		public void Notify(GameEvent gameEvent, Component component)
+		{
+			Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
+									((Collider)(GameObject.GetComponent(Tag.COLLIDER))).CollisionBox);
+
+			//Top and bottom platform.
+			if (intersection.Width > intersection.Height)
+			{
+				//Top platform.
+				if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
+				{
+					Grounded = true;
+					HasJumped = false;
+					Momentum = 0;
+				}
+
+				//Bottom platform.
+				if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
+				{
+					HasJumped = true;
+					Momentum = 0;
+				}
 			}
 		}
+
 
 		#endregion
 	}
