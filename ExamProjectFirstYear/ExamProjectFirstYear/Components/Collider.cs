@@ -10,20 +10,24 @@ namespace ExamProjectFirstYear
 	public class Collider : Component
 	{
 		#region FIELDS
+
 		//Used to notify objects when they are colliding.
 		private GameEvent collidingEvent = new GameEvent("Colliding");
 		//The following to fields are used to notify objects that has collided when they are no longer colliding with eachother.
 		private GameEvent noLongerCollidingEvent = new GameEvent("NoLongerColliding");
+
 		private Collider currentCollisionCollider;
 
 		private Vector2 size;
 		private Vector2 origin;
+
 		private Texture2D collisionTexture;
 
 		#endregion
 
+
 		#region PROPERTIES
-		public bool CheckCollisionEvents { get; set; }
+		public bool CheckCollisionEvents { get; set; } = true;
 
 		public Rectangle CollisionBox
 		{
@@ -43,6 +47,7 @@ namespace ExamProjectFirstYear
 
 		#endregion
 
+
 		#region METHODS
 
 		/// <summary>
@@ -52,8 +57,8 @@ namespace ExamProjectFirstYear
 		public Collider(SpriteRenderer spriteRenderer)
 		{
 			collisionTexture = GameWorld.Instance.Content.Load<Texture2D>("CollisionBox");
-			this.origin = spriteRenderer.Origin;
-			this.size = new Vector2(spriteRenderer.Sprite.Width, spriteRenderer.Sprite.Height);
+			origin = spriteRenderer.Origin;
+			size = new Vector2(spriteRenderer.Sprite.Width, spriteRenderer.Sprite.Height);
 		}
 
 		/// <summary>
@@ -83,7 +88,7 @@ namespace ExamProjectFirstYear
 				{
 					if (CollisionBox.Intersects(other.CollisionBox))
 					{
-						// currentCollider is set to other so that we can ask it later if we are currently colliding with this specific collider
+						//currentCollider is set to other so that we can ask it later if we are currently colliding with this specific collider
 						currentCollisionCollider = other;
 						collidingEvent.Notify(other);
 					}

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear
+namespace ExamProjectFirstYear.CommandPattern
 {
 	class MoveCommand : ICommand
 	{
@@ -34,9 +34,14 @@ namespace ExamProjectFirstYear
 		/// <param name="player"></param>
 		public void Execute(Player player)
 		{
-			player.Move(velocity);
+			player.Movement.Move(velocity);
+			player.Direction = velocity;
 		}
 
-        #endregion
-    }
+		public CommandTag GetCommandTag()
+		{
+			return CommandTag.KEYDOWN;
+		}
+		#endregion
+	}
 }

@@ -40,10 +40,12 @@ namespace ExamProjectFirstYear
         public void AddComponent(Component component)
         {
             Components.Add(component.ToEnum(), component);
+
             if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER)
             {
                 drawnComponents.Add(component.ToEnum(), component);
             }
+
             component.GameObject = this;
         }
 
@@ -82,27 +84,21 @@ namespace ExamProjectFirstYear
 
 
         /// <summary>
-        /// Calls Update for all the components in the GameObject
+        /// Calls Update for all the components in the GameObject.
         /// </summary>
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
-            foreach (Component component in drawnComponents.Values)
-            {
-                component.Update(gameTime);
-            }
-
-            foreach (Component component in components.Values)
+            foreach (Component component in Components.Values)
             {
                 component.Update(gameTime);
             }
         }
 
         /// <summary>
-        ///
+        ///Draws every drawable Component in the GameObject.
         /// </summary>
         /// <param name="spriteBatch"></param>
-
         public void Draw(SpriteBatch spriteBatch)
 
         {
@@ -123,6 +119,7 @@ namespace ExamProjectFirstYear
             }
 
             GameWorld.Instance.DeleteGameObject(this);
+            GameWorld.Instance.Colliders.Remove((Collider)GetComponent(Tag.COLLIDER));
         }
 
 
@@ -142,6 +139,11 @@ namespace ExamProjectFirstYear
             return spriteRenderer.Sprite.Width / NodeManager.Instance.CellSize;
         }
 
+        /// <summary>
+        /// Returns how many nodes that object is occupying (heigh).
+        /// </summary>
+        /// <param name="spriteRenderer"></param>
+        /// <returns></returns>
         public float GetObjectHeightInCellSize(SpriteRenderer spriteRenderer)
         {
             return spriteRenderer.Sprite.Height / NodeManager.Instance.CellSize;

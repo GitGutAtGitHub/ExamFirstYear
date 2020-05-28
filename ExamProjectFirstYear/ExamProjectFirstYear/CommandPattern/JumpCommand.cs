@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ExamProjectFirstYear.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear
+namespace ExamProjectFirstYear.CommandPattern
 {
 	class JumpCommand : ICommand
 	{
@@ -15,7 +16,14 @@ namespace ExamProjectFirstYear
 
 		public void Execute(Player player)
 		{
-			//TODO: Kald på jumpmetode fra player her
+			//player.Movement.Jump();
+			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
+			playerMovement.Jump();
+		}
+
+		public CommandTag GetCommandTag()
+		{
+			return CommandTag.KEYDOWN;
 		}
 	}
 }
