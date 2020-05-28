@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.CommandPattern
 {
-	class AttackCommand : ICommand
+	class ReleaseCommand : ICommand
 	{
 		private int attackNumber;
-		public AttackCommand(int attackNumber)
+		public ReleaseCommand(int attackNumber)
 		{
 			this.attackNumber = attackNumber;
 		}
 
 		public void Execute(Player player)
 		{
-			player.Attack(attackNumber);
+			player.ReleaseAttack(attackNumber);
 		}
 
 		public CommandTag GetCommandTag()
 		{
-			return CommandTag.KEYDOWN;
+			return CommandTag.KEYUP;
 		}
 	}
 }

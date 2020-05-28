@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExamProjectFirstYear.CommandPattern;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace ExamProjectFirstYear
 	{
 		#region Fields
 		private Dictionary<Keys, ICommand> keyBinds = new Dictionary<Keys, ICommand>();
+		private Dictionary<Keys, ICommand> releaseKeyBinds = new Dictionary<Keys,ICommand>();
 
 		private static InputHandler instance;
 		#endregion
@@ -49,7 +51,12 @@ namespace ExamProjectFirstYear
 			keyBinds.Add(Keys.Z, new AttackCommand(2));
 			// Player interacts when pressing a.
 			keyBinds.Add(Keys.A, new InteractCommand());
-        }
+
+			// Player releases the meleeattack
+			releaseKeyBinds.Add(Keys.X, new ReleaseCommand(1));
+			// Player releases the rangedattack
+			releaseKeyBinds.Add(Keys.Z, new ReleaseCommand(2));
+		}
 
 		/// <summary>
 		/// Executes all commands for the keys added to the dictionary
@@ -61,9 +68,30 @@ namespace ExamProjectFirstYear
 
 			foreach (Keys key in keyBinds.Keys)
 			{
+				//if (keyBinds[key].GetCommandTag() == CommandTag.KEYUP)
+				//{
+				//	if (keyState.IsKeyUp(key))
+				//	{
+				//		keyBinds[key].Execute(player);
+				//	}
+				//}
+				//else if (keyBinds[key].GetCommandTag() == CommandTag.KEYDOWN)
+				//{
+				//	if (keyState.IsKeyDown(key))
+				//	{
+				//		keyBinds[key].Execute(player);
+				//	}
+				//}
 				if (keyState.IsKeyDown(key))
 				{
 					keyBinds[key].Execute(player);
+				}
+			}
+			foreach (Keys key in releaseKeyBinds.Keys)
+			{
+				if (keyState.IsKeyUp(key))
+				{
+					releaseKeyBinds[key].Execute(player);
 				}
 			}
 		}
