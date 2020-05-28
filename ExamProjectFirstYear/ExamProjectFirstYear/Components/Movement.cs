@@ -47,7 +47,7 @@ namespace ExamProjectFirstYear.Components
         {
             if (GravityOn == true)
             {
-                CheckGrounded();
+                //CheckGrounded();
                 GravityHandling();
             }
             Move(Velocity);
@@ -76,7 +76,7 @@ namespace ExamProjectFirstYear.Components
         {
             /// If the players position is above the bottom of the screen and isgrounded is false (if the player is not on a platform) player will be pulled
             /// down by the value of force.
-            if (GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.Y && Grounded == false)
+            if (/*GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.Y &&*/ Grounded == false)
             {
                 /// As long as force is a higher value than -20 it will be lowered.
                 /// This ensures that force will not become so low that it can pull the player throough a platform in a single frame.
