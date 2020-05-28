@@ -96,7 +96,7 @@ namespace ExamProjectFirstYear
             {
                 case Tag.PLAYER:
                     createdObject.AddComponent(GameWorld.Instance.player);
-                    createdObject.AddComponent(new Movement(true, 20, 500));
+                    createdObject.AddComponent(new Movement(true, 18, 700));
                     break;
 
                 case Tag.PLATFORM:

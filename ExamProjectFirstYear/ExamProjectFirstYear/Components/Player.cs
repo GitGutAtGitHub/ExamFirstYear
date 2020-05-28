@@ -32,7 +32,7 @@ namespace ExamProjectFirstYear
         public float PositionX { get; set; }
         public float PositionY { get; set; }
 
-        public Movement Movement { get; private set; }
+        //public Movement Movement { get; private set; }
 
         public TmpJournal TmpJournal { get; private set; }
 
@@ -73,7 +73,7 @@ namespace ExamProjectFirstYear
 
         public override void Start()
         {
-            Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+            //Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
 
             GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX, TmpJournal.TmpPositionY));
             InventoryID = TmpJournal.TmpInventoryID;
@@ -86,7 +86,6 @@ namespace ExamProjectFirstYear
         {
             PositionX = GameObject.Transform.Position.X;
             PositionY = GameObject.Transform.Position.Y;
-            Console.WriteLine(Movement.HasJumped);
         }
 
         public void Notify(GameEvent gameEvent, Component component)
@@ -111,20 +110,12 @@ namespace ExamProjectFirstYear
                     if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
                     {
                         GameObject.Transform.Translate(new Vector2(0, -intersection.Height + 1));
-                        //Following ensures that player can jump again when landing on top of a platform.
-                        //Movement.Grounded = true;
-                        //Movement.HasJumped = false;
-                        //Movement.Momentum = 0;
                     }
 
                     //Bottom platform.
                     if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
                     {
                         GameObject.Transform.Translate(new Vector2(0, +intersection.Height -1));
-                        //Following ensures that players jump is interrupted if the hit a platform.
-                        //DETTE KAN I POLISH MULIGVIS FLYTTES TIL MOVEMENT HVIS MOVEMENT LAVES TIL EN IGAMELISTENER 
-                        //Movement.HasJumped = true;
-                        //Movement.Momentum = 0;
                     }
                 }
 
@@ -143,10 +134,6 @@ namespace ExamProjectFirstYear
                         GameObject.Transform.Translate(new Vector2(-intersection.Width, 0));
                     }
                 }
-            }
-            if (gameEvent.Title == "NoLongerColliding" && component.GameObject.Tag == Tag.PLATFORM)
-            {
-                Movement.Grounded = false;
             }
         }
 
