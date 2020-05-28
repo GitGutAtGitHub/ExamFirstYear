@@ -21,7 +21,7 @@ namespace ExamProjectFirstYear.Components
 
         public Vector2 Velocity { get; set; }
         //public float Speed { get; set; }
-        //public float Momentum { get; set; }
+        public float Momentum { get; set; }
         public static float Force { get; set; }
         public bool Grounded { get; set; }
         public bool GravityOn { get; set; }
@@ -56,6 +56,7 @@ namespace ExamProjectFirstYear.Components
                 GravityHandling();
             }
             Move(Velocity);
+            Console.WriteLine(Momentum);
         }
 
         /// <summary>
@@ -116,12 +117,16 @@ namespace ExamProjectFirstYear.Components
         {
             if (Grounded == true)
             {
-                Force = momentum;
+                Force = Momentum;
 
                 GameObject.Transform.Translate(new Vector2(0, -Force));
 
                 Grounded = false;
             }
+        }
+        public void ManageMomentum()
+        {
+            Momentum++;
         }
 
         #endregion

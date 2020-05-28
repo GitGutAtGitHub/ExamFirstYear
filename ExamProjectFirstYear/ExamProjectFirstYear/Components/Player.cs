@@ -102,6 +102,7 @@ namespace ExamProjectFirstYear
             {
                 Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
                                         ((Collider)(GameObject.GetComponent(Tag.COLLIDER))).CollisionBox);
+                Movement.Momentum = 0;
 
                 //Top and bottom platform.
                 if (intersection.Width > intersection.Height)
