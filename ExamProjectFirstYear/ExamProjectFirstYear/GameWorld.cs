@@ -230,17 +230,12 @@ namespace ExamProjectFirstYear
 			SpriteRenderer spriteRenderer = new SpriteRenderer();
 			Collider collider;
 			Material material = new Material(1);
-			Blueprint blueprint = new Blueprint(1);
 
 			switch (tag)
 			{
 				case Tag.MATERIAL:
 					createdObject.AddComponent(material);
 					createdObject.AddComponent(new Movement(true, 40, 500));
-					break;
-
-				case Tag.BLUEPRINT:
-					createdObject.AddComponent(blueprint);
 					break;
 			}
 

@@ -12,14 +12,12 @@ namespace ExamProjectFirstYear.Components
         #region Fields
 
         private Movement movement;
-        private Blueprint blueprint;
 
         #endregion
 
 
         #region Properties
 
-        //public string MaterialName { get; set; }
         public int ID { get; set; }
 
         #endregion
@@ -97,16 +95,5 @@ namespace ExamProjectFirstYear.Components
         }
 
         #endregion
-    }
-
-    public struct TmpMaterialType
-    {
-        public string TmpName { get; set; }
-
-
-        public TmpMaterialType(string tmpName)
-        {
-            TmpName = tmpName;
-        }
     }
 }

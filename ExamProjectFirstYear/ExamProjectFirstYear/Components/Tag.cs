@@ -29,6 +29,8 @@ namespace ExamProjectFirstYear
 		ENEMYPROJECTILE,
 		MOVEMENT,
 		MATERIAL,
-		BLUEPRINT
+		BLUEPRINT,
+		JOURNAL,
+		INVENTORY
 	}
 }

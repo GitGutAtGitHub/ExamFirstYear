@@ -20,6 +20,9 @@ namespace ExamProjectFirstYear
         private MouseState previousMouseState;
         private MouseState currentMouseState;
 
+        private Journal journal;
+        private Inventory inventory;
+
         #endregion
 
 
@@ -69,17 +72,17 @@ namespace ExamProjectFirstYear
             GameObject.Tag = Tag.PLAYER;
             GameObject.SpriteName = "OopPlayerSprite2";
             TmpJournal = SQLiteHandler.Instance.GetJournal(JournalID);
+            journal = (Journal)GameObject.GetComponent(Tag.JOURNAL);
+            inventory = (Inventory)GameObject.GetComponent(Tag.INVENTORY);
+            Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
         }
 
         public override void Start()
         {
-            Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
-
             GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX, TmpJournal.TmpPositionY));
             InventoryID = TmpJournal.TmpInventoryID;
             Health = TmpJournal.TmpHealth;
             OpenDoor = TmpJournal.TmpOpenDoor;
-
         }
 
         public override void Update(GameTime gameTime)
@@ -90,14 +93,15 @@ namespace ExamProjectFirstYear
 
         public void Notify(GameEvent gameEvent, Component component)
         {
+            //Players collect materials when they collide with them.
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MATERIAL)
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
-
                 component.GameObject.Destroy();
                 SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.ID);
             }
 
+            //Players hit platforms when they collide with them.
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
             {
                 Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
@@ -206,28 +210,22 @@ namespace ExamProjectFirstYear
     			}
     		}
 
-        public void ShowStoredMaterial(int materialTypeID, int inventoryID)
-        {
-
-        }
-
         #endregion
 
         public void TestMethod()
         {
-            Blueprint blueprint = new Blueprint();
-
             previousMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
 
             if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
             {
-                Console.WriteLine("Button pressed");
-
-                //blueprint.CheckRecordedBP(1);
-
-                //SQLiteHandler.Instance.SaveGame(Health, OpenDoor, PositionX, PositionY, JournalID);
+                SQLiteHandler.Instance.SaveGame(Health, OpenDoor, JournalID);
             }
+
+            //else if (currentMouseState.RightButton == ButtonState.Released && previousMouseState.RightButton == ButtonState.Pressed)
+            //{
+            //    inventory.ShowStoredMaterials(JournalID);
+            //}
         }
     }
 
@@ -237,11 +235,11 @@ namespace ExamProjectFirstYear
         public int TmpInventoryID { get; set; }
         public int TmpHealth { get; set; }
         public int TmpOpenDoor { get; set; }
-        public float TmpPositionX { get; set; }
-        public float TmpPositionY { get; set; }
+        public int TmpPositionX { get; set; }
+        public int TmpPositionY { get; set; }
 
 
-        public TmpJournal(int tmpJournalID, int tmpInventoryID, int tmpHealth, float tmpPositionX, float tmpPositionY, int tmpOpenDoor)
+        public TmpJournal(int tmpJournalID, int tmpInventoryID, int tmpHealth, int tmpPositionX, int tmpPositionY, int tmpOpenDoor)
         {
             TmpJournalID = tmpJournalID;
             TmpInventoryID = tmpInventoryID;
@@ -252,16 +250,16 @@ namespace ExamProjectFirstYear
         }
     }
 
-    public struct TmpStoredMaterial
-    {
-        public int TmpAmount { get; set; }
-        public int TmpSlot { get; set; }
+    //public struct TmpStoredMaterial
+    //{
+    //    public int TmpAmount { get; set; }
+    //    public int TmpSlot { get; set; }
 
 
-        public TmpStoredMaterial(int tmpAmound, int tmpSlot)
-        {
-            TmpAmount = tmpAmound;
-            TmpSlot = tmpSlot;
-        }
-    }
+    //    public TmpStoredMaterial(int tmpAmound, int tmpSlot)
+    //    {
+    //        TmpAmount = tmpAmound;
+    //        TmpSlot = tmpSlot;
+    //    }
+    //}
 }
