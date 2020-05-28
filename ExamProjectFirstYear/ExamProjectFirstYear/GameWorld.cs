@@ -24,7 +24,7 @@ namespace ExamProjectFirstYear
 
         GraphicsDeviceManager graphics;
 
-        //unused, kept in case it is needed again. 
+        //unused, kept in case it is needed again.
         public bool GetIsRunningSlow { get; set; }
 
         public Player player;
@@ -146,17 +146,17 @@ namespace ExamProjectFirstYear
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                
+
                 foreach (GameObject gO in GameObjects)
                 {
-                 
+
                     if (gO.Components.ContainsKey(Tag.FLYINGENEMY))
                     {
                         ((gO.GetComponent(Tag.FLYINGENEMY))as FlyingEnemy).Alive = false;
                     }
 
-                    //Skal tilføjes når resten af fjender er implementeret. 
-                    
+                    //Skal tilføjes når resten af fjender er implementeret.
+
                     //if (gO.Components.ContainsKey(Tag.MEELEEENEMY))
                     //{
                     //    ((gO.GetComponent(Tag.MEELEEENEMY)) as MeleeEnemy).Alive = false;
@@ -167,7 +167,7 @@ namespace ExamProjectFirstYear
                     //    ((gO.GetComponent(Tag.RANGEDENEMY)) as RangedEnemy).Alive = false;
                     //}
                 }
-                
+
                 Exit();
             }
 
@@ -240,11 +240,8 @@ namespace ExamProjectFirstYear
         /// <param name="gameTime"></param>
         private void TimeHandler(GameTime gameTime)
         {
-            //DeltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            //TimeElapsed = (float)gameTime.TotalGameTime.
-            //Console.WriteLine(DeltaTime);
+
             TimeElapsed += DeltaTime;
         }
 

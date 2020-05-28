@@ -42,6 +42,8 @@ namespace ExamProjectFirstYear.StatePattern
                         break;
                 }
             }
+
+            // Used to change the state to idle when the player is out of the enemies SightRadius.
             else
             {
                 switch (enemy.ToEnum())
@@ -109,5 +111,11 @@ namespace ExamProjectFirstYear.StatePattern
         {
 
         }
+
+
+
+
+
     }
+
 }

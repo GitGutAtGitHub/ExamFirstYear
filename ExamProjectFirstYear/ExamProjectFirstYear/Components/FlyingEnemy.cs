@@ -15,7 +15,7 @@ namespace ExamProjectFirstYear.Components
         private PathFinder enemyPathFinder;
 
         public bool findPathFromEnemy;
-     
+
         private Stack<Node> flyingPath;
         private Vector2 prevNode = new Vector2(0, 0);
 
@@ -24,6 +24,8 @@ namespace ExamProjectFirstYear.Components
         public Stack<Node> FlyingPath { get => flyingPath; set => flyingPath = value; }
         public PathFinder EnemyPathFinder { get => enemyPathFinder; set => EnemyPathFinder = value; }
         public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
+        public bool CanFollowPlayer { get; set; }
+
 
         #endregion
 

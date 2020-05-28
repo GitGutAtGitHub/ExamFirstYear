@@ -46,7 +46,7 @@ namespace ExamProjectFirstYear
 
         }
                                  ///////IMPORTANT\\\\\\\\
-        
+
         // All of the code from here on in this class is taken from a former project made by the same group.
         // There are a few changes made for this program to work as intended.
 
@@ -121,7 +121,7 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-        /// returns a stack with a Path retraced from the parents. 
+        /// returns a stack with a Path retraced from the parents.
         /// </summary>
         /// <param name="startNode"></param>
         /// <param name="endNode"></param>

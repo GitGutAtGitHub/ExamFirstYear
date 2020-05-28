@@ -11,8 +11,8 @@ namespace ExamProjectFirstYear.StatePattern
 {
     class EnemyIdleState : IState
     {
-
         private Enemy enemy;
+
         public void Enter(IEntity enemy)
         {
             this.enemy = enemy as Enemy;
@@ -62,7 +62,7 @@ namespace ExamProjectFirstYear.StatePattern
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void IdleMeleeEnemy()
         {
@@ -70,18 +70,18 @@ namespace ExamProjectFirstYear.StatePattern
         }
 
         /// <summary>
-        /// Puts the FlyingEnemy thread to sleep to stop it from moving after the player, 
+        /// Puts the FlyingEnemy thread to sleep to stop it from moving after the player,
         /// when out of reach.
         /// </summary>
         public void IdleFlyingEnemy()
         {
-          
+
             enemy.Velocity = new Vector2(0, 0);
-           
+
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void IdleRangedEnemy()
         {
@@ -93,6 +93,6 @@ namespace ExamProjectFirstYear.StatePattern
 
         }
 
-       
+
     }
 }
