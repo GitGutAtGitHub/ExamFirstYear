@@ -87,6 +87,10 @@
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\InputHandler.cs" />
     <Compile Include="CommandPattern\MoveCommand.cs" />
+    <Compile Include="Components\Blueprint.cs" />
+    <Compile Include="Components\MeleeEnemy.cs" />
+    <Compile Include="Components\Material.cs" />
+    <Compile Include="Components\MaterialType.cs" />
     <Compile Include="Components\Movement.cs" />
     <Compile Include="Components\Platform.cs" />
     <Compile Include="Factories\IFactory.cs" />

@@ -76,7 +76,7 @@ namespace ExamProjectFirstYear
 		{
 			TimeElapsed = 0;
 
-			player = new Player();
+			player = new Player(1);
 
 			graphics.PreferredBackBufferWidth = 1920;
 			graphics.PreferredBackBufferHeight = 1080;
@@ -111,7 +111,7 @@ namespace ExamProjectFirstYear
 
 			LevelManager.Instance.InitializeLevel();
 			NodeManager.Instance.UpdateGrid();
-			//CreateObject(Tag.PLAYER);
+			CreateObject(Tag.MATERIAL);
 			NodeManager.Instance.LoadContent(Content);
 			
 		}
@@ -163,6 +163,7 @@ namespace ExamProjectFirstYear
 			}
 
 			//SQLiteHandler.Instance.TestMethod();
+			player.TestMethod();
 
 			base.Update(gameTime);
 		}
@@ -223,40 +224,45 @@ namespace ExamProjectFirstYear
 		/// Method for creating component objects.
 		/// </summary>
 		/// <param name="tag"></param>
-		//public void CreateObject(Tag tag)
-		//{
-		//	GameObject createdObject = new GameObject();
-		//	SpriteRenderer spriteRenderer = new SpriteRenderer();
-		//	Collider collider;
-		//	Gravity gravity = new Gravity();
-		//	//Movement movement = new Movement();
-			
-		//	switch (tag)
-		//	{
-		//		case Tag.PLAYER:
-		//			createdObject.AddComponent(player);
-		//			createdObject.AddComponent(gravity);
-		//			//createdObject.AddComponent(movement);
-		//			break;
-		//	}
+		public void CreateObject(Tag tag)
+		{
+			GameObject createdObject = new GameObject();
+			SpriteRenderer spriteRenderer = new SpriteRenderer();
+			Collider collider;
+			Material material = new Material(1);
+			Blueprint blueprint = new Blueprint(1);
 
-		//	createdObject.AddComponent(spriteRenderer);
-		//	createdObject.Awake();
-		//	createdObject.Start();
+			switch (tag)
+			{
+				case Tag.MATERIAL:
+					createdObject.AddComponent(material);
+					createdObject.AddComponent(new Movement(true, 40, 500));
+					break;
 
-		//	if (tag == Tag.PLAYER)
-		//	{
-		//		collider = new Collider(spriteRenderer, player) { CheckCollisionEvents = true };
-		//	}
-		//	else
-		//	{
-		//		collider = new Collider(spriteRenderer);
-		//	}
+				case Tag.BLUEPRINT:
+					createdObject.AddComponent(blueprint);
+					break;
+			}
 
-		//	createdObject.AddComponent(collider);
+			createdObject.AddComponent(spriteRenderer);
 
-		//	Colliders.Add(collider);
-		//	GameObjects.Add(createdObject);
-		//}
+			createdObject.Awake();
+			createdObject.Start();
+
+			if (tag == Tag.MATERIAL)
+			{
+				collider = new Collider(spriteRenderer, material) { CheckCollisionEvents = true };
+			}
+
+			else
+			{
+				collider = new Collider(spriteRenderer);
+			}
+
+			createdObject.AddComponent(collider);
+
+			Colliders.Add(collider);
+			GameObjects.Add(createdObject);
+		}
 	}
 }
