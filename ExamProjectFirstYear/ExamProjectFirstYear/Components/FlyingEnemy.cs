@@ -12,44 +12,40 @@ namespace ExamProjectFirstYear.Components
 {
     class FlyingEnemy : Enemy
     {
-
         private PathFinder enemyPathFinder;
-        private Vector2 targetPosition;
+
+        public bool findPathFromEnemy;
+     
         private Stack<Node> flyingPath;
-        private Vector2 prevNode = new Vector2(0,0);
+        private Vector2 prevNode = new Vector2(0, 0);
+
+        #region PROPERTIES
 
         public Stack<Node> FlyingPath { get => flyingPath; set => flyingPath = value; }
         public PathFinder EnemyPathFinder { get => enemyPathFinder; set => EnemyPathFinder = value; }
-        public Vector2 TargetPosition { get; set; }
         public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
 
-        protected override void ThreadUpdate()
-        {
-            while (alive == true)
-            {
-                SwitchState(new EnemyAttackState());
-                currentState.Execute();
-                Move();
-            }
-        }
+        #endregion
+
 
         public override void Awake()
         {
-            enemyPathFinder = new PathFinder();
-            SightRadius = 30 * NodeManager.Instance.CellSize;
-            alive = true;
-            speed = 20;
+            enemyPathFinder = new PathFinder(this);
+            SightRadius = 6 * NodeManager.Instance.CellSize;
+            Alive = true;
+            speed = 200f;
             GameObject.Tag = Tag.FLYINGENEMY;
-            Thread flyingEnemyThread = new Thread(ThreadUpdate);
-            flyingEnemyThread.Start();
+            SwitchState(new EnemyAttackState());
         }
+
 
         public override void Start()
         {
             GameObject.SpriteName = "smol";
         }
 
-        protected override void SwitchState(IState newState)
+
+        public override void SwitchState(IState newState)
         {
             // Makes sure the state isn't null when exiting a state.
             // This is done to avoid an exception.
@@ -59,14 +55,23 @@ namespace ExamProjectFirstYear.Components
             }
 
             currentState = newState;
-            // This means the FlyingEnemy.
+            // "This" means the FlyingEnemy.
             currentState.Enter(this);
         }
+
+
+        public override void Update(GameTime gameTime)
+        {
+            currentState.Execute();
+            Move();
+        }
+
 
         protected override void Notify()
         {
             throw new NotImplementedException();
         }
+
 
         protected override void Move()
         {
@@ -79,6 +84,7 @@ namespace ExamProjectFirstYear.Components
 
             GameObject.Transform.Translate(Velocity * GameWorld.Instance.DeltaTime);
         }
+
 
         public override Tag ToEnum()
         {

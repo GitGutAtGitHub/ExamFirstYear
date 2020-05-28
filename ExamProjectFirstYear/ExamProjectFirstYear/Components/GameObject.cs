@@ -91,6 +91,11 @@ namespace ExamProjectFirstYear
             {
                 component.Update(gameTime);
             }
+
+            foreach (Component component in components.Values)
+            {
+                component.Update(gameTime);
+            }
         }
 
         /// <summary>

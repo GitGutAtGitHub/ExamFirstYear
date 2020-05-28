@@ -16,6 +16,7 @@ namespace ExamProjectFirstYear
         {
             using (var game = GameWorld.Instance)
                 game.Run();
+            
         }
     }
 #endif
