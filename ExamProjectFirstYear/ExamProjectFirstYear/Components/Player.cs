@@ -102,7 +102,6 @@ namespace ExamProjectFirstYear
             {
                 Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
                                         ((Collider)(GameObject.GetComponent(Tag.COLLIDER))).CollisionBox);
-                Movement.Momentum = 0;
 
                 //Top and bottom platform.
                 if (intersection.Width > intersection.Height)
@@ -111,13 +110,13 @@ namespace ExamProjectFirstYear
                     if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
                     {
                         GameObject.Transform.Translate(new Vector2(0, -intersection.Height + 1));
-                        Movement.Grounded = true;
                     }
 
                     //Bottom platform.
                     if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
                     {
                         GameObject.Transform.Translate(new Vector2(0, +intersection.Height -1));
+                        Movement.Momentum = 0;
                     }
                 }
 
