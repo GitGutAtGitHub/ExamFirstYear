@@ -1,5 +1,6 @@
 ﻿using ExamProjectFirstYear.Components;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,17 +16,24 @@ namespace ExamProjectFirstYear
     {
         #region Fields
 
-        private int journalID;
+        private MouseState previousMouseState;
+        private MouseState currentMouseState;
 
         #endregion
 
 
         #region Properties
-
-        public int Health { get; set; }
         public int JournalID { get; set; }
+        public int InventoryID { get; set; }
+        public int Health { get; set; }
+        public int OpenDoor { get; set; }
+
+        public float PositionX { get; set; }
+        public float PositionY { get; set; }
+
         public Movement Movement { get; private set; }
-        public int JournalID1 { get => journalID; set => journalID = value; }
+
+        public TmpJournal TmpJournal { get; private set; }
 
         #endregion
 
@@ -37,7 +45,7 @@ namespace ExamProjectFirstYear
         /// </summary>
         public Player(int journalID)
         {
-            this.journalID = journalID;
+            JournalID = journalID;
         }
 
         #endregion
@@ -54,11 +62,23 @@ namespace ExamProjectFirstYear
         {
             GameObject.Tag = Tag.PLAYER;
             GameObject.SpriteName = "OopPlayerSprite2";
+            TmpJournal = SQLiteHandler.Instance.GetJournal(JournalID);
         }
 
         public override void Start()
         {
             Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+
+            GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX, TmpJournal.TmpPositionY));
+            InventoryID = TmpJournal.TmpInventoryID;
+            Health = TmpJournal.TmpHealth;
+            OpenDoor = TmpJournal.TmpOpenDoor;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            PositionX = GameObject.Transform.Position.X;
+            PositionY = GameObject.Transform.Position.Y;
         }
 
         public void Notify(GameEvent gameEvent, Component component)
@@ -67,13 +87,8 @@ namespace ExamProjectFirstYear
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
 
-                switch (componentMaterial.MaterialType)
-                {
-                    case MaterialType.LightBulb:
-                        component.GameObject.Destroy();
-                        SQLiteHandler.Instance.IncreaseAmountStoredMaterial(1);
-                        break;
-                }
+                component.GameObject.Destroy();
+                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.ID);
             }
 
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
@@ -150,8 +165,62 @@ namespace ExamProjectFirstYear
             //Insert ranged attack here.
         }
 
+        public void ShowStoredMaterial(int materialTypeID, int inventoryID)
+        {
 
+        }
 
         #endregion
+
+        public void TestMethod()
+        {
+            Blueprint blueprint = new Blueprint();
+
+            previousMouseState = currentMouseState;
+            currentMouseState = Mouse.GetState();
+
+            if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
+            {
+                Console.WriteLine("Button pressed");
+
+                //blueprint.CheckRecordedBP(1);
+
+                //SQLiteHandler.Instance.SaveGame(Health, OpenDoor, PositionX, PositionY, JournalID);
+            }
+        }
+    }
+
+    public struct TmpJournal
+    {
+        public int TmpJournalID { get; set; }
+        public int TmpInventoryID { get; set; }
+        public int TmpHealth { get; set; }
+        public int TmpOpenDoor { get; set; }
+        public float TmpPositionX { get; set; }
+        public float TmpPositionY { get; set; }
+
+
+        public TmpJournal(int tmpJournalID, int tmpInventoryID, int tmpHealth, float tmpPositionX, float tmpPositionY, int tmpOpenDoor)
+        {
+            TmpJournalID = tmpJournalID;
+            TmpInventoryID = tmpInventoryID;
+            TmpHealth = tmpHealth;
+            TmpPositionX = tmpPositionX;
+            TmpPositionY = tmpPositionY;
+            TmpOpenDoor = tmpOpenDoor;
+        }
+    }
+
+    public struct TmpStoredMaterial
+    {
+        public int TmpAmount { get; set; }
+        public int TmpSlot { get; set; }
+
+
+        public TmpStoredMaterial(int tmpAmound, int tmpSlot)
+        {
+            TmpAmount = tmpAmound;
+            TmpSlot = tmpSlot;
+        }
     }
 }

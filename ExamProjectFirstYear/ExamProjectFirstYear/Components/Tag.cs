@@ -23,6 +23,7 @@ namespace ExamProjectFirstYear
 		GRAVITY,
 		LIGHTSOURCE,
 		MOVEMENT,
-		MATERIAL
+		MATERIAL,
+		BLUEPRINT
 	}
 }

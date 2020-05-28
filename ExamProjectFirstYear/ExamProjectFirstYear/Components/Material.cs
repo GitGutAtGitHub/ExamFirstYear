@@ -12,22 +12,24 @@ namespace ExamProjectFirstYear.Components
         #region Fields
 
         private Movement movement;
+        private Blueprint blueprint;
 
         #endregion
 
 
         #region Properties
 
-        public MaterialType MaterialType { get; set; }
+        //public string MaterialName { get; set; }
+        public int ID { get; set; }
 
         #endregion
 
 
         #region Constructors
 
-        public Material(MaterialType materialType)
+        public Material(int iD)
         {
-            MaterialType = materialType;
+            ID = iD;
         }
 
         #endregion
@@ -95,5 +97,16 @@ namespace ExamProjectFirstYear.Components
         }
 
         #endregion
+    }
+
+    public struct TmpMaterialType
+    {
+        public string TmpName { get; set; }
+
+
+        public TmpMaterialType(string tmpName)
+        {
+            TmpName = tmpName;
+        }
     }
 }

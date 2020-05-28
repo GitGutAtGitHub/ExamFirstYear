@@ -163,6 +163,7 @@ namespace ExamProjectFirstYear
 			}
 
 			//SQLiteHandler.Instance.TestMethod();
+			player.TestMethod();
 
 			base.Update(gameTime);
 		}
@@ -228,15 +229,21 @@ namespace ExamProjectFirstYear
 			GameObject createdObject = new GameObject();
 			SpriteRenderer spriteRenderer = new SpriteRenderer();
 			Collider collider;
-			Material lightBulb = new Material(MaterialType.LightBulb);
+			Material material = new Material(1);
+			Blueprint blueprint = new Blueprint(1);
 
 			switch (tag)
 			{
 				case Tag.MATERIAL:
-					createdObject.AddComponent(lightBulb);
+					createdObject.AddComponent(material);
 					createdObject.AddComponent(new Movement(true, 40, 500));
 					break;
+
+				case Tag.BLUEPRINT:
+					createdObject.AddComponent(blueprint);
+					break;
 			}
+
 			createdObject.AddComponent(spriteRenderer);
 
 			createdObject.Awake();
@@ -244,7 +251,7 @@ namespace ExamProjectFirstYear
 
 			if (tag == Tag.MATERIAL)
 			{
-				collider = new Collider(spriteRenderer, lightBulb) { CheckCollisionEvents = true };
+				collider = new Collider(spriteRenderer, material) { CheckCollisionEvents = true };
 			}
 
 			else
