@@ -22,7 +22,7 @@ namespace ExamProjectFirstYear.Components
         private bool alive = true;
         protected IState currentState;
         private GameObject target = GameWorld.Instance.player.GameObject;
-        public Vector2 TargetPosition { get; set; }
+       
 
         #endregion
 

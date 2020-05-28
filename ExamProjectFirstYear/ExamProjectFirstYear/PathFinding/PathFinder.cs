@@ -13,8 +13,7 @@ namespace ExamProjectFirstYear
     class PathFinder
     {
         Enemy enemy;
-        public bool FindPathBool;
-
+       
         public PathFinder(Enemy enemy)
         {
             this.enemy = enemy;
