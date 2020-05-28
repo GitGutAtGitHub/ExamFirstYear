@@ -27,7 +27,7 @@ namespace ExamProjectFirstYear
 
 
 		#region PROPERTIES
-		public bool CheckCollisionEvents { get; set; }
+		public bool CheckCollisionEvents { get; set; } = true;
 
 		public Rectangle CollisionBox
 		{

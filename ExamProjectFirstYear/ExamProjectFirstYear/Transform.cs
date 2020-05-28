@@ -14,7 +14,7 @@ namespace ExamProjectFirstYear
 	{
         #region PROPERTIES
 
-        public Vector2 Velocity { get; set; }
+        public Vector2 Velocity { get; set; } // Skal muligvis slettes
         public Vector2 Position { get; set; }
 
         #endregion

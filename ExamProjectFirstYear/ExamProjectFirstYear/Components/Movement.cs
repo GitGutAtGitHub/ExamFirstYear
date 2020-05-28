@@ -9,112 +9,118 @@ namespace ExamProjectFirstYear.Components
 {
     public class Movement : Component
     {
-		#region Fields
+		    #region Fields
 
-		private float speed;
-		private float momentum;
+		    private float speed;
+		    private float momentum;
 
         #endregion
 
 
         #region Properties
 
-		public static float Force { get; set; }
+        public Vector2 Velocity { get; set; }
+        //public float Speed { get; set; }
+        //public float Momentum { get; set; }
+        public static float Force { get; set; }
+        public bool Grounded { get; set; }
+        public bool GravityOn { get; set; } = true;
 
-		public bool Grounded { get; set; }
-		public bool GravityOn { get; set; }
-
-		#endregion
-
-
-		#region Contstructors
-
-		public Movement(bool gravityOn, float momentum, float speed)
-		{
-			GravityOn = gravityOn;
-			this.momentum = GameWorld.Instance.ScreenSize.Y / momentum;
-			this.speed = speed;
-		}
-
-		#endregion
+        #endregion
 
 
-		#region Methods
+        #region Contstructors
 
-		public override Tag ToEnum()
-		{
-			return Tag.MOVEMENT;
-		}
+        public Movement(bool gravityOn, float momentum, float speed)
+    		{
+    			GravityOn = gravityOn;
+    			this.momentum = GameWorld.Instance.ScreenSize.Y / momentum;
+    			this.speed = speed;
+    		}
 
-		public override void Update(GameTime gameTime)
-		{
-			if (GravityOn == true)
-			{
-				CheckGrounded();
-				GravityHandling();
-			}
-		}
+        #endregion
 
-		/// <summary>
-		/// Enables movement of the object.
-		/// </summary>
-		/// <param name="velocity"></param>
-		public void Move(Vector2 velocity)
-		{
-			if (velocity != Vector2.Zero)
-			{
-				velocity.Normalize();
-			}
 
-			velocity *= speed;
+        #region Methods
 
-			GameObject.Transform.Translate(velocity * GameWorld.Instance.DeltaTime);
-		}
+        public override Tag ToEnum()
+        {
+            return Tag.MOVEMENT;
+        }
 
-		/// <summary>
-		/// Applies gravity to an object that has left the ground.
-		/// </summary>
-		private void GravityHandling()
-		{
-			if (GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.Y && Grounded == false)
-			{
-				if (Force >= -20f)
-				{
-					Force--;
-				}
-				GameObject.Transform.Translate(new Vector2(0, -Force));
-			}
-		}
+        public override void Update(GameTime gameTime)
+        {
+            if (GravityOn == true)
+            {
+                GravityHandling();
+            }
+            Move(Velocity);
+        }
 
-		/// <summary>
-		/// Checks if the object is grounded on a platform.
-		/// </summary>
-		private void CheckGrounded()
-		{
-			if (GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.Y)
-			{
-				Grounded = false;
-			}
+        /// <summary>
+        /// Enables movement of the object.
+        /// </summary>
+        /// <param name="velocity"></param>
+        public void Move(Vector2 velocity)
+        {
+            if (velocity != Vector2.Zero)
+            {
+                velocity.Normalize();
+            }
 
-			else if (GameObject.Transform.Position.Y >= GameWorld.Instance.ScreenSize.Y)
-			{
-				Grounded = true;
-			}
-		}
+            velocity *= Speed;
 
-		/// <summary>
-		/// Enables jumping.
-		/// </summary>
-		public void Jump()
-		{
-			if (Grounded == true)
-			{
-				Force = momentum;
+            GameObject.Transform.Translate(velocity * GameWorld.Instance.DeltaTime);
+        }
 
-				GameObject.Transform.Translate(new Vector2(0, -Force));
-			}
-		}
+        /// <summary>
+        /// Applies gravity to an object that has left the ground.
+        /// </summary>
+        private void GravityHandling()
+        {
+            /// If the players position is above the bottom of the screen and isgrounded is false (if the player is not on a platform) player will be pulled
+            /// down by the value of force.
+            if (Grounded == false)
+            {
+                /// As long as force is a higher value than -20 it will be lowered.
+                /// This ensures that force will not become so low that it can pull the player throough a platform in a single frame.
+                if (Force >= -20f)
+                {
+                    Force--;
+                }
+                GameObject.Transform.Translate(new Vector2(0, -Force));
+            }
+        }
 
-		#endregion
-	}
+        /// <summary>
+        /// Checks if the object is grounded on a platform.
+        /// </summary>
+        //private void CheckGrounded()
+        //{
+        //    if (GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.Y)
+        //    {
+        //        Grounded = false;
+        //    }
+        //
+        //    else if (GameObject.Transform.Position.Y >= GameWorld.Instance.ScreenSize.Y)
+        //    {
+        //        Grounded = true;
+        //    }
+        //}
+
+        /// <summary>
+        /// Enables jumping.
+        /// </summary>
+        public void Jump()
+        {
+            if (Grounded == true)
+            {
+                Force = Momentum;
+
+                GameObject.Transform.Translate(new Vector2(0, -Force));
+            }
+        }
+
+        #endregion
+    }
 }
