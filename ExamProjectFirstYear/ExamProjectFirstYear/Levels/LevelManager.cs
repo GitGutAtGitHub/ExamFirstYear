@@ -133,7 +133,7 @@ namespace ExamProjectFirstYear
             GameWorld.Instance.GameObjects.Add(createdObject);
 
             //Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.
-            for (int x = 0; x <= (int)Math.Round(createdObject.GetObjectWidthInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); x++)
+            for (int x = 0; x < (int)Math.Round(createdObject.GetObjectWidthInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); x++)
             {
                 for (int y = 0; y <= (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
                 {
