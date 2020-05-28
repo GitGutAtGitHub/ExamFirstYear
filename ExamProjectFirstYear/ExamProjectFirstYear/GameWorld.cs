@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using ExamProjectFirstYear.PathFinding;
+using System.Xml;
+using System.Dynamic;
+using System.Threading;
 using ExamProjectFirstYear.Components;
 
 namespace ExamProjectFirstYear
@@ -48,9 +51,6 @@ namespace ExamProjectFirstYear
 		public float TimeElapsed { get; set; }
 		public Vector2 ScreenSize { get; private set; }
 
-        // Used by the camera-class.
-        public static int ScreenHeight { get; private set; }
-        public static int ScreenWidth { get; private set; }
         #endregion
 
         #region CONSTRUCTORS
@@ -136,8 +136,34 @@ namespace ExamProjectFirstYear
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-				Exit();
+
+                  if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                  {
+
+                      foreach (GameObject gO in GameObjects)
+                      {
+
+                          if (gO.Components.ContainsKey(Tag.FLYINGENEMY))
+                          {
+                              ((gO.GetComponent(Tag.FLYINGENEMY))as FlyingEnemy).Alive = false;
+                          }
+
+                          //Skal tilføjes når resten af fjender er implementeret.
+
+                          //if (gO.Components.ContainsKey(Tag.MEELEEENEMY))
+                          //{
+                          //    ((gO.GetComponent(Tag.MEELEEENEMY)) as MeleeEnemy).Alive = false;
+                          //}
+
+                          //if (gO.Components.ContainsKey(Tag.RANGEDENEMY))
+                          //{
+                          //    ((gO.GetComponent(Tag.RANGEDENEMY)) as RangedEnemy).Alive = false;
+                          //}
+                      }
+
+                      Exit();
+                  }
+
 
 			TimeHandler(gameTime);
 

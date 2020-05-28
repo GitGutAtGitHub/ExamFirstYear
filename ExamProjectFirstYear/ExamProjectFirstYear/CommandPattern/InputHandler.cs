@@ -15,26 +15,26 @@ namespace ExamProjectFirstYear
 		private Dictionary<Keys, ICommand> keyBinds = new Dictionary<Keys, ICommand>();
 		private Dictionary<Keys, ICommand> releaseKeyBinds = new Dictionary<Keys,ICommand>();
 
-		private static InputHandler instance;
-		#endregion
+        private static InputHandler instance;
+        #endregion
 
-		#region PROPERTIES
-		public static InputHandler Instance
-		{
-			get
-			{
-				if (instance == null)
-				{
-					instance = new InputHandler();
-				}
-				return instance;
-			}
-		}
+        #region PROPERTIES
+        public static InputHandler Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new InputHandler();
+                }
+                return instance;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region METHODS
-		 /// <summary>
+        #region METHODS
+        /// <summary>
         /// Adds all controls for player to a keybinds Dictionary once instantiated.
         /// </summary>
         private InputHandler()
@@ -58,13 +58,13 @@ namespace ExamProjectFirstYear
 			releaseKeyBinds.Add(Keys.Z, new ReleaseCommand(2));
 		}
 
-		/// <summary>
-		/// Executes all commands for the keys added to the dictionary
-		/// </summary>
-		/// <param name="player"></param>
-		public void Execute(Player player)
-		{
-			KeyboardState keyState = Keyboard.GetState();
+        /// <summary>
+        /// Executes all commands for the keys added to the dictionary
+        /// </summary>
+        /// <param name="player"></param>
+        public void Execute(Player player)
+        {
+            KeyboardState keyState = Keyboard.GetState();
 
 			foreach (Keys key in keyBinds.Keys)
 			{
@@ -96,6 +96,6 @@ namespace ExamProjectFirstYear
 			}
 		}
 
-		#endregion
-	}
+        #endregion
+    }
 }
