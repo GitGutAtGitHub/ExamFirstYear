@@ -52,7 +52,7 @@ namespace ExamProjectFirstYear.Components
         {
             if (GravityOn == true)
             {
-                CheckGrounded();
+                //CheckGrounded();
                 GravityHandling();
             }
             Move(Velocity);
@@ -119,6 +119,8 @@ namespace ExamProjectFirstYear.Components
                 Force = momentum;
 
                 GameObject.Transform.Translate(new Vector2(0, -Force));
+
+                Grounded = false;
             }
         }
 

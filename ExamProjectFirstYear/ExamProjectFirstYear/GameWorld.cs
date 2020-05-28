@@ -22,13 +22,14 @@ namespace ExamProjectFirstYear
 		GraphicsDeviceManager graphics;
 
 		public Player player;
+        private Camera camera;
 
-		#endregion
+        #endregion
 
-		#region PROPERTIES
+        #region PROPERTIES
 
-		//For singletong pattern
-		public static GameWorld Instance
+        //For singletong pattern
+        public static GameWorld Instance
 		{
 			get
 			{
@@ -47,16 +48,19 @@ namespace ExamProjectFirstYear
 		public float TimeElapsed { get; set; }
 		public Vector2 ScreenSize { get; private set; }
 
-		#endregion
+        // Used by the camera-class.
+        public static int ScreenHeight { get; private set; }
+        public static int ScreenWidth { get; private set; }
+        #endregion
 
-		#region Constructors
+        #region CONSTRUCTORS
 
-		private GameWorld()
+        private GameWorld()
 		{
 			graphics = new GraphicsDeviceManager(this)
 			{
-				PreferredBackBufferHeight = 1000,
-				PreferredBackBufferWidth = 1500
+				PreferredBackBufferHeight = 1080,
+				PreferredBackBufferWidth = 1920
 			};
 			graphics.ApplyChanges();
 
@@ -78,16 +82,16 @@ namespace ExamProjectFirstYear
 
 			player = new Player(1);
 
-			graphics.PreferredBackBufferWidth = 1920;
-			graphics.PreferredBackBufferHeight = 1080;
-			graphics.ApplyChanges();
+			//graphics.PreferredBackBufferWidth = 1920;
+			//graphics.PreferredBackBufferHeight = 1080;
+			//graphics.ApplyChanges();
 			IsMouseVisible = true;
 
-
 			NodeManager.Instance.InitializeGrid();
-			
 
-			base.Initialize();
+            camera = new Camera();
+
+            base.Initialize();
 		}
 
 		/// <summary>
@@ -113,7 +117,7 @@ namespace ExamProjectFirstYear
 			NodeManager.Instance.UpdateGrid();
 			CreateObject(Tag.MATERIAL);
 			NodeManager.Instance.LoadContent(Content);
-			
+
 		}
 
 		/// <summary>
@@ -162,10 +166,13 @@ namespace ExamProjectFirstYear
 				}
 			}
 
+            //SQLiteHandler.Instance.TestMethod();
+
+            camera.FollowPlayer(player.GameObject);
 			//SQLiteHandler.Instance.TestMethod();
 			player.TestMethod();
 
-			base.Update(gameTime);
+            base.Update(gameTime);
 		}
 
 		/// <summary>
@@ -176,7 +183,8 @@ namespace ExamProjectFirstYear
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			spriteBatch.Begin();
+            // The code in the ( ) is added to make sure the camera runs.
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: camera.TransformCamera);
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
