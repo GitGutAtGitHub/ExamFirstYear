@@ -79,6 +79,7 @@ namespace ExamProjectFirstYear
             InventoryID = TmpJournal.TmpInventoryID;
             Health = TmpJournal.TmpHealth;
             OpenDoor = TmpJournal.TmpOpenDoor;
+
         }
 
         public override void Update(GameTime gameTime)
@@ -177,7 +178,7 @@ namespace ExamProjectFirstYear
     				GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
     				SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
     				Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
-    				tmpMeleeObject.Transform.Position = this.GameObject.Transform.Position + (new Vector2(Direction.X * tmpMeleeRenderer.Sprite.Width, Direction.Y));
+    				tmpMeleeObject.Transform.Position = GameObject.Transform.Position + (new Vector2(Direction.X * tmpMeleeRenderer.Sprite.Width, Direction.Y));
     				GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
     				GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
     				canAttack = false;
@@ -195,7 +196,7 @@ namespace ExamProjectFirstYear
     			{
     				GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject();
     				Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
-    				tmpProjectileObject.Transform.Position = this.GameObject.Transform.Position;
+    				tmpProjectileObject.Transform.Position = GameObject.Transform.Position;
     				Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
     				tmpMovement.Velocity = Direction;
     				//tmpMovement.Speed = 1000f;

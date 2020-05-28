@@ -24,7 +24,7 @@ namespace ExamProjectFirstYear.Components
         //public float Momentum { get; set; }
         public static float Force { get; set; }
         public bool Grounded { get; set; }
-        public bool GravityOn { get; set; } = true;
+        public bool GravityOn { get; set; }
 
         #endregion
 
@@ -52,6 +52,7 @@ namespace ExamProjectFirstYear.Components
         {
             if (GravityOn == true)
             {
+                CheckGrounded();
                 GravityHandling();
             }
             Move(Velocity);
@@ -68,7 +69,7 @@ namespace ExamProjectFirstYear.Components
                 velocity.Normalize();
             }
 
-            velocity *= Speed;
+            velocity *= speed;
 
             GameObject.Transform.Translate(velocity * GameWorld.Instance.DeltaTime);
         }
@@ -95,18 +96,18 @@ namespace ExamProjectFirstYear.Components
         /// <summary>
         /// Checks if the object is grounded on a platform.
         /// </summary>
-        //private void CheckGrounded()
-        //{
-        //    if (GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.Y)
-        //    {
-        //        Grounded = false;
-        //    }
-        //
-        //    else if (GameObject.Transform.Position.Y >= GameWorld.Instance.ScreenSize.Y)
-        //    {
-        //        Grounded = true;
-        //    }
-        //}
+        private void CheckGrounded()
+        {
+            if (GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.Y)
+            {
+                Grounded = false;
+            }
+
+            else if (GameObject.Transform.Position.Y >= GameWorld.Instance.ScreenSize.Y)
+            {
+                Grounded = true;
+            }
+        }
 
         /// <summary>
         /// Enables jumping.
@@ -115,7 +116,7 @@ namespace ExamProjectFirstYear.Components
         {
             if (Grounded == true)
             {
-                Force = Momentum;
+                Force = momentum;
 
                 GameObject.Transform.Translate(new Vector2(0, -Force));
             }
