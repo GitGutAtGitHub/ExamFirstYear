@@ -10,6 +10,7 @@ namespace ExamProjectFirstYear
 	public class Collider : Component
 	{
 		#region FIELDS
+
 		//Used to notify objects when they are colliding.
 		private GameEvent collidingEvent = new GameEvent("Colliding");
 		//The following to fields are used to notify objects that has collided when they are no longer colliding with eachother.
@@ -22,10 +23,8 @@ namespace ExamProjectFirstYear
 
 		private Texture2D collisionTexture;
 
-		protected Rectangle intersection;
-
-
 		#endregion
+
 
 		#region PROPERTIES
 		public bool CheckCollisionEvents { get; set; } = true;
@@ -47,6 +46,7 @@ namespace ExamProjectFirstYear
 		}
 
 		#endregion
+
 
 		#region METHODS
 
@@ -81,8 +81,6 @@ namespace ExamProjectFirstYear
 		/// <param name="other"></param>
 		public void OnColliding(Collider other)
 		{
-			intersection = Rectangle.Intersect(other.CollisionBox, CollisionBox);
-
 			// Following notifies an object when this collider intersects with the other objects collider.
 			if (CheckCollisionEvents)
 			{
