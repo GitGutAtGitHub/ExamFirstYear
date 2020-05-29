@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +13,21 @@ namespace ExamProjectFirstYear.Components
     /// </summary>
     public class Inventory : Component
     {
+        #region Fields
+
+        private bool inventoryOpen;
+
+        private KeyboardState previousKeyboardState;
+        private KeyboardState currentKeyboardState;
+
+        private SpriteRenderer inventoryRenderer;
+
+        #endregion
+
+
         #region Properties
 
-        public int ID { get; set; }
+        public int InventoryID { get; set; }
         public List<int> MaterialTypeIDs { get; set; } = new List<int>();
 
         #endregion
@@ -21,9 +35,9 @@ namespace ExamProjectFirstYear.Components
 
         #region Constructors
 
-        public Inventory(int iD)
+        public Inventory(int inventoryID)
         {
-            ID = iD;
+            InventoryID = inventoryID;
         }
 
         #endregion
@@ -39,13 +53,75 @@ namespace ExamProjectFirstYear.Components
         public override void Awake()
         {
             GameObject.Tag = Tag.INVENTORY;
+            GameObject.SpriteName = "InventoryClosed";
+            inventoryRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+            MaterialTypeIDs.Add(1);
+        }
+
+        public override void Start()
+        {
+            GameObject.Transform.Translate(new Vector2(30, 180));
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            HandleInventory();
+        }
+
+        /// <summary>
+        /// Checks whether Journal is open or closed.
+        /// </summary>
+        private void HandleInventory()
+        {
+            //If Journal is closed, it can be opened.
+            if (inventoryOpen == false)
+            {
+                OpenInventory();
+            }
+
+            //If Journal is open, it can be closed.
+            else if (inventoryOpen == true)
+            {
+                CloseInventory();
+            }
+        }
+
+        /// <summary>
+        /// If J key is pressed, open Inventory.
+        /// </summary>
+        private void OpenInventory()
+        {
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
+            if (currentKeyboardState.IsKeyUp(Keys.I) && previousKeyboardState.IsKeyDown(Keys.I))
+            {
+                inventoryOpen = true;
+                inventoryRenderer.SetSprite("InventoryOpen");
+                ShowStoredMaterials();
+            }
+        }
+
+        /// <summary>
+        /// If J key is pressed, close Inventory.
+        /// </summary>
+        private void CloseInventory()
+        {
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
+            if (currentKeyboardState.IsKeyUp(Keys.I) && previousKeyboardState.IsKeyDown(Keys.I))
+            {
+                inventoryOpen = false;
+                inventoryRenderer.SetSprite("InventoryClosed");
+            }
         }
 
         /// <summary>
         /// Show all the materials that the player currently have.
         /// </summary>
         /// <param name="journalID"></param>
-        public void ShowStoredMaterials(int journalID)
+        public void ShowStoredMaterials()
         {
             TmpMaterialType tmpMaterialType;
             TmpStoredMaterial tmpStoredMaterial;

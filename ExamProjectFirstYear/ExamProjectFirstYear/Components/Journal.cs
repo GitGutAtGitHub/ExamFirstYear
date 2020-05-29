@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,20 @@ namespace ExamProjectFirstYear.Components
     /// </summary>
     public class Journal : Component
     {
+        #region Fields
+
+        private bool journalOpen;
+
+        private KeyboardState previousKeyboardState;
+        private KeyboardState currentKeyboardState;
+
+        private SpriteRenderer journalRenderer;
+
+        private SpriteFont journalHeading;
+
+        #endregion
+
+
         #region Properties
 
         public int JournalID { get; set; }
@@ -46,6 +62,88 @@ namespace ExamProjectFirstYear.Components
         public override void Awake()
         {
             GameObject.Tag = Tag.JOURNAL;
+            GameObject.SpriteName = "ClosedJournal";
+            journalRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+            journalHeading = GameWorld.Instance.Content.Load<SpriteFont>("JournalHeading");
+        }
+
+        public override void Start()
+        {
+            GameObject.Transform.Translate(new Vector2(30, 30));
+
+            SQLiteHandler.Instance.AddRecordedBP(1, JournalID);
+            SQLiteHandler.Instance.AddRecordedCreature(1, JournalID);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            HandleJournal();
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (journalOpen == true)
+            {
+                journalRenderer.SetSprite("OpenJournal");
+                spriteBatch.Draw(journalRenderer.Sprite, GameObject.Transform.Position, null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, 1);
+                spriteBatch.DrawString(journalHeading, "Recorded Blueprints", new Vector2(GameObject.Transform.Position.X + 20, GameObject.Transform.Position.Y + 20),
+                                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+            }
+
+            else if (journalOpen == false)
+            {
+                journalRenderer.SetSprite("ClosedJournal");
+                spriteBatch.Draw(journalRenderer.Sprite, GameObject.Transform.Position, null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, 1);        
+            }
+        }
+
+
+        /// <summary>
+        /// Checks whether Journal is open or closed.
+        /// </summary>
+        private void HandleJournal()
+        {
+            //If Journal is closed, it can be opened.
+            if (journalOpen == false)
+            {
+                OpenJournal();
+            }
+
+            //If Journal is open, it can be closed.
+            else if (journalOpen == true)
+            {
+                CloseJournal();
+            }
+        }
+
+        /// <summary>
+        /// If J key is pressed, open Journal.
+        /// </summary>
+        private void OpenJournal()
+        {
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
+            if (currentKeyboardState.IsKeyUp(Keys.J) && previousKeyboardState.IsKeyDown(Keys.J))
+            {
+                journalOpen = true;
+                ShowRecordedBlueprints();
+            }
+        }
+
+        /// <summary>
+        /// If J key is pressed, close Journal.
+        /// </summary>
+        private void CloseJournal()
+        {
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
+            if (currentKeyboardState.IsKeyUp(Keys.J) && previousKeyboardState.IsKeyDown(Keys.J))
+            {
+                journalOpen = false;
+                journalRenderer.SetSprite("ClosedJournal");
+            }
         }
 
         /// <summary>

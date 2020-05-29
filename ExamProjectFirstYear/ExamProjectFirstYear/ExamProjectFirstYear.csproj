@@ -82,7 +82,6 @@
     <Compile Include="Components\Door.cs" />
     <Compile Include="Components\Inventory.cs" />
     <Compile Include="Components\Journal.cs" />
-    <Compile Include="Components\JournalUI.cs" />
     <Compile Include="Components\LightSource.cs" />
     <Compile Include="ObjectPools\EnemyProjectilePool.cs" />
     <Compile Include="ObjectPools\BossProjectilePool.cs" />

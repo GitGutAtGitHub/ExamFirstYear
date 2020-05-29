@@ -20,14 +20,12 @@ namespace ExamProjectFirstYear
         private MouseState previousMouseState;
         private MouseState currentMouseState;
 
-        private Journal journal;
-        private Inventory inventory;
-
         #endregion
 
 
         #region Properties
-        public int JournalID { get; set; }
+        public int PlayerID { get; set; }
+
         public int InventoryID { get; set; }
         public int Health { get; set; }
         public int OpenDoor { get; set; }
@@ -41,8 +39,8 @@ namespace ExamProjectFirstYear
 
         public Vector2 Direction { get; set; } = new Vector2(1, 0);
 
-    		public bool canAttack { get; set; } = true;
-    		public bool canShoot { get; set; } = true;
+        public bool canAttack { get; set; } = true;
+        public bool canShoot { get; set; } = true;
 
         #endregion
 
@@ -52,9 +50,9 @@ namespace ExamProjectFirstYear
         /// <summary>
         /// Constructor for the Player Character component.
         /// </summary>
-        public Player(int journalID)
+        public Player(int playerID)
         {
-            JournalID = journalID;
+            PlayerID = playerID;
         }
 
         #endregion
@@ -71,9 +69,7 @@ namespace ExamProjectFirstYear
         {
             GameObject.Tag = Tag.PLAYER;
             GameObject.SpriteName = "OopPlayerSprite2";
-            TmpJournal = SQLiteHandler.Instance.GetJournal(JournalID);
-            journal = (Journal)GameObject.GetComponent(Tag.JOURNAL);
-            inventory = (Inventory)GameObject.GetComponent(Tag.INVENTORY);
+            TmpJournal = SQLiteHandler.Instance.GetJournal(PlayerID);
             Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
         }
 
@@ -143,16 +139,16 @@ namespace ExamProjectFirstYear
         }
 
         public void ReleaseAttack(int attackNumber)
-    		{
-    			if (attackNumber == 1)
-    			{
-    				canAttack = true;
-    			}
-    			if (attackNumber == 2)
-    			{
-    				canShoot = true;
-    			}
-    		}
+        {
+            if (attackNumber == 1)
+            {
+                canAttack = true;
+            }
+            if (attackNumber == 2)
+            {
+                canShoot = true;
+            }
+        }
 
         /// <summary>
         /// Players method for attacking.
@@ -173,42 +169,42 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-    		/// Melee attack for Player.
-    		/// </summary>
-    		private void MeleeAttak()
-    		{
-    			if (canAttack)
-    			{
-    				GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
-    				SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
-    				Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
-    				tmpMeleeObject.Transform.Position = GameObject.Transform.Position + (new Vector2(Direction.X * tmpMeleeRenderer.Sprite.Width, Direction.Y));
-    				GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
-    				GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
-    				canAttack = false;
-    			}
-    		}
+        /// Melee attack for Player.
+        /// </summary>
+        private void MeleeAttak()
+        {
+            if (canAttack)
+            {
+                GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
+                SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
+                Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
+                tmpMeleeObject.Transform.Position = GameObject.Transform.Position + (new Vector2(Direction.X * tmpMeleeRenderer.Sprite.Width, Direction.Y));
+                GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
+                GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
+                canAttack = false;
+            }
+        }
 
         /// <summary>
-    		/// Ranged attack for Player.
-    		/// </summary>
-    		private void RangedAttack()
-    		{
-    			//MANGLER KODE DER FORHINDRER AT MAN KAN LAVE MERE END ÉT ANGREB AF GANGEN
-    			//MANGLER OGSÅ KODE DER SØRGER FOR AT SPILLEREN MISTER LYS/MANA.
-    			if (canShoot)
-    			{
-    				GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject();
-    				Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
-    				tmpProjectileObject.Transform.Position = GameObject.Transform.Position;
-    				Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
-    				tmpMovement.Velocity = Direction;
-    				//tmpMovement.Speed = 1000f;
-    				GameWorld.Instance.Colliders.Add(tmpProjectileCollider);
-    				GameWorld.Instance.GameObjects.Add(tmpProjectileObject);
-    				canShoot = false;
-    			}
-    		}
+        /// Ranged attack for Player.
+        /// </summary>
+        private void RangedAttack()
+        {
+            //MANGLER KODE DER FORHINDRER AT MAN KAN LAVE MERE END ÉT ANGREB AF GANGEN
+            //MANGLER OGSÅ KODE DER SØRGER FOR AT SPILLEREN MISTER LYS/MANA.
+            if (canShoot)
+            {
+                GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject();
+                Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
+                tmpProjectileObject.Transform.Position = GameObject.Transform.Position;
+                Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
+                tmpMovement.Velocity = Direction;
+                //tmpMovement.Speed = 1000f;
+                GameWorld.Instance.Colliders.Add(tmpProjectileCollider);
+                GameWorld.Instance.GameObjects.Add(tmpProjectileObject);
+                canShoot = false;
+            }
+        }
 
         #endregion
 
@@ -219,7 +215,7 @@ namespace ExamProjectFirstYear
 
             if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
             {
-                SQLiteHandler.Instance.SaveGame(Health, OpenDoor, JournalID);
+                SQLiteHandler.Instance.SaveGame(Health, OpenDoor, PlayerID);
             }
 
             //else if (currentMouseState.RightButton == ButtonState.Released && previousMouseState.RightButton == ButtonState.Pressed)

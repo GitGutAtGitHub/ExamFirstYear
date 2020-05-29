@@ -21,6 +21,8 @@ namespace ExamProjectFirstYear
 		GraphicsDeviceManager graphics;
 
 		public Player player;
+		public Journal journal;
+		public Inventory inventory;
 
 		#endregion
 
@@ -76,7 +78,9 @@ namespace ExamProjectFirstYear
 		{
 			TimeElapsed = 0;
 
-			player = new Player(1);
+			journal = new Journal(1);
+			player = new Player(journal.JournalID);
+			inventory = new Inventory(player.PlayerID);
 
 			graphics.PreferredBackBufferWidth = 1920;
 			graphics.PreferredBackBufferHeight = 1080;
@@ -112,7 +116,8 @@ namespace ExamProjectFirstYear
 			LevelManager.Instance.InitializeLevel();
 			NodeManager.Instance.UpdateGrid();
 			CreateObject(Tag.MATERIAL);
-			CreateObject(Tag.JOURNAILUI);
+			CreateObject(Tag.JOURNAL);
+			CreateObject(Tag.INVENTORY);
 			NodeManager.Instance.LoadContent(Content);
 			
 		}
@@ -239,8 +244,12 @@ namespace ExamProjectFirstYear
 					createdObject.AddComponent(new Movement(true, 40, 500));
 					break;
 
-				case Tag.JOURNAILUI:
-					createdObject.AddComponent(new JournalUI());
+				case Tag.JOURNAL:
+					createdObject.AddComponent(journal);
+					break;
+
+				case Tag.INVENTORY:
+					createdObject.AddComponent(inventory);
 					break;
 			}
 

@@ -237,8 +237,7 @@ namespace ExamProjectFirstYear
         /// <param name="materialName"></param>
         public void IncreaseAmountStoredMaterial(int materialTypeID)
         {
-            inventory = (Inventory)GameWorld.Instance.player.GameObject.GetComponent(Tag.INVENTORY);
-            inventory.MaterialTypeIDs.Add(materialTypeID);
+            GameWorld.Instance.inventory.MaterialTypeIDs.Add(materialTypeID);
             UpdateTable("StoredMaterial", "Amount=Amount+1", $"MaterialTypeID={materialTypeID}");
         }
 
@@ -248,8 +247,7 @@ namespace ExamProjectFirstYear
         /// <param name="materialName"></param>
         public void DecreaseAmountStoredMaterial(int materialTypeID)
         {
-            inventory = (Inventory)GameWorld.Instance.player.GameObject.GetComponent(Tag.INVENTORY);
-            inventory.MaterialTypeIDs.Remove(materialTypeID);
+            GameWorld.Instance.inventory.MaterialTypeIDs.Remove(materialTypeID);
             UpdateTable("StoredMaterial", "Amount=Amount-1", $"MaterialTypeID={materialTypeID}");
         }
 
@@ -259,8 +257,7 @@ namespace ExamProjectFirstYear
         /// <param name="blueprintName"></param>
         public void AddRecordedBP(int blueprintID, int journalID)
         {
-            journal = (Journal)GameWorld.Instance.player.GameObject.GetComponent(Tag.JOURNAL);
-            journal.RecordedBlueprintIDs.Add(blueprintID);
+            GameWorld.Instance.journal.RecordedBlueprintIDs.Add(blueprintID);
             InsertIntoTable($"RecordedBP", $"{blueprintID}, {journalID}");
         }
 
@@ -270,8 +267,7 @@ namespace ExamProjectFirstYear
         /// <param name="blueprintName"></param>
         public void AddRecordedCreature(int creatureID, int journalID)
         {
-            journal = (Journal)GameWorld.Instance.player.GameObject.GetComponent(Tag.JOURNAL);
-            journal.RecordedCreatureIDs.Add(creatureID);
+            GameWorld.Instance.journal.RecordedCreatureIDs.Add(creatureID);
             InsertIntoTable($"RecordedCreature", $"{creatureID}, {journalID}");
         }
 
@@ -402,7 +398,7 @@ namespace ExamProjectFirstYear
         /// <returns></returns>
         public TmpInventory GetInventory()
         {
-            int iD = SelectIntValuesWhere("ID", "Inventory", $"ID = {GameWorld.Instance.player.JournalID}");
+            int iD = SelectIntValuesWhere("ID", "Inventory", $"ID = {GameWorld.Instance.player.PlayerID}");
 
             TmpInventory tmpInventory = new TmpInventory(iD);
 

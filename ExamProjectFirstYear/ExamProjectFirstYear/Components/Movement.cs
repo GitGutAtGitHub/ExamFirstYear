@@ -52,7 +52,7 @@ namespace ExamProjectFirstYear.Components
         {
             if (GravityOn == true)
             {
-                CheckGrounded();
+                //CheckGrounded();
                 GravityHandling();
             }
             Move(Velocity);

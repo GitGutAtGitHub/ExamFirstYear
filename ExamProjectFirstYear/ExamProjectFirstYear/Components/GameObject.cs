@@ -100,9 +100,8 @@ namespace ExamProjectFirstYear
         /// </summary>
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
-
         {
-            foreach (Component component in drawnComponents.Values)
+            foreach (Component component in Components.Values)
             {
                 component.Draw(spriteBatch);
             }
@@ -142,6 +141,17 @@ namespace ExamProjectFirstYear
         {
             return Transform.Position / NodeManager.Instance.CellSize;
         }
+
+        /// <summary>
+        /// Load and set a SpriteFont.
+        /// </summary>
+        /// <param name="spriteFont"></param>
+        /// <param name="fontName"></param>
+        public void SetSpriteFont(SpriteFont spriteFont, string fontName)
+        {
+            spriteFont = GameWorld.Instance.Content.Load<SpriteFont>($"{fontName}");
+        }
+
         #endregion
     }
 }
