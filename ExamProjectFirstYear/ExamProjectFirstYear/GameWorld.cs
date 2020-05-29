@@ -14,8 +14,7 @@ namespace ExamProjectFirstYear
 	public class GameWorld : Game
 	{
 		#region FIELDS
-		private SpriteBatch spriteBatch;
-
+		
 		//For singleton pattern
 		private static GameWorld instance;
 
@@ -46,6 +45,7 @@ namespace ExamProjectFirstYear
 		public float DeltaTime { get; set; }
 		public float TimeElapsed { get; set; }
 		public Vector2 ScreenSize { get; private set; }
+		public SpriteBatch SpriteBatch { get; set; }
 
 		#endregion
 
@@ -97,7 +97,7 @@ namespace ExamProjectFirstYear
 		protected override void LoadContent()
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
-			spriteBatch = new SpriteBatch(GraphicsDevice);
+			SpriteBatch = new SpriteBatch(GraphicsDevice);
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
@@ -112,6 +112,7 @@ namespace ExamProjectFirstYear
 			LevelManager.Instance.InitializeLevel();
 			NodeManager.Instance.UpdateGrid();
 			CreateObject(Tag.MATERIAL);
+			CreateObject(Tag.JOURNAILUI);
 			NodeManager.Instance.LoadContent(Content);
 			
 		}
@@ -163,7 +164,7 @@ namespace ExamProjectFirstYear
 			}
 
 			//SQLiteHandler.Instance.TestMethod();
-			player.TestMethod();
+			//player.TestMethod();
 
 			base.Update(gameTime);
 		}
@@ -176,16 +177,16 @@ namespace ExamProjectFirstYear
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			spriteBatch.Begin();
+			SpriteBatch.Begin();
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
-				GameObjects[i].Draw(spriteBatch);
+				GameObjects[i].Draw(SpriteBatch);
 			}
 
-			NodeManager.Instance.Draw(spriteBatch);
+			NodeManager.Instance.Draw(SpriteBatch);
 
-			spriteBatch.End();
+			SpriteBatch.End();
 
 			base.Draw(gameTime);
 		}
@@ -236,6 +237,10 @@ namespace ExamProjectFirstYear
 				case Tag.MATERIAL:
 					createdObject.AddComponent(material);
 					createdObject.AddComponent(new Movement(true, 40, 500));
+					break;
+
+				case Tag.JOURNAILUI:
+					createdObject.AddComponent(new JournalUI());
 					break;
 			}
 

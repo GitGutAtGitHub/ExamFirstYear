@@ -18,7 +18,7 @@ namespace ExamProjectFirstYear.Components
 
         #region Properties
 
-        public int ID { get; set; }
+        public int MaterialID { get; set; }
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace ExamProjectFirstYear.Components
 
         public Material(int iD)
         {
-            ID = iD;
+            MaterialID = iD;
         }
 
         #endregion

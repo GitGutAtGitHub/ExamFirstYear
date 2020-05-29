@@ -98,7 +98,7 @@ namespace ExamProjectFirstYear
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
                 component.GameObject.Destroy();
-                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.ID);
+                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
             }
 
             //Players hit platforms when they collide with them.

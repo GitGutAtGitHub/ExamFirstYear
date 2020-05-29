@@ -21,7 +21,6 @@ namespace ExamProjectFirstYear.Components
 
 		public override void Start()
 		{
-			SpriteRenderer platformRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
 			GameObject.SpriteName = "Platform";	
 		}
 	}

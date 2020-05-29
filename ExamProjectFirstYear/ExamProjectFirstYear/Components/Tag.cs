@@ -31,6 +31,7 @@ namespace ExamProjectFirstYear
 		MATERIAL,
 		BLUEPRINT,
 		JOURNAL,
-		INVENTORY
+		INVENTORY,
+		JOURNAILUI
 	}
 }
