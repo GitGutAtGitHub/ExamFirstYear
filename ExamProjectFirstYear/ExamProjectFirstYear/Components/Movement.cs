@@ -127,9 +127,9 @@ namespace ExamProjectFirstYear.Components
 
 			if (HasJumped == false)
 			{
-				Force = Momentum;
+				Force = maxMomentum;
 
-				GameObject.Transform.Translate(new Vector2(0, -Momentum));
+				GameObject.Transform.Translate(new Vector2(0, -Force));
 
 				Grounded = false;
 			}
@@ -139,6 +139,7 @@ namespace ExamProjectFirstYear.Components
 		/// <summary>
 		/// VIRKER IKKE!!! Har prøvet at lave en notify for movement så den selv kan køre sin notify logik i stedet for at player skal gøre det
 		/// Men skidtet virker ikke
+		/// Scarcth that DET VIRKER!!!!!!!
 		/// </summary>
 		/// <param name="gameEvent"></param>
 		/// <param name="component"></param>
