@@ -37,16 +37,18 @@ namespace ExamProjectFirstYear
         }
 
         Bitmap TestLevel;
+        Bitmap PlatformSection;
 
         private void LoadBitmap()
         {
             TestLevel = (Bitmap)Image.FromFile(GetPath("TestLevel"));
+            PlatformSection = (Bitmap)Image.FromFile(GetPath("PlatformSection"));
         }
 
         public void InitializeLevel()
         {
             LoadBitmap();
-            PopulateLevel(TestLevel);
+            PopulateLevel(PlatformSection);
         }
 
         /// <summary>
@@ -64,21 +66,25 @@ namespace ExamProjectFirstYear
                     //Saves the current pixels color as a Color field.
                     System.Drawing.Color input = level.GetPixel(x, y);
 
-                    int positionX = x * (int)NodeManager.Instance.CellSize;
-                    int positionY = y * (int)NodeManager.Instance.CellSize;
-
                     //if the pixel is black
                     if (input.R == 0 && input.G == 0 && input.B == 0 && SpotOccupied[x, y] == false)
                     {
                         //add a platform
-                        CreateObject(Tag.PLATFORM, positionX, positionY, x, y);
+                        CreateObject(Tag.PLATFORM, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
 
                     //if the pixel is Red
+                    if (input.R == 255 && input.G == 0 && input.B == 0)
+                    {
+                        //add a flying
+                        CreateObject(Tag.FLYINGENEMY, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
+
+                    //if the pixel is green
                     if (input.R == 0 && input.G == 255 && input.B == 0)
                     {
-                        //add a player
-                        CreateObject(Tag.PLAYER, positionX, positionY, x, y);
+                        //add a platform
+                        CreateObject(Tag.PLAYER, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
                 }
             }
@@ -101,6 +107,10 @@ namespace ExamProjectFirstYear
 
                 case Tag.PLATFORM:
                     createdObject.AddComponent(new Platform());
+                    break;
+
+                case Tag.FLYINGENEMY:
+                    createdObject.AddComponent(new FlyingEnemy());
                     break;
             }
 
@@ -131,7 +141,7 @@ namespace ExamProjectFirstYear
             //Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.
             for (int x = 0; x < (int)Math.Round(createdObject.GetObjectWidthInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); x++)
             {
-                for (int y = 0; y < (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
+                for (int y = 0; y <= (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
                 {
                     SpotOccupied[forLoopX + x, forLoopY + y] = true;
                 }

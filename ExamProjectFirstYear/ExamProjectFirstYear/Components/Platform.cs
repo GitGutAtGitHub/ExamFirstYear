@@ -11,18 +11,18 @@ namespace ExamProjectFirstYear.Components
     {
         public override Tag ToEnum()
         {
-			return Tag.PLATFORM;
+            return Tag.PLATFORM;
         }
 
-		public override void Awake()
-		{
-			GameObject.Tag = Tag.PLATFORM;
-		}
+        public override void Awake()
+        {
+            GameObject.Tag = Tag.PLATFORM;
+        }
 
-		public override void Start()
-		{
-			SpriteRenderer platformRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
-			GameObject.SpriteName = "Platform";	
-		}
-	}
+        public override void Start()
+        {
+
+            GameObject.SpriteName = "Platform";
+        }
+    }
 }

@@ -121,7 +121,7 @@ namespace ExamProjectFirstYear
 
                 // Left and right platform.
                 else if (intersection.Width < intersection.Height)
-                {
+                  {
                     //Right platform.
                     if (component.GameObject.Transform.Position.X < GameObject.Transform.Position.X)
                     {

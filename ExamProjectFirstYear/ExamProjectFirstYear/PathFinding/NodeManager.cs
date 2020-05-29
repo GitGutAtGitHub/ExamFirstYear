@@ -13,13 +13,17 @@ namespace ExamProjectFirstYear.PathFinding
     {
         #region FIELDS
 
+        public List<Node> DebugPath = new List<Node>();
         private static NodeManager instance;
         Texture2D gridSprite;
         Texture2D chosenPathgridSprite;
+        Texture2D unwalkableSprite;
         private List<Node> grid;
-        private static int cellRowCount = 20;
-        private float cellSize = 96;
+        //fix så det ikke nødve´ndigvis er uniform
+        private static int cellRowCount = 200;
+        private int cellSize = 96;
         private Stack<Node> path;
+        public int debugcount = 0;
 
         //SKAL RETTES TIL GAMEWORLD ELLER ANDET SENERE, SÅ DET ER NEMMERE AT REDIGERE STØRRELSE SENERE.
         private Node[,] nodes = new Node[cellRowCount, cellRowCount];
@@ -45,7 +49,7 @@ namespace ExamProjectFirstYear.PathFinding
 
         // Needed to access it from the PathFinder class.
         public Node[,] Nodes { get => nodes; }
-        public float CellSize { get => cellSize; set => cellSize = value; }
+        public int CellSize { get => cellSize; set => cellSize = value; }
 
         public int CellRowCount { get => cellRowCount; set => cellRowCount = value; }
 
@@ -83,6 +87,7 @@ namespace ExamProjectFirstYear.PathFinding
                         {
                             gO.GetObjectWidthInCellSize((SpriteRenderer)gO.GetComponent(Tag.SPRITERENDERER));
 
+                            //outdated CODE
                             if(gO.Components.ContainsKey(Tag.PLATFORM))
                             {
                                 for (int i = 0; i < (int)Math.Round(gO.GetObjectWidthInCellSize((SpriteRenderer)gO.GetComponent(Tag.SPRITERENDERER))); i++)
@@ -103,25 +108,39 @@ namespace ExamProjectFirstYear.PathFinding
         {
            gridSprite = contentManager.Load<Texture2D>("NodeGridTexture");
            chosenPathgridSprite = contentManager.Load<Texture2D>("ChoosenPathTexture");
+            unwalkableSprite = contentManager.Load<Texture2D>("UnWalkableNode");
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            PathFinder pf = new PathFinder();
-
-            path = pf.FindPath(Nodes[0, 0], Nodes[8, 8]);
-
-            foreach (Node node in Nodes)
-            {
-                spriteBatch.Draw(gridSprite, node.Position, Color.White);
-            }
-
             
-            foreach (Node node in path)
-            {
-                spriteBatch.Draw(chosenPathgridSprite, node.Position, Color.White);
-            }
-            
+            //foreach (Node node in Nodes)
+            //{
+            //    if (node.Walkable == true)
+            //    {
+            //        spriteBatch.Draw(gridSprite, node.Position, Color.White);
+            //    }
+            //    else
+            //    {
+            //        spriteBatch.Draw(unwalkableSprite, node.Position, Color.White);
+            //    }
+                
+            //}
+
+
+            //foreach (Node node in DebugPath)
+            //{
+            //    spriteBatch.Draw(chosenPathgridSprite, node.Position, Color.White);
+            //}
+
+
+            //for (int i = 0; i < DebugPath.Count; i++)
+            //{
+            //    Node tmp = DebugPath[i];
+            //    spriteBatch.Draw(chosenPathgridSprite, tmp.Position, Color.White);
+
+            //}
+
 
         }
         #endregion 

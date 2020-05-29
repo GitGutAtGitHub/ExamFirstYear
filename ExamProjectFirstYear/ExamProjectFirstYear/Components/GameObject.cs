@@ -113,12 +113,24 @@ namespace ExamProjectFirstYear
         /// </summary>
         public void Destroy()
         {
+            foreach (Component component in Components.Values)
+            {
+                component.Destroy();
+            }
+
             GameWorld.Instance.DeleteGameObject(this);
             GameWorld.Instance.Colliders.Remove((Collider)GetComponent(Tag.COLLIDER));
         }
 
+
+        //public override Tag ToEnum()
+        //{
+        //	//return Tag = Tag.GAMEOBJECT;
+        //}
+
+
         /// <summary>
-        /// Returns how many nodes that object is occupying (width).
+        /// Returns how many nodes that object is occupying
         /// </summary>
         /// <param name="spriteRenderer"></param>
         /// <returns></returns>

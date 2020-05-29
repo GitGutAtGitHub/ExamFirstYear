@@ -1,14 +1,54 @@
-﻿using ExamProjectFirstYear.PathFinding;
+﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.PathFinding;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
     class PathFinder
     {
+        Enemy enemy;
+       
+        public PathFinder(Enemy enemy)
+        {
+            this.enemy = enemy;
+            Thread pathFinderThread = new Thread(ThreadUpdate);
+            pathFinderThread.Name = "EnemyPathFinder";
+            pathFinderThread.Start();
+        }
+
+        /// <summary>
+        /// This is the method run by the PathFinder thread.
+        /// It only rungs the FindPath method when FindPathFromEnemy is true,
+        /// to avoid having the method run over and over again for no reason.
+        /// If the if-statement isn't true, it sleeps for 500 miliseconds
+        /// before checking the if-statement again.
+        /// </summary>
+        public void ThreadUpdate()
+        {
+            while ((enemy as FlyingEnemy).Alive == true)
+            {
+                if ((enemy as FlyingEnemy).findPathFromEnemy == true)
+                {
+                    (enemy as FlyingEnemy).FlyingPath = FindPath(enemy.GameObject.Transform.Position, enemy.Target.Transform.Position);
+                }
+                else
+                {
+                    Thread.Sleep(500);
+                }
+            }
+
+        }
+                                 ///////IMPORTANT\\\\\\\\
+
+        // All of the code from here on in this class is taken from a former project made by the same group.
+        // There are a few changes made for this program to work as intended.
+
         #region Astar Pathfinding
         /// <summary>
         /// Calculates the distance between two nodes
@@ -18,7 +58,6 @@ namespace ExamProjectFirstYear
         /// <returns></returns>
         private int CalculateDistance(Node inputNode, Node targetNode)
         {
-
             //distance between the two nodes, x and y
             int dstX = Math.Abs((int)inputNode.GetCoordinate().X - (int)targetNode.GetCoordinate().X);
             int dstY = Math.Abs((int)inputNode.GetCoordinate().Y - (int)targetNode.GetCoordinate().Y);
@@ -81,7 +120,7 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-        /// returns a stack with a Path retraced from the parents. 
+        /// returns a stack with a Path retraced from the parents.
         /// </summary>
         /// <param name="startNode"></param>
         /// <param name="endNode"></param>
@@ -115,8 +154,11 @@ namespace ExamProjectFirstYear
         /// <param name="startNode"></param>
         /// <param name="targetNode"></param>
         /// <returns></returns>
-        public Stack<Node> FindPath(Node startNode, Node targetNode)
+        public Stack<Node> FindPath(Vector2 startPosition, Vector2 targetPosition)
         {
+            Node startNode = NodeManager.Instance.Nodes[(int)(startPosition.X / NodeManager.Instance.CellSize), (int)(startPosition.Y / NodeManager.Instance.CellSize)];
+            Node targetNode = NodeManager.Instance.Nodes[(int)(targetPosition.X / NodeManager.Instance.CellSize), (int)(targetPosition.Y / NodeManager.Instance.CellSize)];
+
             Stack<Node> pathStack = new Stack<Node>();
 
             //List with all cells, with calculated fCost.
@@ -188,6 +230,17 @@ namespace ExamProjectFirstYear
                     }
                 }
             }
+
+
+            // Saves the previous target node (players position).
+            // Used to prevent astar calculating for the same targetposition over and over again.
+            (enemy as FlyingEnemy).PrevTargetNode = new Vector2(
+                 (int)enemy.Target.Transform.Position.X / NodeManager.Instance.CellSize,
+                 (int)enemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize);
+
+            // Makes sure the method doesn't run again right away.
+            (enemy as FlyingEnemy).findPathFromEnemy = false;
+
             return pathStack;
         }
         #endregion
