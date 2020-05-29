@@ -102,7 +102,7 @@ namespace ExamProjectFirstYear
             {
                 case Tag.PLAYER:
                     createdObject.AddComponent(GameWorld.Instance.player);
-                    createdObject.AddComponent(new Movement(true, 18, 500));
+                    createdObject.AddComponent(new Movement(true, 15, 700));
                     break;
 
                 case Tag.PLATFORM:
@@ -123,11 +123,15 @@ namespace ExamProjectFirstYear
             if (tag == Tag.PLAYER)
             {
                 collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
+                collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
             }
             else
             {
                 collider = new Collider(spriteRenderer);
             }
+
+            //Skulle sørge for at collider også advarer Movement component men det virker ikke
+
 
             createdObject.AddComponent(collider);
 

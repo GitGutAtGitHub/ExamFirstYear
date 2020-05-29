@@ -10,11 +10,11 @@ namespace ExamProjectFirstYear
 	public class Collider : Component
 	{
 		#region FIELDS
-
-		//Used to notify objects when they are colliding.
+		////Used to notify objects when they are colliding.
 		private GameEvent collidingEvent = new GameEvent("Colliding");
-		//The following to fields are used to notify objects that has collided when they are no longer colliding with eachother.
+		////The following to fields are used to notify objects that has collided when they are no longer colliding with eachother.
 		private GameEvent noLongerCollidingEvent = new GameEvent("NoLongerColliding");
+
 
 		private Collider currentCollisionCollider;
 
@@ -73,6 +73,12 @@ namespace ExamProjectFirstYear
 			collisionTexture = GameWorld.Instance.Content.Load<Texture2D>("CollisionBox");
 			origin = spriteRenderer.Origin;
 			size = new Vector2(spriteRenderer.Sprite.Width, spriteRenderer.Sprite.Height);
+		}
+
+		public void AttachListener(IGameListener listener)
+		{
+			collidingEvent.Attach(listener);
+			noLongerCollidingEvent.Attach(listener);
 		}
 
 		/// <summary>

@@ -27,12 +27,12 @@ namespace ExamProjectFirstYear
 		public Player player;
         private Camera camera;
 
-        #endregion
+		#endregion
 
-        #region PROPERTIES
+		#region PROPERTIES
 
-        //For singletong pattern
-        public static GameWorld Instance
+		//For singletong pattern
+		public static GameWorld Instance
 		{
 			get
 			{
