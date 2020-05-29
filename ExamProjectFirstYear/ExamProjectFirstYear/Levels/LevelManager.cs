@@ -102,8 +102,8 @@ namespace ExamProjectFirstYear
             {
                 case Tag.PLAYER:
                     createdObject.AddComponent(GameWorld.Instance.player);
-             
-                    createdObject.AddComponent(new Movement(true, 15, 700));
+                    //use this if tall jump
+                    createdObject.AddComponent(new Movement(true, 45, 900));
                     break;
 
                 case Tag.PLATFORM:
