@@ -207,7 +207,7 @@ namespace ExamProjectFirstYear
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.Clear(Color.Black);
 
             // The code in the ( ) is added to make sure the camera runs.
             spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: camera.TransformCamera);

@@ -37,16 +37,18 @@ namespace ExamProjectFirstYear
         }
 
         Bitmap TestLevel;
+        Bitmap PlatformSection;
 
         private void LoadBitmap()
         {
             TestLevel = (Bitmap)Image.FromFile(GetPath("TestLevel"));
+            PlatformSection = (Bitmap)Image.FromFile(GetPath("PlatformSection"));
         }
 
         public void InitializeLevel()
         {
             LoadBitmap();
-            PopulateLevel(TestLevel);
+            PopulateLevel(PlatformSection);
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace ExamProjectFirstYear
             {
                 case Tag.PLAYER:
                     createdObject.AddComponent(GameWorld.Instance.player);
-                    createdObject.AddComponent(new Movement(true, 27, 500));
+                    createdObject.AddComponent(new Movement(true, 18, 500));
                     break;
 
                 case Tag.PLATFORM:
