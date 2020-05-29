@@ -32,7 +32,7 @@ namespace ExamProjectFirstYear
         public float PositionX { get; set; }
         public float PositionY { get; set; }
 
-        //public Movement Movement { get; private set; }
+        public Movement Movement { get; private set; }
 
         public TmpJournal TmpJournal { get; private set; }
 
@@ -73,7 +73,7 @@ namespace ExamProjectFirstYear
 
         public override void Start()
         {
-            //Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+            Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
 
             GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX, TmpJournal.TmpPositionY));
             InventoryID = TmpJournal.TmpInventoryID;
