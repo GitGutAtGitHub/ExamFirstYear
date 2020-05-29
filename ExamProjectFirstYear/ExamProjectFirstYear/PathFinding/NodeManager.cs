@@ -19,7 +19,8 @@ namespace ExamProjectFirstYear.PathFinding
         Texture2D chosenPathgridSprite;
         Texture2D unwalkableSprite;
         private List<Node> grid;
-        private static int cellRowCount = 30;
+        //fix så det ikke nødve´ndigvis er uniform
+        private static int cellRowCount = 200;
         private int cellSize = 96;
         private Stack<Node> path;
         public int debugcount = 0;
@@ -112,32 +113,33 @@ namespace ExamProjectFirstYear.PathFinding
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Node node in Nodes)
-            {
-                if (node.Walkable == true)
-                {
-                    spriteBatch.Draw(gridSprite, node.Position, Color.White);
-                }
-                else
-                {
-                    spriteBatch.Draw(unwalkableSprite, node.Position, Color.White);
-                }
+            
+            //foreach (Node node in Nodes)
+            //{
+            //    if (node.Walkable == true)
+            //    {
+            //        spriteBatch.Draw(gridSprite, node.Position, Color.White);
+            //    }
+            //    else
+            //    {
+            //        spriteBatch.Draw(unwalkableSprite, node.Position, Color.White);
+            //    }
                 
-            }
+            //}
 
 
-            foreach (Node node in DebugPath)
-            {
-                spriteBatch.Draw(chosenPathgridSprite, node.Position, Color.White);
-            }
+            //foreach (Node node in DebugPath)
+            //{
+            //    spriteBatch.Draw(chosenPathgridSprite, node.Position, Color.White);
+            //}
 
 
-            for (int i = 0; i < DebugPath.Count; i++)
-            {
-                Node tmp = DebugPath[i];
-                spriteBatch.Draw(chosenPathgridSprite, tmp.Position, Color.White);
+            //for (int i = 0; i < DebugPath.Count; i++)
+            //{
+            //    Node tmp = DebugPath[i];
+            //    spriteBatch.Draw(chosenPathgridSprite, tmp.Position, Color.White);
 
-            }
+            //}
 
 
         }
