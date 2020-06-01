@@ -12,42 +12,70 @@ namespace ExamProjectFirstYear
 {
     class PathFinder
     {
-        Enemy enemy;
-       
-        public PathFinder(Enemy enemy)
+        private static PathFinder instance;
+
+        // This type of "list" is used because when you use Dequeue(),
+        // it removes the first added object from the list.
+        private Queue<Enemy> enemiesNeedingPath = new Queue<Enemy>();
+
+        /// <summary>
+        /// Singleton for PathFinder.
+        /// </summary>
+        public static PathFinder Instance
         {
-            this.enemy = enemy;
-            Thread pathFinderThread = new Thread(ThreadUpdate);
+            get
+            {
+                if(instance == null)
+                {
+                    instance = new PathFinder();
+                }
+
+                return instance;
+            }
+        }
+
+        public Queue<Enemy> EnemiesNeedingPath { get => enemiesNeedingPath; set => enemiesNeedingPath = value; }
+
+        public PathFinder()
+        {
+            // Sets the ThreadUpdate method as a Thread.
+            Thread pathFinderThread = new Thread(PathFinderThreadLoop);
+            // Changes the thread name.
             pathFinderThread.Name = "EnemyPathFinder";
+            // Starts the Thread.
             pathFinderThread.Start();
         }
 
         /// <summary>
         /// This is the method run by the PathFinder thread.
-        /// It only rungs the FindPath method when FindPathFromEnemy is true,
-        /// to avoid having the method run over and over again for no reason.
-        /// If the if-statement isn't true, it sleeps for 500 miliseconds
-        /// before checking the if-statement again.
+        /// It goes through a list of enemies needing to find a path to their target.
+        /// Once there are no more enemies on the list, the threads sleeps for a set amount of time,
+        /// before checking if there are any enemies on the list again, needing a path.
         /// </summary>
-        public void ThreadUpdate()
+        public void PathFinderThreadLoop()
         {
-            while ((enemy as FlyingEnemy).Alive == true)
+            while (GameWorld.Instance.GameIsRunning == true)
             {
-                if ((enemy as FlyingEnemy).findPathFromEnemy == true)
+                while (EnemiesNeedingPath.Count > 0)
                 {
-                    (enemy as FlyingEnemy).FlyingPath = FindPath(enemy.GameObject.Transform.Position, enemy.Target.Transform.Position);
-                }
-                else
-                {
-                    Thread.Sleep(500);
-                }
-            }
+                    Enemy currentEnemy = EnemiesNeedingPath.Dequeue();
+                    (currentEnemy as FlyingEnemy).FlyingPath = FindPath(currentEnemy.GameObject.Transform.Position, currentEnemy.Target.Transform.Position);
 
+                    // Saves the previous target node (players position).
+                    // Used to prevent astar calculating for the same targetposition over and over again.
+                    (currentEnemy as FlyingEnemy).PrevTargetNode = new Vector2(
+                         (int)currentEnemy.Target.Transform.Position.X / NodeManager.Instance.CellSize,
+                         (int)currentEnemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize);
+
+                }
+                Thread.Sleep(500);
+            }
         }
+
                                  ///////IMPORTANT\\\\\\\\
 
         // All of the code from here on in this class is taken from a former project made by the same group.
-        // There are a few changes made for this program to work as intended.
+        // There has been made a few changes for this program to work as intended.
 
         #region Astar Pathfinding
         /// <summary>
@@ -109,7 +137,7 @@ namespace ExamProjectFirstYear
                     int checkY = (int)node.GetCoordinate().Y + y;
 
                     // Checks if it's inside the grid that makes out the playable field.
-                    if (checkX >= 0 && checkX < NodeManager.Instance.CellRowCount && checkY >= 0 && checkY < NodeManager.Instance.CellRowCount)
+                    if (checkX >= 0 && checkX < NodeManager.Instance.CellRowCountTwo.width && checkY >= 0 && checkY < NodeManager.Instance.CellRowCountTwo.height)
                     {
                         //Adds Neighour to the nodeArray
                         neighbours.Add(NodeManager.Instance.Nodes[checkX, checkY]);
@@ -193,6 +221,7 @@ namespace ExamProjectFirstYear
                 if (currentNode == targetNode)
                 {
                     pathStack = RetracePath(startNode, targetNode);
+                    break;
                 }
 
                 foreach (Node neighbour in GetNeighbours(currentNode))
@@ -230,17 +259,6 @@ namespace ExamProjectFirstYear
                     }
                 }
             }
-
-
-            // Saves the previous target node (players position).
-            // Used to prevent astar calculating for the same targetposition over and over again.
-            (enemy as FlyingEnemy).PrevTargetNode = new Vector2(
-                 (int)enemy.Target.Transform.Position.X / NodeManager.Instance.CellSize,
-                 (int)enemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize);
-
-            // Makes sure the method doesn't run again right away.
-            (enemy as FlyingEnemy).findPathFromEnemy = false;
-
             return pathStack;
         }
         #endregion

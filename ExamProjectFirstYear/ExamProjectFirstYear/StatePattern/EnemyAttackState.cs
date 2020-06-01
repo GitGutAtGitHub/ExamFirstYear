@@ -72,7 +72,9 @@ namespace ExamProjectFirstYear.StatePattern
                 new Vector2((int)(enemy.Target.Transform.Position.X / NodeManager.Instance.CellSize),
                             (int)(enemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize)))
             {
-                (enemy as FlyingEnemy).findPathFromEnemy = true;
+             
+                // Adds the flying enemy to the list of enemies that need to find a path.
+                PathFinder.Instance.EnemiesNeedingPath.Enqueue(enemy);
             }
 
             if ((enemy as FlyingEnemy).FlyingPath != null)

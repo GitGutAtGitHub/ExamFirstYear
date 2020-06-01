@@ -98,12 +98,12 @@ namespace ExamProjectFirstYear.Components
 		/// </summary>
 		private void CheckGrounded()
 		{
-			if (GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.Y)
+			if (GameObject.Transform.Position.Y < GameWorld.Instance.ScreenSize.height)
 			{
 				Grounded = false;
 			}
 
-			else if (GameObject.Transform.Position.Y >= GameWorld.Instance.ScreenSize.Y)
+			else if (GameObject.Transform.Position.Y >= GameWorld.Instance.ScreenSize.height)
 			{
 				Grounded = true;
 			}

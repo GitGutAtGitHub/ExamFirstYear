@@ -12,29 +12,21 @@ namespace ExamProjectFirstYear.Components
 {
     class FlyingEnemy : Enemy
     {
-        private PathFinder enemyPathFinder;
-
-        public bool findPathFromEnemy;
-
         private Stack<Node> flyingPath;
         private Vector2 prevNode = new Vector2(0, 0);
 
         #region PROPERTIES
 
         public Stack<Node> FlyingPath { get => flyingPath; set => flyingPath = value; }
-        public PathFinder EnemyPathFinder { get => enemyPathFinder; set => EnemyPathFinder = value; }
+       
         public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
-        public bool CanFollowPlayer { get; set; }
-
 
         #endregion
 
 
         public override void Awake()
-        {
-            enemyPathFinder = new PathFinder(this);
-            SightRadius = 6 * NodeManager.Instance.CellSize;
-            Alive = true;
+        {            
+            SightRadius = 6 * NodeManager.Instance.CellSize;         
             speed = 200f;
             GameObject.Tag = Tag.FLYINGENEMY;
             SwitchState(new EnemyAttackState());
@@ -63,7 +55,7 @@ namespace ExamProjectFirstYear.Components
 
 
         public override void Update(GameTime gameTime)
-        {
+        {         
             currentState.Execute();
             Move();
         }
@@ -87,6 +79,11 @@ namespace ExamProjectFirstYear.Components
             GameObject.Transform.Translate(Velocity * GameWorld.Instance.DeltaTime);
         }
 
+
+        public override void AddTarget()
+        {
+            Target = GameWorld.Instance.player.GameObject;
+        }
 
         public override Tag ToEnum()
         {

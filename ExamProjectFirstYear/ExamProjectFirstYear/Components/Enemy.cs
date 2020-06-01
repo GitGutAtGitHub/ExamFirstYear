@@ -19,9 +19,9 @@ namespace ExamProjectFirstYear.Components
         private Vector2 targetPosition;
         //it is a public variable, to be able to edit the specific X and Y values, it has to be a variable.
         public Vector2 Velocity;
-        private bool alive = true;
+        
         protected IState currentState;
-        private GameObject target = GameWorld.Instance.player.GameObject;
+        private GameObject target; 
        
 
         #endregion
@@ -32,7 +32,7 @@ namespace ExamProjectFirstYear.Components
         public Vector2 TargetPosition { get; set; }
         public int SightRadius { get => sightRadius; set => sightRadius = value; }
         public GameObject Target { get => target; set => target = value; }
-        public bool Alive { get => alive; set => alive = value; }
+  
 
         #endregion
 
@@ -42,6 +42,8 @@ namespace ExamProjectFirstYear.Components
         public abstract void SwitchState(IState newState);
 
         protected abstract void Notify();
+
+        public abstract void AddTarget();
 
         protected abstract void Move();
 

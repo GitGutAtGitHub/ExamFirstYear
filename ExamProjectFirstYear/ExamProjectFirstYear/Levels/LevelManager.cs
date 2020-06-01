@@ -10,6 +10,20 @@ namespace ExamProjectFirstYear
 {
     class LevelManager
     {
+        //event for checking if the level is done populating.
+        //Used for setting the enemies target, and making sure the player is intantiated when the target filed is set. 
+        public delegate void LevelInitializationDoneHandler();
+        public event LevelInitializationDoneHandler LevelInitializationDoneEvent;
+
+
+        protected virtual void OnLevelInitializationDoneEvent()
+        {
+            if (LevelInitializationDoneEvent != null)
+            {
+                LevelInitializationDoneEvent();
+            }
+        }
+
 
 
         //string path2 = "..\\..\\" + "Levels\\TestLevel.bmp";
@@ -33,7 +47,7 @@ namespace ExamProjectFirstYear
         public string GetPath(string filename)
         {
             return Environment.CurrentDirectory + ($"\\Levels\\{filename}.bmp");
-
+   
         }
 
         Bitmap TestLevel;
@@ -49,6 +63,10 @@ namespace ExamProjectFirstYear
         {
             LoadBitmap();
             PopulateLevel(PlatformSection);
+
+            NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
+
+            //PopulateLevel(TestLevel);
         }
 
         /// <summary>
@@ -57,6 +75,7 @@ namespace ExamProjectFirstYear
         /// <param name="level"></param>
         private void PopulateLevel(Bitmap level)
         {
+  
             SpotOccupied = new bool[level.Width, level.Width];
 
             for (int y = 0; y < level.Height; y++)
@@ -88,6 +107,9 @@ namespace ExamProjectFirstYear
                     }
                 }
             }
+            // The event is raised. It calls the method AddTarget,
+            // which is added to each enemy in the CreateObject method.
+            LevelInitializationDoneEvent();         
         }
 
 
@@ -112,6 +134,8 @@ namespace ExamProjectFirstYear
 
                 case Tag.FLYINGENEMY:
                     createdObject.AddComponent(new FlyingEnemy());
+                    // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
+                    LevelInitializationDoneEvent += ((FlyingEnemy)(createdObject.GetComponent(Tag.FLYINGENEMY))).AddTarget;
                     break;
             }
 
@@ -133,7 +157,6 @@ namespace ExamProjectFirstYear
             }
 
             //Skulle sørge for at collider også advarer Movement component men det virker ikke
-
 
             createdObject.AddComponent(collider);
 

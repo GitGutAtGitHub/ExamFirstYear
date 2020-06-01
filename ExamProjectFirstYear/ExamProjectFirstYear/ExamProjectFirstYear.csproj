@@ -126,6 +126,7 @@
     <Compile Include="StatePattern\IState.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="SQLite\SQLiteHandler.cs" />
+    <Compile Include="TwoDimensionalSize.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
