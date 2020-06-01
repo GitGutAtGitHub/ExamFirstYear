@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,12 @@ namespace ExamProjectFirstYear.Components
 
         private SpriteRenderer inventoryRenderer;
 
+        private SpriteFont inventoryHeading;
+        private SpriteFont inventoryText;
+
+        private float playerPositionX;
+        private float playerPositionY;
+
         #endregion
 
 
@@ -35,6 +42,10 @@ namespace ExamProjectFirstYear.Components
 
         #region Constructors
 
+        /// <summary>
+        /// Constructor for the Inventory.
+        /// </summary>
+        /// <param name="inventoryID"></param>
         public Inventory(int inventoryID)
         {
             InventoryID = inventoryID;
@@ -43,7 +54,7 @@ namespace ExamProjectFirstYear.Components
         #endregion
 
 
-        #region Methods
+        #region Override methods
 
         public override Tag ToEnum()
         {
@@ -56,16 +67,52 @@ namespace ExamProjectFirstYear.Components
             GameObject.SpriteName = "InventoryClosed";
             inventoryRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
             MaterialTypeIDs.Add(1);
+            inventoryHeading = GameWorld.Instance.Content.Load<SpriteFont>("JournalHeading");
+            inventoryText = GameWorld.Instance.Content.Load<SpriteFont>("JournalText");
         }
 
         public override void Start()
         {
             GameObject.Transform.Translate(new Vector2(30, 180));
         }
-
         public override void Update(GameTime gameTime)
         {
+            HandlePosition();
             HandleInventory();
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            //Determines which sprite should be drawn, depending on whether the Inventory is open or closed.
+
+            if (inventoryOpen == true)
+            {
+                inventoryRenderer.SetSprite("InventoryOpen");
+                spriteBatch.Draw(inventoryRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 330), null, Color.White, 0, inventoryRenderer.Origin, 1, SpriteEffects.None, inventoryRenderer.SpriteLayer);
+                
+                //Draws the text field.
+                DrawStoredMaterialStrings(spriteBatch);
+            }
+
+            else if (inventoryOpen == false)
+            {
+                inventoryRenderer.SetSprite("InventoryClosed");
+                spriteBatch.Draw(inventoryRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 330), null, Color.White, 0, inventoryRenderer.Origin, 1, SpriteEffects.None, inventoryRenderer.SpriteLayer);
+            }
+        }
+
+        #endregion
+
+
+        #region Other methods
+
+        /// <summary>
+        /// Handles the journal position according to the players position.
+        /// </summary>
+        private void HandlePosition()
+        {
+            playerPositionX = GameWorld.Instance.player.GameObject.Transform.Position.X;
+            playerPositionY = GameWorld.Instance.player.GameObject.Transform.Position.Y;
         }
 
         /// <summary>
@@ -97,8 +144,6 @@ namespace ExamProjectFirstYear.Components
             if (currentKeyboardState.IsKeyUp(Keys.I) && previousKeyboardState.IsKeyDown(Keys.I))
             {
                 inventoryOpen = true;
-                inventoryRenderer.SetSprite("InventoryOpen");
-                ShowStoredMaterials();
             }
         }
 
@@ -113,29 +158,37 @@ namespace ExamProjectFirstYear.Components
             if (currentKeyboardState.IsKeyUp(Keys.I) && previousKeyboardState.IsKeyDown(Keys.I))
             {
                 inventoryOpen = false;
-                inventoryRenderer.SetSprite("InventoryClosed");
             }
         }
 
         /// <summary>
-        /// Show all the materials that the player currently have.
+        /// Draw all the materials that the player currently have over the Inventory sprite.
         /// </summary>
         /// <param name="journalID"></param>
-        public void ShowStoredMaterials()
+        private void DrawStoredMaterialStrings(SpriteBatch spriteBatch)
         {
+            spriteBatch.DrawString(inventoryHeading, "Inventory", new Vector2(playerPositionX - 890, playerPositionY - 300),
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.8f);
+
             TmpMaterialType tmpMaterialType;
             TmpStoredMaterial tmpStoredMaterial;
             TmpInventory tmpInventory;
 
+            float positionX = playerPositionX - 890;
+            float positionY = (playerPositionY - 310) + 90;
+
+            //Create a text field for every MaterialType in the ID list.
             foreach (int materialTypeID in MaterialTypeIDs)
             {
                 tmpInventory = SQLiteHandler.Instance.GetInventory();
                 tmpStoredMaterial = SQLiteHandler.Instance.GetStoredMaterial(materialTypeID, tmpInventory.TmpID);
                 tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(materialTypeID);
 
-                Console.WriteLine($"Material: {tmpMaterialType.TmpName}");
-                Console.WriteLine($"Amount: {tmpStoredMaterial.TmpAmount}");
-                Console.WriteLine();
+                spriteBatch.DrawString(inventoryText, $"{tmpMaterialType.TmpName}: {tmpStoredMaterial.TmpAmount}",
+                                       new Vector2(positionX, positionY),
+                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.8f);
+
+                positionY += 60;
             }   
         }
 

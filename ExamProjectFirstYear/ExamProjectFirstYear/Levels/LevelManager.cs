@@ -137,6 +137,21 @@ namespace ExamProjectFirstYear
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((FlyingEnemy)(createdObject.GetComponent(Tag.FLYINGENEMY))).AddTarget;
                     break;
+
+                //case Tag.JOURNAL:
+                //    createdObject.AddComponent(GameWorld.Instance.journal);
+                //    spriteRenderer.SpriteLayer = 0.9f;
+                //    break;
+
+                //case Tag.INVENTORY:
+                //    createdObject.AddComponent(GameWorld.Instance.inventory);
+                //    spriteRenderer.SpriteLayer = 0.8f;
+                //    break;
+
+                //default:
+                //    spriteRenderer.SpriteLayer = 0.6f;
+                //    break;
+
             }
 
             createdObject.AddComponent(spriteRenderer);
@@ -147,7 +162,7 @@ namespace ExamProjectFirstYear
 
             if (tag == Tag.PLAYER)
             {
-                       spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
+                spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
                 collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
             }

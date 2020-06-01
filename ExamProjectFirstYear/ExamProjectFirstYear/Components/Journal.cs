@@ -26,6 +26,11 @@ namespace ExamProjectFirstYear.Components
         private SpriteFont journalHeading;
         private SpriteFont journalText;
 
+        private float playerPositionX;
+        private float playerPositionY;
+
+        private int page;
+
         #endregion
 
 
@@ -53,7 +58,7 @@ namespace ExamProjectFirstYear.Components
         #endregion
 
 
-        #region Methods
+        #region Override methods
 
         public override Tag ToEnum()
         {
@@ -71,31 +76,57 @@ namespace ExamProjectFirstYear.Components
 
         public override void Start()
         {
-            GameObject.Transform.Translate(new Vector2(30, 30));
-
             SQLiteHandler.Instance.AddRecordedBP(1, JournalID);
             SQLiteHandler.Instance.AddRecordedCreature(1, JournalID);
         }
 
         public override void Update(GameTime gameTime)
         {
+            HandlePosition();
             HandleJournal();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //Determines which sprite should be drawn, depending on whether the Journal is open or closed.
+
             if (journalOpen == true)
             {
                 journalRenderer.SetSprite("OpenJournal");
-                spriteBatch.Draw(journalRenderer.Sprite, GameObject.Transform.Position, null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
-                DrawRecordedBlueprintStrings(spriteBatch);
+                spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
+                
+                //If the page is 1, draws the text field for RecordedBP.
+                if (page == 1)
+                {
+                    DrawRecordedBlueprintStrings(spriteBatch);
+                }
+
+                //If the page is 2, draws the text field for RecordedCreature.
+                else if (page == 2)
+                {
+                    DrawRecordedCreatureStrings(spriteBatch);
+                }
             }
 
             else if (journalOpen == false)
             {
                 journalRenderer.SetSprite("ClosedJournal");
-                spriteBatch.Draw(journalRenderer.Sprite, GameObject.Transform.Position, null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
+                spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
             }
+        }
+
+        #endregion
+
+
+        #region Other methods
+
+        /// <summary>
+        /// Handles the journal position according to the players position.
+        /// </summary>
+        private void HandlePosition()
+        {
+            playerPositionX = GameWorld.Instance.player.GameObject.Transform.Position.X;
+            playerPositionY = GameWorld.Instance.player.GameObject.Transform.Position.Y;
         }
 
         /// <summary>
@@ -103,6 +134,9 @@ namespace ExamProjectFirstYear.Components
         /// </summary>
         private void HandleJournal()
         {
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
             //If Journal is closed, it can be opened.
             if (journalOpen == false)
             {
@@ -114,6 +148,17 @@ namespace ExamProjectFirstYear.Components
             {
                 CloseJournal();
             }
+
+            //For changing the Journal page.
+            if (currentKeyboardState.IsKeyUp(Keys.D1) && previousKeyboardState.IsKeyDown(Keys.D1))
+            {
+                page = 1;
+            }
+
+            else if (currentKeyboardState.IsKeyUp(Keys.D2) && previousKeyboardState.IsKeyDown(Keys.D2))
+            {
+                page = 2;
+            }
         }
 
         /// <summary>
@@ -121,12 +166,12 @@ namespace ExamProjectFirstYear.Components
         /// </summary>
         private void OpenJournal()
         {
-            previousKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-
             if (currentKeyboardState.IsKeyUp(Keys.J) && previousKeyboardState.IsKeyDown(Keys.J))
             {
                 journalOpen = true;
+
+                //Makes sure a page is set when the Journal opens.
+                page = 1;
             }
         }
 
@@ -135,9 +180,6 @@ namespace ExamProjectFirstYear.Components
         /// </summary>
         private void CloseJournal()
         {
-            previousKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-
             if (currentKeyboardState.IsKeyUp(Keys.J) && previousKeyboardState.IsKeyDown(Keys.J))
             {
                 journalOpen = false;
@@ -148,20 +190,19 @@ namespace ExamProjectFirstYear.Components
         /// <summary>
         /// Draw all blueprints that the player has recorded.
         /// </summary>
-        public void DrawRecordedBlueprintStrings(SpriteBatch spriteBatch)
+        private void DrawRecordedBlueprintStrings(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(journalHeading, "Recorded Blueprints", new Vector2(GameObject.Transform.Position.X + 110, GameObject.Transform.Position.Y + 30),
+            spriteBatch.DrawString(journalHeading, "Recorded Blueprints", new Vector2(playerPositionX - 800, playerPositionY - 450),
                                    Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
 
             TmpBlueprint tmpBlueprint;
             TmpRequiredMaterial tmpRequiredMaterial;
             TmpMaterialType tmpMaterialType;
 
-            float positionX = GameObject.Transform.Position.X + 110;
-            float positionY = GameObject.Transform.Position.Y + 30;
+            float positionX = playerPositionX - 800;
+            float positionY = (playerPositionY - 450) + 100;
 
-            positionY += 80;
-
+            //Create a text field for every RecordedBP in the ID list.
             foreach (int blueprintID in RecordedBlueprintIDs)
             {
                 tmpBlueprint = SQLiteHandler.Instance.GetBlueprint(blueprintID);
@@ -173,30 +214,37 @@ namespace ExamProjectFirstYear.Components
                                        new Vector2(positionX, positionY),
                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
 
-                positionY += 60;
+                positionY += 150;
             }
         }
 
         /// <summary>
         /// Show all creatures that the player has recorded.
         /// </summary>
-        public void ShowRecordedCreature()
+        private void DrawRecordedCreatureStrings(SpriteBatch spriteBatch)
         {
+            spriteBatch.DrawString(journalHeading, "Recorded Creatures", new Vector2(playerPositionX - 800, playerPositionY - 450),
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+
             TmpCreature tmpCreature;
             TmpMaterialType tmpMaterialType;
 
+            float positionX = playerPositionX - 800;
+            float positionY = (playerPositionY - 450) + 100;
+
+            //Create a text field for every RecordedCreature in the ID list.
             foreach (int creatureID in RecordedCreatureIDs)
             {
                 tmpCreature = SQLiteHandler.Instance.GetCreature(creatureID);
                 tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(tmpCreature.TmpMaterialTypeID);
 
-                Console.WriteLine($"Name: {tmpCreature.TmpName}");
-                Console.WriteLine($"Type: {tmpCreature.TmpType}");
-                Console.WriteLine($"Description: {tmpCreature.TmpDescription}");
-                Console.WriteLine($"Drops: {tmpMaterialType.TmpName}");
-                Console.WriteLine($"Location: {tmpCreature.TmpLocation}");
+                spriteBatch.DrawString(journalText, $"Name: {tmpCreature.TmpName} ({tmpCreature.TmpType})" +
+                                        $"\nDescription: {tmpCreature.TmpDescription} " +
+                                        $"\nDrops: {tmpMaterialType.TmpName}\nLocation: {tmpCreature.TmpLocation}",
+                                        new Vector2(positionX, positionY),
+                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
 
-                Console.WriteLine();
+                positionY += 190;
             }
         }
 

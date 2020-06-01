@@ -62,7 +62,7 @@ namespace ExamProjectFirstYear
         #endregion
 
 
-        #region Methods
+        #region Override methods
 
         public override Tag ToEnum()
         {
@@ -81,14 +81,19 @@ namespace ExamProjectFirstYear
 
         public override void Start()
         {
-            
+
         }
 
         public override void Update(GameTime gameTime)
         {
-            LoadSave();
-            TestMethod();
+            //LoadSave();
+            //TestMethod();
         }
+
+        #endregion
+
+
+        #region Other methods
 
         public void Notify(GameEvent gameEvent, Component component)
         {
@@ -118,13 +123,13 @@ namespace ExamProjectFirstYear
                     //Bottom platform.
                     if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height -1));
+                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height - 1));
                     }
                 }
 
                 // Left and right platform.
                 else if (intersection.Width < intersection.Height)
-                  {
+                {
                     //Right platform.
                     if (component.GameObject.Transform.Position.X < GameObject.Transform.Position.X)
                     {
@@ -140,7 +145,7 @@ namespace ExamProjectFirstYear
             }
         }
 
-        public void LoadSave()
+        private void LoadSave()
         {
             if (saveLoaded == true)
             {
@@ -260,17 +265,4 @@ namespace ExamProjectFirstYear
             TmpOpenDoor = tmpOpenDoor;
         }
     }
-
-    //public struct TmpStoredMaterial
-    //{
-    //    public int TmpAmount { get; set; }
-    //    public int TmpSlot { get; set; }
-
-
-    //    public TmpStoredMaterial(int tmpAmound, int tmpSlot)
-    //    {
-    //        TmpAmount = tmpAmound;
-    //        TmpSlot = tmpSlot;
-    //    }
-    //}
 }

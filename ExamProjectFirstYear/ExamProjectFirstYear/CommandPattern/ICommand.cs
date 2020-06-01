@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.CommandPattern
 {
+	/// <summary>
+	/// Interface for command classes.
+	/// </summary>
 	interface ICommand
 	{
 		void Execute(Player player);

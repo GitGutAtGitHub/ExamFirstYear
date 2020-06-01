@@ -9,16 +9,23 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
+	/// <summary>
+	/// InputHander class.
+	/// </summary>
 	public class InputHandler
 	{
 		#region Fields
+
 		private Dictionary<Keys, ICommand> keyBinds = new Dictionary<Keys, ICommand>();
 		private Dictionary<Keys, ICommand> releaseKeyBinds = new Dictionary<Keys,ICommand>();
 
         private static InputHandler instance;
+
         #endregion
 
+
         #region PROPERTIES
+
         public static InputHandler Instance
         {
             get
@@ -31,18 +38,20 @@ namespace ExamProjectFirstYear
             }
         }
 
-        #endregion
+		#endregion
 
-        #region METHODS
-        /// <summary>
-        /// Adds all controls for player to a keybinds Dictionary once instantiated.
-        /// </summary>
-        private InputHandler()
-        {
-            // Moves player left when pressing A.
-            keyBinds.Add(Keys.Left, new MoveCommand(new Vector2(-1, 0)));
-            // Moves player right when pressing D.
-            keyBinds.Add(Keys.Right, new MoveCommand(new Vector2(1, 0)));
+
+		#region Constructors
+
+		/// <summary>
+		/// Adds all controls for player to a keybinds Dictionary once instantiated.
+		/// </summary>
+		private InputHandler()
+		{
+			// Moves player left when pressing A.
+			keyBinds.Add(Keys.Left, new MoveCommand(new Vector2(-1, 0)));
+			// Moves player right when pressing D.
+			keyBinds.Add(Keys.Right, new MoveCommand(new Vector2(1, 0)));
 			// Player jumps when pressing space.
 			keyBinds.Add(Keys.Space, new JumpCommand());
 			// Player uses a melee attack when pressing x.
@@ -59,6 +68,11 @@ namespace ExamProjectFirstYear
 
 			releaseKeyBinds.Add(Keys.Space, new ReleaseCommand(3));
 		}
+
+        #endregion
+
+
+        #region METHODS
 
         /// <summary>
         /// Executes all commands for the keys added to the dictionary

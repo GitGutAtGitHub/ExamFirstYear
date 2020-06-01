@@ -7,18 +7,29 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.CommandPattern
 {
+	/// <summary>
+	/// Jump command for the player.
+	/// </summary>
 	class JumpCommand : ICommand
 	{
+		#region Constructors
+
+		/// <summary>
+		/// Constructor for JumpCommand.
+		/// </summary>
 		public JumpCommand()
 		{
 
 		}
 
+		#endregion
+
+
+		#region Methods
+
 		public void Execute(Player player)
 		{
-			//player.Movement.Jump();
 			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
-			//playerMovement.ManageMomentum();
 			playerMovement.Jump();
 		}
 
@@ -26,5 +37,7 @@ namespace ExamProjectFirstYear.CommandPattern
 		{
 			return CommandTag.KEYDOWN;
 		}
-	}
+
+        #endregion
+    }
 }

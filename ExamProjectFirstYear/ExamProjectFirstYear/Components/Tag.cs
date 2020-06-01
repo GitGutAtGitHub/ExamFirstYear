@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
+	/// <summary>
+	/// "Tag" enum with all component tags.
+	/// </summary>
 	public enum Tag
 	{
 		COLLIDER,

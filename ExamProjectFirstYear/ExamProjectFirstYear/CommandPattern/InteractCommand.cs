@@ -6,12 +6,25 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.CommandPattern
 {
+	/// <summary>
+	/// Interact command for player.
+	/// </summary>
 	class InteractCommand : ICommand
 	{
+		#region Constructors
+
+		/// <summary>
+		/// Constructor for InteractCommand.
+		/// </summary>
 		public InteractCommand()
 		{
 
 		}
+
+		#endregion
+
+
+		#region Methods
 
 		public void Execute(Player player)
 		{
@@ -22,5 +35,7 @@ namespace ExamProjectFirstYear.CommandPattern
 		{
 			return CommandTag.KEYDOWN;
 		}
-	}
+
+        #endregion
+    }
 }

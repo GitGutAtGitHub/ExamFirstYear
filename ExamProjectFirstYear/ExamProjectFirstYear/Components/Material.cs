@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
+    /// <summary>
+    /// Material component class.
+    /// </summary>
     public class Material : Component, IGameListener
     {
         #region Fields
@@ -24,7 +27,11 @@ namespace ExamProjectFirstYear.Components
 
 
         #region Constructors
-
+        
+        /// <summary>
+        /// Constructor for material.
+        /// </summary>
+        /// <param name="iD"></param>
         public Material(int iD)
         {
             MaterialID = iD;
@@ -33,7 +40,7 @@ namespace ExamProjectFirstYear.Components
         #endregion
 
 
-        #region Methods
+        #region Override methods
 
         public override Tag ToEnum()
         {
@@ -51,6 +58,11 @@ namespace ExamProjectFirstYear.Components
             movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
             GameObject.Transform.Translate(new Vector2(500, 10));
         }
+
+        #endregion
+
+
+        #region Other methods
 
         public void Notify(GameEvent gameEvent, Component component)
         {

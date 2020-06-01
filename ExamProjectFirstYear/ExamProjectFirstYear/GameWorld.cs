@@ -26,11 +26,12 @@ namespace ExamProjectFirstYear
         GraphicsDeviceManager graphics;
 
         public Player player;
-				public Journal journal;
-				public Inventory inventory;
+        public Journal journal;
+        public Inventory inventory;
         private Camera camera;
 
         #endregion
+
 
         #region PROPERTIES
 
@@ -54,10 +55,11 @@ namespace ExamProjectFirstYear
         public float TimeElapsed { get; set; }
         public TwoDimensionalSize ScreenSize { get; private set; }
         public bool GameIsRunning { get => gameIsRunning; set => gameIsRunning = value; }
-				public SpriteBatch SpriteBatch { get; set; }
+        public SpriteBatch SpriteBatch { get; set; }
 
 
         #endregion
+
 
         #region CONSTRUCTORS
 
@@ -76,6 +78,9 @@ namespace ExamProjectFirstYear
 
         #endregion
 
+
+        #region Preset methods
+
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -86,9 +91,10 @@ namespace ExamProjectFirstYear
         {
             TimeElapsed = 0;
 
-						journal = new Journal(1);
-						player = new Player(journal.JournalID);
-						inventory = new Inventory(player.PlayerID);
+            //Create instances of Player, Journal and Inventory.
+            journal = new Journal(1);
+            player = new Player(journal.JournalID);
+            inventory = new Inventory(player.PlayerID);
 
             //graphics.PreferredBackBufferWidth = 1920;
             //graphics.PreferredBackBufferHeight = 1080;
@@ -119,14 +125,14 @@ namespace ExamProjectFirstYear
                 GameObjects[i].Start();
             }
 
+            CreateUIObject(Tag.JOURNAL);
+            CreateUIObject(Tag.INVENTORY);
+
             LevelManager.Instance.InitializeLevel();
+
             NodeManager.Instance.InitializeGrid();
             NodeManager.Instance.UpdateGrid();
-            CreateObject(Tag.MATERIAL);
-						CreateObject(Tag.JOURNAL);
-						CreateObject(Tag.INVENTORY);
             NodeManager.Instance.LoadContent(Content);
-
         }
 
         /// <summary>
@@ -145,7 +151,6 @@ namespace ExamProjectFirstYear
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 gameIsRunning = false;
@@ -153,14 +158,13 @@ namespace ExamProjectFirstYear
                 Exit();
             }
 
-
             TimeHandler(gameTime);
 
             InputHandler.Instance.Execute(player);
 
             for (int i = 0; i < GameObjects.Count; i++)
             {
-                if (GameObjects[i].Components.ContainsKey(Tag.PLAYER))
+                if (GameObjects[i].Components.ContainsKey(Tag.PLAYER) || GameObjects[i].Components.ContainsKey(Tag.JOURNAL) || GameObjects[i].Components.ContainsKey(Tag.INVENTORY))
                 {
                     GameObjects[i].Update(gameTime);
                 }
@@ -194,11 +198,7 @@ namespace ExamProjectFirstYear
                 }
             }
 
-            //SQLiteHandler.Instance.TestMethod();
-
             camera.FollowPlayer(player.GameObject);
-            //SQLiteHandler.Instance.TestMethod();
-            player.TestMethod();
 
             base.Update(gameTime);
         }
@@ -216,7 +216,7 @@ namespace ExamProjectFirstYear
 
             for (int i = 0; i < GameObjects.Count; i++)
             {
-                if (GameObjects[i].Components.ContainsKey(Tag.PLAYER))
+                if (GameObjects[i].Components.ContainsKey(Tag.PLAYER) || GameObjects[i].Components.ContainsKey(Tag.JOURNAL) || GameObjects[i].Components.ContainsKey(Tag.INVENTORY))
                 {
                     GameObjects[i].Draw(spriteBatch);
                 }
@@ -246,6 +246,11 @@ namespace ExamProjectFirstYear
 
             base.Draw(gameTime);
         }
+
+        #endregion
+
+
+        #region Specific methods
 
         /// <summary>
         /// Removes a GameObject from the list of all GameObjects.
@@ -277,59 +282,45 @@ namespace ExamProjectFirstYear
             return ScreenSize;
         }
 
-				/// <summary>
-				/// Method for creating component objects.
-				/// </summary>
-				/// <param name="tag"></param>
-				public void CreateObject(Tag tag)
-				{
-					GameObject createdObject = new GameObject();
-					SpriteRenderer spriteRenderer = new SpriteRenderer();
-					Collider collider;
-					Material material = new Material(1);
-		
-					switch (tag)
-					{
-						case Tag.MATERIAL:
-							createdObject.AddComponent(material);
-							createdObject.AddComponent(new Movement(true, 40, 500));
-							spriteRenderer.SpriteLayer = 0.7f;
-							break;
+        /// <summary>
+        /// Method for creating UI component objects. Specifically Journal and Inventory.
+        /// </summary>
+        /// <param name="tag"></param>
+        private void CreateUIObject(Tag tag)
+        {
+            GameObject createdObject = new GameObject();
+            SpriteRenderer spriteRenderer = new SpriteRenderer();
+            Collider collider;
 
-						case Tag.JOURNAL:
-							createdObject.AddComponent(journal);
-							spriteRenderer.SpriteLayer = 0.9f;
-							break;
+            switch (tag)
+            {
+                case Tag.JOURNAL:
+                    createdObject.AddComponent(journal);
 
-						case Tag.INVENTORY:
-							createdObject.AddComponent(inventory);
-							spriteRenderer.SpriteLayer = 0.8f;
-							break;
+                    //SpriteLayer ensures that the text can later be drawn on top of the Journal sprite.
+                    spriteRenderer.SpriteLayer = 0.9f;
+                    break;
 
-						default:
-							spriteRenderer.SpriteLayer = 0.6f;
-							break;
-					}
+                case Tag.INVENTORY:
+                    createdObject.AddComponent(inventory);
 
-					createdObject.AddComponent(spriteRenderer);
+                    //SpriteLayer ensures that the text can later be drawn on top of the Inventory sprite.
+                    spriteRenderer.SpriteLayer = 0.7f;
+                    break;
+            }
 
-					createdObject.Awake();
-					createdObject.Start();
+            createdObject.AddComponent(spriteRenderer);
 
-					if (tag == Tag.MATERIAL)
-					{
-						collider = new Collider(spriteRenderer, material) { CheckCollisionEvents = true };
-					}
+            createdObject.Awake();
+            createdObject.Start();
 
-					else
-					{
-						collider = new Collider(spriteRenderer);
-					}
+            collider = new Collider(spriteRenderer);
+            createdObject.AddComponent(collider);
 
-					createdObject.AddComponent(collider);
+            Colliders.Add(collider);
+            GameObjects.Add(createdObject);
+        }
 
-					Colliders.Add(collider);
-					GameObjects.Add(createdObject);
-				}
+        #endregion
     }
 }
