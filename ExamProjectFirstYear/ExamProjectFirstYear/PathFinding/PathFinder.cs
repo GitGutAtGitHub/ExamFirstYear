@@ -1,14 +1,82 @@
-﻿using ExamProjectFirstYear.PathFinding;
+﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.PathFinding;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
     class PathFinder
     {
+        private static PathFinder instance;
+
+        // This type of "list" is used because when you use Dequeue(),
+        // it removes the first added object from the list.
+        private Queue<Enemy> enemiesNeedingPath = new Queue<Enemy>();
+
+        /// <summary>
+        /// Singleton for PathFinder.
+        /// </summary>
+        public static PathFinder Instance
+        {
+            get
+            {
+                if(instance == null)
+                {
+                    instance = new PathFinder();
+                }
+
+                return instance;
+            }
+        }
+
+        public Queue<Enemy> EnemiesNeedingPath { get => enemiesNeedingPath; set => enemiesNeedingPath = value; }
+
+        public PathFinder()
+        {
+            // Sets the ThreadUpdate method as a Thread.
+            Thread pathFinderThread = new Thread(PathFinderThreadLoop);
+            // Changes the thread name.
+            pathFinderThread.Name = "EnemyPathFinder";
+            // Starts the Thread.
+            pathFinderThread.Start();
+        }
+
+        /// <summary>
+        /// This is the method run by the PathFinder thread.
+        /// It goes through a list of enemies needing to find a path to their target.
+        /// Once there are no more enemies on the list, the threads sleeps for a set amount of time,
+        /// before checking if there are any enemies on the list again, needing a path.
+        /// </summary>
+        public void PathFinderThreadLoop()
+        {
+            while (GameWorld.Instance.GameIsRunning == true)
+            {
+                while (EnemiesNeedingPath.Count > 0)
+                {
+                    Enemy currentEnemy = EnemiesNeedingPath.Dequeue();
+                    (currentEnemy as FlyingEnemy).FlyingPath = FindPath(currentEnemy.GameObject.Transform.Position, currentEnemy.Target.Transform.Position);
+
+                    // Saves the previous target node (players position).
+                    // Used to prevent astar calculating for the same targetposition over and over again.
+                    (currentEnemy as FlyingEnemy).PrevTargetNode = new Vector2(
+                         (int)currentEnemy.Target.Transform.Position.X / NodeManager.Instance.CellSize,
+                         (int)currentEnemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize);
+
+                }
+                Thread.Sleep(500);
+            }
+        }
+
+                                 ///////IMPORTANT\\\\\\\\
+
+        // All of the code from here on in this class is taken from a former project made by the same group.
+        // There has been made a few changes for this program to work as intended.
+
         #region Astar Pathfinding
         /// <summary>
         /// Calculates the distance between two nodes
@@ -18,7 +86,6 @@ namespace ExamProjectFirstYear
         /// <returns></returns>
         private int CalculateDistance(Node inputNode, Node targetNode)
         {
-
             //distance between the two nodes, x and y
             int dstX = Math.Abs((int)inputNode.GetCoordinate().X - (int)targetNode.GetCoordinate().X);
             int dstY = Math.Abs((int)inputNode.GetCoordinate().Y - (int)targetNode.GetCoordinate().Y);
@@ -70,7 +137,7 @@ namespace ExamProjectFirstYear
                     int checkY = (int)node.GetCoordinate().Y + y;
 
                     // Checks if it's inside the grid that makes out the playable field.
-                    if (checkX >= 0 && checkX < NodeManager.Instance.CellRowCount && checkY >= 0 && checkY < NodeManager.Instance.CellRowCount)
+                    if (checkX >= 0 && checkX < NodeManager.Instance.CellRowCountTwo.width && checkY >= 0 && checkY < NodeManager.Instance.CellRowCountTwo.height)
                     {
                         //Adds Neighour to the nodeArray
                         neighbours.Add(NodeManager.Instance.Nodes[checkX, checkY]);
@@ -81,7 +148,7 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-        /// returns a stack with a Path retraced from the parents. 
+        /// returns a stack with a Path retraced from the parents.
         /// </summary>
         /// <param name="startNode"></param>
         /// <param name="endNode"></param>
@@ -115,8 +182,11 @@ namespace ExamProjectFirstYear
         /// <param name="startNode"></param>
         /// <param name="targetNode"></param>
         /// <returns></returns>
-        public Stack<Node> FindPath(Node startNode, Node targetNode)
+        public Stack<Node> FindPath(Vector2 startPosition, Vector2 targetPosition)
         {
+            Node startNode = NodeManager.Instance.Nodes[(int)(startPosition.X / NodeManager.Instance.CellSize), (int)(startPosition.Y / NodeManager.Instance.CellSize)];
+            Node targetNode = NodeManager.Instance.Nodes[(int)(targetPosition.X / NodeManager.Instance.CellSize), (int)(targetPosition.Y / NodeManager.Instance.CellSize)];
+
             Stack<Node> pathStack = new Stack<Node>();
 
             //List with all cells, with calculated fCost.
@@ -151,6 +221,7 @@ namespace ExamProjectFirstYear
                 if (currentNode == targetNode)
                 {
                     pathStack = RetracePath(startNode, targetNode);
+                    break;
                 }
 
                 foreach (Node neighbour in GetNeighbours(currentNode))

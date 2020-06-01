@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExamProjectFirstYear.Components;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +35,11 @@ namespace ExamProjectFirstYear.CommandPattern
 		/// <param name="player"></param>
 		public void Execute(Player player)
 		{
-			player.Movement.Move(velocity);
+			//player.Movement.Move(velocity);
+
+			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
 			player.Direction = velocity;
+			playerMovement.Move(velocity);
 		}
 
 		public CommandTag GetCommandTag()

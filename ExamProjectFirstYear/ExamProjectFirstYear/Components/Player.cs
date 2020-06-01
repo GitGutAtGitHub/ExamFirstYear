@@ -112,20 +112,19 @@ namespace ExamProjectFirstYear
                     //Top platform.
                     if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, -intersection.Height));
-                        Movement.Grounded = true;
+                        GameObject.Transform.Translate(new Vector2(0, -intersection.Height + 1));
                     }
 
                     //Bottom platform.
                     if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height));
+                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height -1));
                     }
                 }
 
                 // Left and right platform.
                 else if (intersection.Width < intersection.Height)
-                {
+                  {
                     //Right platform.
                     if (component.GameObject.Transform.Position.X < GameObject.Transform.Position.X)
                     {
