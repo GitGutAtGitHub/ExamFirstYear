@@ -24,6 +24,7 @@ namespace ExamProjectFirstYear.Components
         private SpriteRenderer journalRenderer;
 
         private SpriteFont journalHeading;
+        private SpriteFont journalText;
 
         #endregion
 
@@ -65,6 +66,7 @@ namespace ExamProjectFirstYear.Components
             GameObject.SpriteName = "ClosedJournal";
             journalRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
             journalHeading = GameWorld.Instance.Content.Load<SpriteFont>("JournalHeading");
+            journalText = GameWorld.Instance.Content.Load<SpriteFont>("JournalText");
         }
 
         public override void Start()
@@ -85,18 +87,16 @@ namespace ExamProjectFirstYear.Components
             if (journalOpen == true)
             {
                 journalRenderer.SetSprite("OpenJournal");
-                spriteBatch.Draw(journalRenderer.Sprite, GameObject.Transform.Position, null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, 1);
-                spriteBatch.DrawString(journalHeading, "Recorded Blueprints", new Vector2(GameObject.Transform.Position.X + 20, GameObject.Transform.Position.Y + 20),
-                                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                spriteBatch.Draw(journalRenderer.Sprite, GameObject.Transform.Position, null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
+                DrawRecordedBlueprintStrings(spriteBatch);
             }
 
             else if (journalOpen == false)
             {
                 journalRenderer.SetSprite("ClosedJournal");
-                spriteBatch.Draw(journalRenderer.Sprite, GameObject.Transform.Position, null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, 1);        
+                spriteBatch.Draw(journalRenderer.Sprite, GameObject.Transform.Position, null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
             }
         }
-
 
         /// <summary>
         /// Checks whether Journal is open or closed.
@@ -127,7 +127,6 @@ namespace ExamProjectFirstYear.Components
             if (currentKeyboardState.IsKeyUp(Keys.J) && previousKeyboardState.IsKeyDown(Keys.J))
             {
                 journalOpen = true;
-                ShowRecordedBlueprints();
             }
         }
 
@@ -147,40 +146,35 @@ namespace ExamProjectFirstYear.Components
         }
 
         /// <summary>
-        /// Show all blueprints that the player has recorded.
+        /// Draw all blueprints that the player has recorded.
         /// </summary>
-        public void ShowRecordedBlueprints()
+        public void DrawRecordedBlueprintStrings(SpriteBatch spriteBatch)
         {
+            spriteBatch.DrawString(journalHeading, "Recorded Blueprints", new Vector2(GameObject.Transform.Position.X + 110, GameObject.Transform.Position.Y + 30),
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+
             TmpBlueprint tmpBlueprint;
+            TmpRequiredMaterial tmpRequiredMaterial;
+            TmpMaterialType tmpMaterialType;
+
+            float positionX = GameObject.Transform.Position.X + 110;
+            float positionY = GameObject.Transform.Position.Y + 30;
+
+            positionY += 80;
 
             foreach (int blueprintID in RecordedBlueprintIDs)
             {
                 tmpBlueprint = SQLiteHandler.Instance.GetBlueprint(blueprintID);
+                tmpRequiredMaterial = SQLiteHandler.Instance.GetRequiredMaterial(blueprintID);
+                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(tmpRequiredMaterial.TmpMaterialTypeID);
 
-                Console.WriteLine($"Name: {tmpBlueprint.TmpName}");
-                Console.WriteLine($"Description: {tmpBlueprint.TmpDescription}");
+                spriteBatch.DrawString(journalText, $"Name: {tmpBlueprint.TmpName} \nDescription: {tmpBlueprint.TmpDescription}" +
+                                       $"\nMaterials: {tmpMaterialType.TmpName} ({tmpRequiredMaterial.TmpAmount})",
+                                       new Vector2(positionX, positionY),
+                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
 
-                ShowRequiredMaterial(blueprintID);
-
-                Console.WriteLine();
+                positionY += 60;
             }
-        }
-
-        /// <summary>
-        /// Show required materials for blueprints. Can be used when displaying blueprints.
-        /// </summary>
-        /// <param name="blueprintID"></param>
-        public void ShowRequiredMaterial(int blueprintID)
-        {
-            TmpRequiredMaterial tmpRequiredMaterial;
-            tmpRequiredMaterial = SQLiteHandler.Instance.GetRequiredMaterial(blueprintID);
-
-            TmpMaterialType tmpMaterialType;
-            tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(tmpRequiredMaterial.TmpMaterialTypeID);
-
-
-            Console.WriteLine($"Materials: {tmpMaterialType.TmpName}");
-            Console.WriteLine($"Amount: {tmpRequiredMaterial.TmpAmount}");
         }
 
         /// <summary>

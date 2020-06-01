@@ -41,7 +41,7 @@ namespace ExamProjectFirstYear
         {
             Components.Add(component.ToEnum(), component);
 
-            if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER)
+            if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER || component.ToEnum() == Tag.JOURNAL || component.ToEnum() == Tag.INVENTORY)
             {
                 drawnComponents.Add(component.ToEnum(), component);
             }
@@ -101,7 +101,7 @@ namespace ExamProjectFirstYear
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Component component in Components.Values)
+            foreach (Component component in drawnComponents.Values)
             {
                 component.Draw(spriteBatch);
             }

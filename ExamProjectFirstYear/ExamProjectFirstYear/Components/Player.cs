@@ -20,6 +20,10 @@ namespace ExamProjectFirstYear
         private MouseState previousMouseState;
         private MouseState currentMouseState;
 
+        private bool saveLoaded;
+
+        private SpriteRenderer spriteRenderer;
+
         #endregion
 
 
@@ -71,20 +75,19 @@ namespace ExamProjectFirstYear
             GameObject.SpriteName = "OopPlayerSprite2";
             TmpJournal = SQLiteHandler.Instance.GetJournal(PlayerID);
             Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+            spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+            saveLoaded = true;
         }
 
         public override void Start()
         {
-            GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX, TmpJournal.TmpPositionY));
-            InventoryID = TmpJournal.TmpInventoryID;
-            Health = TmpJournal.TmpHealth;
-            OpenDoor = TmpJournal.TmpOpenDoor;
+            
         }
 
         public override void Update(GameTime gameTime)
         {
-            PositionX = GameObject.Transform.Position.X;
-            PositionY = GameObject.Transform.Position.Y;
+            LoadSave();
+            TestMethod();
         }
 
         public void Notify(GameEvent gameEvent, Component component)
@@ -136,6 +139,19 @@ namespace ExamProjectFirstYear
                     }
                 }
             }
+        }
+
+        public void LoadSave()
+        {
+            if (saveLoaded == true)
+            {
+                GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX - spriteRenderer.Sprite.Width * 3, TmpJournal.TmpPositionY - spriteRenderer.Sprite.Height));
+                InventoryID = TmpJournal.TmpInventoryID;
+                Health = TmpJournal.TmpHealth;
+                OpenDoor = TmpJournal.TmpOpenDoor;
+            }
+
+            saveLoaded = false;
         }
 
         public void ReleaseAttack(int attackNumber)

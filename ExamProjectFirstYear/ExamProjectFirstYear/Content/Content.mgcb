@@ -92,6 +92,13 @@
 /processorParam:TextureFormat=Compressed
 /build:JournalHeading.spritefont
 
+#begin JournalText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:JournalText.spritefont
+
 #begin MeleeObject.png
 /importer:TextureImporter
 /processor:TextureProcessor

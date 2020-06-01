@@ -168,9 +168,6 @@ namespace ExamProjectFirstYear
 				}
 			}
 
-			//SQLiteHandler.Instance.TestMethod();
-			//player.TestMethod();
-
 			base.Update(gameTime);
 		}
 
@@ -182,7 +179,7 @@ namespace ExamProjectFirstYear
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			SpriteBatch.Begin();
+			SpriteBatch.Begin(SpriteSortMode.FrontToBack);
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
@@ -242,14 +239,21 @@ namespace ExamProjectFirstYear
 				case Tag.MATERIAL:
 					createdObject.AddComponent(material);
 					createdObject.AddComponent(new Movement(true, 40, 500));
+					spriteRenderer.SpriteLayer = 0.7f;
 					break;
 
 				case Tag.JOURNAL:
 					createdObject.AddComponent(journal);
+					spriteRenderer.SpriteLayer = 0.9f;
 					break;
 
 				case Tag.INVENTORY:
 					createdObject.AddComponent(inventory);
+					spriteRenderer.SpriteLayer = 0.8f;
+					break;
+
+				default:
+					spriteRenderer.SpriteLayer = 0.6f;
 					break;
 			}
 
