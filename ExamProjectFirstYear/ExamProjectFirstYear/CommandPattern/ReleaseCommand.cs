@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExamProjectFirstYear.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +9,24 @@ namespace ExamProjectFirstYear.CommandPattern
 {
 	class ReleaseCommand : ICommand
 	{
-		private int attackNumber;
-		public ReleaseCommand(int attackNumber)
+		private int releaseNumber;
+		public ReleaseCommand(int releaseNumber)
 		{
-			this.attackNumber = attackNumber;
+			this.releaseNumber = releaseNumber;
 		}
 
 		public void Execute(Player player)
 		{
-			player.ReleaseAttack(attackNumber);
+			if (releaseNumber <= 2)
+			{
+				player.ReleaseAttack(releaseNumber);
+			}
+			else
+			{
+				Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
+				playerMovement.ReleaseJump();
+			}
+			
 		}
 
 		public CommandTag GetCommandTag()

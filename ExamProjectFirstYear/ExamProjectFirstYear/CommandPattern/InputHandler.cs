@@ -56,6 +56,8 @@ namespace ExamProjectFirstYear
 			releaseKeyBinds.Add(Keys.X, new ReleaseCommand(1));
 			// Player releases the rangedattack
 			releaseKeyBinds.Add(Keys.Z, new ReleaseCommand(2));
+
+			releaseKeyBinds.Add(Keys.Space, new ReleaseCommand(3));
 		}
 
         /// <summary>
