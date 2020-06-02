@@ -1,4 +1,5 @@
-﻿using ExamProjectFirstYear.PathFinding;
+﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -41,7 +42,7 @@ namespace ExamProjectFirstYear
         {
             Components.Add(component.ToEnum(), component);
 
-            if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER)
+            if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER/* || component.ToEnum() == Tag.LIGHTSOURCE*/)
             {
                 drawnComponents.Add(component.ToEnum(), component);
             }

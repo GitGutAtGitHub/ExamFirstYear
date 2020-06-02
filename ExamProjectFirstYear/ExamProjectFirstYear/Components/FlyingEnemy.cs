@@ -35,7 +35,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void Start()
         {
-            GameObject.SpriteName = "smol";
+            GameObject.SpriteName = "FlyingEnemy";
         }
 
 

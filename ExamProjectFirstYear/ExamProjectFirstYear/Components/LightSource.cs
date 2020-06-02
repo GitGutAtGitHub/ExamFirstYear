@@ -8,16 +8,14 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-	class LightSource : Component
+	public class LightSource : Component
 	{
 		//private float radius;
 		private int intensity;
-		
 
 		private Texture2D lightMaskTexture;
 		private Effect lightEffect;
-		private RenderTarget2D lightsTarget;
-		private RenderTarget2D mainTarget;
+		//private RenderTarget2D mainTarget;
 		private float lightRadiusScale;
 		private bool lightOn;
 
@@ -25,6 +23,7 @@ namespace ExamProjectFirstYear.Components
 		{
 			this.lightRadiusScale = lightRadiusScale;
 			this.lightOn = lightOn;
+
 		}
 
 		public override void Awake()
@@ -35,12 +34,21 @@ namespace ExamProjectFirstYear.Components
 
 		public override void Start()
 		{
-
+			GameWorld.Instance.LightSources.Add(this);
 		}
 
 		public override void Update(GameTime gameTime)
 		{
-			base.Update(gameTime);
+			
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			if (lightOn == true)
+			{
+				spriteBatch.Draw(lightMaskTexture, GameObject.Transform.Position, null, Color.White, 0, new Vector2(lightMaskTexture.Width/2, lightMaskTexture.Height/2), lightRadiusScale, SpriteEffects.None, 1f);
+				
+			}
 		}
 
 		public override Tag ToEnum()

@@ -46,7 +46,7 @@ namespace ExamProjectFirstYear
 
 			//har ændret deault origin til at være i hjørnet igen, ellers er det svært at lave level design med bitmap
 			//det kan bare ændres specifikt til player osv
-			//Origin = new Vector2(Sprite.Width / 2, Sprite.Height / 2);
+			Origin = new Vector2(Sprite.Width / 2, Sprite.Height / 2);
 		}
 
 		/// <summary>
