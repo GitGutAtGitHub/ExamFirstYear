@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
+    /// <summary>
+    /// Abstract Enemy class for different enemy types.
+    /// </summary>
     abstract class Enemy : Component, IEntity
     {
         #region FIELDS

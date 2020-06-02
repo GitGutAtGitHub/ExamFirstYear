@@ -20,11 +20,16 @@ namespace ExamProjectFirstYear
         private MouseState previousMouseState;
         private MouseState currentMouseState;
 
+        private bool saveLoaded;
+
+        private SpriteRenderer spriteRenderer;
+
         #endregion
 
 
         #region Properties
-        public int JournalID { get; set; }
+        public int PlayerID { get; set; }
+
         public int InventoryID { get; set; }
         public int Health { get; set; }
         public int OpenDoor { get; set; }
@@ -38,8 +43,8 @@ namespace ExamProjectFirstYear
 
         public Vector2 Direction { get; set; } = new Vector2(1, 0);
 
-    		public bool canAttack { get; set; } = true;
-    		public bool canShoot { get; set; } = true;
+        public bool canAttack { get; set; } = true;
+        public bool canShoot { get; set; } = true;
 
         #endregion
 
@@ -49,15 +54,15 @@ namespace ExamProjectFirstYear
         /// <summary>
         /// Constructor for the Player Character component.
         /// </summary>
-        public Player(int journalID)
+        public Player(int playerID)
         {
-            JournalID = journalID;
+            PlayerID = playerID;
         }
 
         #endregion
 
 
-        #region Methods
+        #region Override methods
 
         public override Tag ToEnum()
         {
@@ -68,36 +73,39 @@ namespace ExamProjectFirstYear
         {
             GameObject.Tag = Tag.PLAYER;
             GameObject.SpriteName = "OopPlayerSprite2";
-            TmpJournal = SQLiteHandler.Instance.GetJournal(JournalID);
+            TmpJournal = SQLiteHandler.Instance.GetJournal(PlayerID);
+            Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+            spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+            saveLoaded = true;
         }
 
         public override void Start()
         {
-            Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
-
-            GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX, TmpJournal.TmpPositionY));
-            InventoryID = TmpJournal.TmpInventoryID;
-            Health = TmpJournal.TmpHealth;
-            OpenDoor = TmpJournal.TmpOpenDoor;
 
         }
 
         public override void Update(GameTime gameTime)
         {
-            PositionX = GameObject.Transform.Position.X;
-            PositionY = GameObject.Transform.Position.Y;
+            //LoadSave();
+            //TestMethod();
         }
+
+        #endregion
+
+
+        #region Other methods
 
         public void Notify(GameEvent gameEvent, Component component)
         {
+            //Players collect materials when they collide with them.
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MATERIAL)
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
-
                 component.GameObject.Destroy();
-                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.ID);
+                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
             }
 
+            //Players hit platforms when they collide with them.
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
             {
                 Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
@@ -115,13 +123,13 @@ namespace ExamProjectFirstYear
                     //Bottom platform.
                     if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height -1));
+                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height - 1));
                     }
                 }
 
                 // Left and right platform.
                 else if (intersection.Width < intersection.Height)
-                  {
+                {
                     //Right platform.
                     if (component.GameObject.Transform.Position.X < GameObject.Transform.Position.X)
                     {
@@ -137,17 +145,30 @@ namespace ExamProjectFirstYear
             }
         }
 
+        private void LoadSave()
+        {
+            if (saveLoaded == true)
+            {
+                GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX - spriteRenderer.Sprite.Width * 3, TmpJournal.TmpPositionY - spriteRenderer.Sprite.Height));
+                InventoryID = TmpJournal.TmpInventoryID;
+                Health = TmpJournal.TmpHealth;
+                OpenDoor = TmpJournal.TmpOpenDoor;
+            }
+
+            saveLoaded = false;
+        }
+
         public void ReleaseAttack(int attackNumber)
-    		{
-    			if (attackNumber == 1)
-    			{
-    				canAttack = true;
-    			}
-    			if (attackNumber == 2)
-    			{
-    				canShoot = true;
-    			}
-    		}
+        {
+            if (attackNumber == 1)
+            {
+                canAttack = true;
+            }
+            if (attackNumber == 2)
+            {
+                canShoot = true;
+            }
+        }
 
         /// <summary>
         /// Players method for attacking.
@@ -168,65 +189,59 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-    		/// Melee attack for Player.
-    		/// </summary>
-    		private void MeleeAttak()
-    		{
-    			if (canAttack)
-    			{
-    				GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
-    				SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
-    				Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
-    				tmpMeleeObject.Transform.Position = GameObject.Transform.Position + (new Vector2(Direction.X * tmpMeleeRenderer.Sprite.Width, Direction.Y));
-    				GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
-    				GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
-    				canAttack = false;
-    			}
-    		}
+        /// Melee attack for Player.
+        /// </summary>
+        private void MeleeAttak()
+        {
+            if (canAttack)
+            {
+                GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
+                SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
+                Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
+                tmpMeleeObject.Transform.Position = GameObject.Transform.Position + (new Vector2(Direction.X * tmpMeleeRenderer.Sprite.Width, Direction.Y));
+                GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
+                GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
+                canAttack = false;
+            }
+        }
 
         /// <summary>
-    		/// Ranged attack for Player.
-    		/// </summary>
-    		private void RangedAttack()
-    		{
-    			//MANGLER KODE DER FORHINDRER AT MAN KAN LAVE MERE END ÉT ANGREB AF GANGEN
-    			//MANGLER OGSÅ KODE DER SØRGER FOR AT SPILLEREN MISTER LYS/MANA.
-    			if (canShoot)
-    			{
-    				GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject();
-    				Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
-    				tmpProjectileObject.Transform.Position = GameObject.Transform.Position;
-    				Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
-    				tmpMovement.Velocity = Direction;
-    				//tmpMovement.Speed = 1000f;
-    				GameWorld.Instance.Colliders.Add(tmpProjectileCollider);
-    				GameWorld.Instance.GameObjects.Add(tmpProjectileObject);
-    				canShoot = false;
-    			}
-    		}
-
-        public void ShowStoredMaterial(int materialTypeID, int inventoryID)
+        /// Ranged attack for Player.
+        /// </summary>
+        private void RangedAttack()
         {
-
+            //MANGLER KODE DER FORHINDRER AT MAN KAN LAVE MERE END ÉT ANGREB AF GANGEN
+            //MANGLER OGSÅ KODE DER SØRGER FOR AT SPILLEREN MISTER LYS/MANA.
+            if (canShoot)
+            {
+                GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject();
+                Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
+                tmpProjectileObject.Transform.Position = GameObject.Transform.Position;
+                Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
+                tmpMovement.Velocity = Direction;
+                //tmpMovement.Speed = 1000f;
+                GameWorld.Instance.Colliders.Add(tmpProjectileCollider);
+                GameWorld.Instance.GameObjects.Add(tmpProjectileObject);
+                canShoot = false;
+            }
         }
 
         #endregion
 
         public void TestMethod()
         {
-            Blueprint blueprint = new Blueprint();
-
             previousMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
 
             if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
             {
-                Console.WriteLine("Button pressed");
-
-                //blueprint.CheckRecordedBP(1);
-
-                //SQLiteHandler.Instance.SaveGame(Health, OpenDoor, PositionX, PositionY, JournalID);
+                SQLiteHandler.Instance.SaveGame(Health, OpenDoor, PlayerID);
             }
+
+            //else if (currentMouseState.RightButton == ButtonState.Released && previousMouseState.RightButton == ButtonState.Pressed)
+            //{
+            //    inventory.ShowStoredMaterials(JournalID);
+            //}
         }
     }
 
@@ -236,11 +251,11 @@ namespace ExamProjectFirstYear
         public int TmpInventoryID { get; set; }
         public int TmpHealth { get; set; }
         public int TmpOpenDoor { get; set; }
-        public float TmpPositionX { get; set; }
-        public float TmpPositionY { get; set; }
+        public int TmpPositionX { get; set; }
+        public int TmpPositionY { get; set; }
 
 
-        public TmpJournal(int tmpJournalID, int tmpInventoryID, int tmpHealth, float tmpPositionX, float tmpPositionY, int tmpOpenDoor)
+        public TmpJournal(int tmpJournalID, int tmpInventoryID, int tmpHealth, int tmpPositionX, int tmpPositionY, int tmpOpenDoor)
         {
             TmpJournalID = tmpJournalID;
             TmpInventoryID = tmpInventoryID;
@@ -248,19 +263,6 @@ namespace ExamProjectFirstYear
             TmpPositionX = tmpPositionX;
             TmpPositionY = tmpPositionY;
             TmpOpenDoor = tmpOpenDoor;
-        }
-    }
-
-    public struct TmpStoredMaterial
-    {
-        public int TmpAmount { get; set; }
-        public int TmpSlot { get; set; }
-
-
-        public TmpStoredMaterial(int tmpAmound, int tmpSlot)
-        {
-            TmpAmount = tmpAmound;
-            TmpSlot = tmpSlot;
         }
     }
 }

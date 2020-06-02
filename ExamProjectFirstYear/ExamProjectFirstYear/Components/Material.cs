@@ -7,35 +7,40 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
+    /// <summary>
+    /// Material component class.
+    /// </summary>
     public class Material : Component, IGameListener
     {
         #region Fields
 
         private Movement movement;
-        private Blueprint blueprint;
 
         #endregion
 
 
         #region Properties
 
-        //public string MaterialName { get; set; }
-        public int ID { get; set; }
+        public int MaterialID { get; set; }
 
         #endregion
 
 
         #region Constructors
-
+        
+        /// <summary>
+        /// Constructor for material.
+        /// </summary>
+        /// <param name="iD"></param>
         public Material(int iD)
         {
-            ID = iD;
+            MaterialID = iD;
         }
 
         #endregion
 
 
-        #region Methods
+        #region Override methods
 
         public override Tag ToEnum()
         {
@@ -53,6 +58,11 @@ namespace ExamProjectFirstYear.Components
             movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
             GameObject.Transform.Translate(new Vector2(500, 10));
         }
+
+        #endregion
+
+
+        #region Other methods
 
         public void Notify(GameEvent gameEvent, Component component)
         {
@@ -97,16 +107,5 @@ namespace ExamProjectFirstYear.Components
         }
 
         #endregion
-    }
-
-    public struct TmpMaterialType
-    {
-        public string TmpName { get; set; }
-
-
-        public TmpMaterialType(string tmpName)
-        {
-            TmpName = tmpName;
-        }
     }
 }

@@ -7,9 +7,13 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
+	/// <summary>
+	/// Collider component class. Used for collision.
+	/// </summary>
 	public class Collider : Component
 	{
 		#region FIELDS
+
 		////Used to notify objects when they are colliding.
 		private GameEvent collidingEvent = new GameEvent("Colliding");
 		////The following to fields are used to notify objects that has collided when they are no longer colliding with eachother.
@@ -27,6 +31,7 @@ namespace ExamProjectFirstYear
 
 
 		#region PROPERTIES
+
 		public bool CheckCollisionEvents { get; set; } = true;
 
 		public Rectangle CollisionBox
@@ -48,7 +53,7 @@ namespace ExamProjectFirstYear
 		#endregion
 
 
-		#region METHODS
+		#region Constructors
 
 		/// <summary>
 		/// Constructor for Colliders that don't need an IGameListener attached
@@ -74,6 +79,27 @@ namespace ExamProjectFirstYear
 			origin = spriteRenderer.Origin;
 			size = new Vector2(spriteRenderer.Sprite.Width, spriteRenderer.Sprite.Height);
 		}
+
+		#endregion
+
+
+		#region Override methods
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			//Draws the collision boxes around objects. Re-insert for debugging.
+			spriteBatch.Draw(collisionTexture, CollisionBox, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
+		}
+
+		public override Tag ToEnum()
+		{
+			return Tag.COLLIDER;
+		}
+
+		#endregion
+
+
+		#region Other methods
 
 		public void AttachListener(IGameListener listener)
 		{
@@ -120,17 +146,6 @@ namespace ExamProjectFirstYear
 					noLongerCollidingEvent.Notify(other);
 				}
 			}
-		}
-
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			//Draws the collision boxes around objects. Re-insert for debugging.
-			spriteBatch.Draw(collisionTexture, CollisionBox, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 0);
-		}
-
-		public override Tag ToEnum()
-		{
-			return Tag.COLLIDER;
 		}
 
 		#endregion

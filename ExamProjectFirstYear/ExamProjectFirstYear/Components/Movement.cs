@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
+	/// <summary>
+	/// Component that enabled sprite movement.
+	/// </summary>
 	public class Movement : Component, IGameListener
 	{
 		#region Fields
@@ -30,6 +33,12 @@ namespace ExamProjectFirstYear.Components
 
 		#region Contstructors
 
+		/// <summary>
+		/// Constructor for Movement component.
+		/// </summary>
+		/// <param name="gravityOn"></param>
+		/// <param name="maxMomentum"></param>
+		/// <param name="speed"></param>
 		public Movement(bool gravityOn, float maxMomentum, float speed)
 		{
 			this.gravityOn = gravityOn;
@@ -133,6 +142,9 @@ namespace ExamProjectFirstYear.Components
 
 		}
 
+		/// <summary>
+		/// Sets Jump to true.
+		/// </summary>
 		public void ReleaseJump()
 		{
 			hasJumped = true;

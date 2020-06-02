@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.CommandPattern
 {
+	/// <summary>
+	/// MoveCommand for the player.
+	/// </summary>
 	class MoveCommand : ICommand
 	{
 		#region Fields
@@ -19,6 +22,10 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		#region Constructors
 
+		/// <summary>
+		/// Constructor for MoveCommand.
+		/// </summary>
+		/// <param name="velocity"></param>
 		public MoveCommand(Vector2 velocity)
 		{
 			this.velocity = velocity;
@@ -30,13 +37,11 @@ namespace ExamProjectFirstYear.CommandPattern
 		#region Methods
 
 		/// <summary>
-		/// Executes the command
+		/// Executes the command.
 		/// </summary>
 		/// <param name="player"></param>
 		public void Execute(Player player)
 		{
-			//player.Movement.Move(velocity);
-
 			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
 			player.Direction = velocity;
 			playerMovement.Move(velocity);
@@ -46,6 +51,7 @@ namespace ExamProjectFirstYear.CommandPattern
 		{
 			return CommandTag.KEYDOWN;
 		}
+
 		#endregion
 	}
 }

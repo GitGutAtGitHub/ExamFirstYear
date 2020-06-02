@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:ChoosenPathTexture.png
 
+#begin ClosedJournal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ClosedJournal.png
+
 #begin CollisionBox.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -48,6 +60,45 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:CollisionTexture.png
+
+#begin InventoryClosed.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:InventoryClosed.png
+
+#begin InventoryOpen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:InventoryOpen.png
+
+#begin JournalHeading.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:JournalHeading.spritefont
+
+#begin JournalText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:JournalText.spritefont
+
 
 #begin FlyingEnemy.png
 /importer:TextureImporter
@@ -109,6 +160,18 @@
 /processorParam:TextureFormat=Color
 /build:OopPlayerSprite2.png
 
+#begin OpenJournal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:OpenJournal.png
+
 #begin Platform.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -151,4 +214,3 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UnWalkableNode.png
-

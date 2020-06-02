@@ -11,7 +11,7 @@ namespace ExamProjectFirstYear
     class LevelManager
     {
         //event for checking if the level is done populating.
-        //Used for setting the enemies target, and making sure the player is intantiated when the target filed is set. 
+        //Used for setting the enemies target, and making sure the player is intantiated when the target filed is set.
         public delegate void LevelInitializationDoneHandler();
         public event LevelInitializationDoneHandler LevelInitializationDoneEvent;
 
@@ -47,7 +47,7 @@ namespace ExamProjectFirstYear
         public string GetPath(string filename)
         {
             return Environment.CurrentDirectory + ($"\\Levels\\{filename}.bmp");
-   
+
         }
 
         Bitmap TestLevel;
@@ -75,7 +75,7 @@ namespace ExamProjectFirstYear
         /// <param name="level"></param>
         private void PopulateLevel(Bitmap level)
         {
-  
+
             SpotOccupied = new bool[level.Width, level.Width];
 
             for (int y = 0; y < level.Height; y++)
@@ -109,7 +109,7 @@ namespace ExamProjectFirstYear
             }
             // The event is raised. It calls the method AddTarget,
             // which is added to each enemy in the CreateObject method.
-            LevelInitializationDoneEvent();         
+            LevelInitializationDoneEvent();
         }
 
 
@@ -137,6 +137,21 @@ namespace ExamProjectFirstYear
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((FlyingEnemy)(createdObject.GetComponent(Tag.FLYINGENEMY))).AddTarget;
                     break;
+
+                //case Tag.JOURNAL:
+                //    createdObject.AddComponent(GameWorld.Instance.journal);
+                //    spriteRenderer.SpriteLayer = 0.9f;
+                //    break;
+
+                //case Tag.INVENTORY:
+                //    createdObject.AddComponent(GameWorld.Instance.inventory);
+                //    spriteRenderer.SpriteLayer = 0.8f;
+                //    break;
+
+                //default:
+                //    spriteRenderer.SpriteLayer = 0.6f;
+                //    break;
+
             }
 
             createdObject.AddComponent(spriteRenderer);
@@ -147,7 +162,7 @@ namespace ExamProjectFirstYear
 
             if (tag == Tag.PLAYER)
             {
-                       spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
+                spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
                 collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
             }

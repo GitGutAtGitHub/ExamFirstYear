@@ -9,13 +9,18 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
+    /// <summary>
+    /// Class for GameObjects methods.
+    /// </summary>
     public class GameObject
     {
         #region FIELDS
+
         private Dictionary<Tag, Component> components = new Dictionary<Tag, Component>();
         //drawnComponents is used in the Draw method, so that only components that need to be drawn
         // such as SpriteRenderer call their Draw method.
         private Dictionary<Tag, Component> drawnComponents = new Dictionary<Tag, Component>();
+
         #endregion
 
 
@@ -24,14 +29,21 @@ namespace ExamProjectFirstYear
         public string SpriteName { get; set; }
         public Tag Tag { get; set; }
         public Dictionary<Tag, Component> Components { get => components; }
+
         #endregion
 
 
-        #region METHODS
+        #region Constructors
+
         public GameObject()
         {
 
         }
+
+        #endregion
+
+
+        #region METHODS
 
         /// <summary>
         /// Adds a component to the the GameObject.
@@ -41,7 +53,7 @@ namespace ExamProjectFirstYear
         {
             Components.Add(component.ToEnum(), component);
 
-            if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER)
+            if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER || component.ToEnum() == Tag.JOURNAL || component.ToEnum() == Tag.INVENTORY)
             {
                 drawnComponents.Add(component.ToEnum(), component);
             }
@@ -81,8 +93,6 @@ namespace ExamProjectFirstYear
             }
         }
 
-
-
         /// <summary>
         /// Calls Update for all the components in the GameObject.
         /// </summary>
@@ -100,7 +110,6 @@ namespace ExamProjectFirstYear
         /// </summary>
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
-
         {
             foreach (Component component in drawnComponents.Values)
             {
@@ -123,12 +132,6 @@ namespace ExamProjectFirstYear
         }
 
 
-        //public override Tag ToEnum()
-        //{
-        //	//return Tag = Tag.GAMEOBJECT;
-        //}
-
-
         /// <summary>
         /// Returns how many nodes that object is occupying
         /// </summary>
@@ -149,11 +152,21 @@ namespace ExamProjectFirstYear
             return spriteRenderer.Sprite.Height / NodeManager.Instance.CellSize;
         }
 
-
         public Vector2 GetCoordinate()
         {
             return Transform.Position / NodeManager.Instance.CellSize;
         }
+
+        /// <summary>
+        /// Load and set a SpriteFont.
+        /// </summary>
+        /// <param name="spriteFont"></param>
+        /// <param name="fontName"></param>
+        public void SetSpriteFont(SpriteFont spriteFont, string fontName)
+        {
+            spriteFont = GameWorld.Instance.Content.Load<SpriteFont>($"{fontName}");
+        }
+
         #endregion
     }
 }

@@ -10,10 +10,18 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
+    /// <summary>
+    /// Flying Enemy component class.
+    /// </summary>
     class FlyingEnemy : Enemy
     {
+        #region Fields
+
         private Stack<Node> flyingPath;
         private Vector2 prevNode = new Vector2(0, 0);
+
+        #endregion
+
 
         #region PROPERTIES
 
@@ -24,6 +32,8 @@ namespace ExamProjectFirstYear.Components
         #endregion
 
 
+        #region Override methods
+
         public override void Awake()
         {            
             SightRadius = 6 * NodeManager.Instance.CellSize;         
@@ -32,12 +42,10 @@ namespace ExamProjectFirstYear.Components
             SwitchState(new EnemyAttackState());
         }
 
-
         public override void Start()
         {
             GameObject.SpriteName = "smol";
         }
-
 
         public override void SwitchState(IState newState)
         {
@@ -53,19 +61,16 @@ namespace ExamProjectFirstYear.Components
             currentState.Enter(this);
         }
 
-
         public override void Update(GameTime gameTime)
         {         
             currentState.Execute();
             Move();
         }
 
-
         protected override void Notify()
         {
-            throw new NotImplementedException();
+            
         }
-
 
         protected override void Move()
         {
@@ -79,7 +84,6 @@ namespace ExamProjectFirstYear.Components
             GameObject.Transform.Translate(Velocity * GameWorld.Instance.DeltaTime);
         }
 
-
         public override void AddTarget()
         {
             Target = GameWorld.Instance.player.GameObject;
@@ -89,5 +93,7 @@ namespace ExamProjectFirstYear.Components
         {
             return Tag.FLYINGENEMY;
         }
+
+        #endregion
     }
 }
