@@ -50,7 +50,7 @@ namespace ExamProjectFirstYear
         /// <summary>
         /// Destroy for the component. Removes the Component from the Game. 
         /// </summary>
-        public virtual void Destroy() { }
+        //public virtual void Destroy() { }
 
         /// <summary>
         /// Returns the components Tag. Is used to tell Components apart. 

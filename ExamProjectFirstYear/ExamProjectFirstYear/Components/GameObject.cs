@@ -53,7 +53,7 @@ namespace ExamProjectFirstYear
         {
             Components.Add(component.ToEnum(), component);
 
-            if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER || component.ToEnum() == Tag.JOURNAL || component.ToEnum() == Tag.INVENTORY)
+            if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER || component.ToEnum() == Tag.JOURNAL || component.ToEnum() == Tag.INVENTORY/* || component.ToEnum() == Tag.MATERIAL*/)
             {
                 drawnComponents.Add(component.ToEnum(), component);
             }
@@ -122,10 +122,10 @@ namespace ExamProjectFirstYear
         /// </summary>
         public void Destroy()
         {
-            foreach (Component component in Components.Values)
-            {
-                component.Destroy();
-            }
+            //foreach (Component component in Components.Values)
+            //{
+            //    component.Destroy();
+            //}
 
             GameWorld.Instance.DeleteGameObject(this);
             GameWorld.Instance.Colliders.Remove((Collider)GetComponent(Tag.COLLIDER));

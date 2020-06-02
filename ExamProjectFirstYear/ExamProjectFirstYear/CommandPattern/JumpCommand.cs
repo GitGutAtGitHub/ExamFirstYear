@@ -24,13 +24,14 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		#endregion
 
+		// Check on material er sat sammen med player pos
 
 		#region Methods
 
 		public void Execute(Player player)
 		{
-			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
-			playerMovement.Jump();
+			Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
+			playerJump.PlayerJump();
 		}
 
 		public CommandTag GetCommandTag()
