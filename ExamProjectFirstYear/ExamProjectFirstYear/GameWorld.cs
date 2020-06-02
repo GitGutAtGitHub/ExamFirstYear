@@ -177,7 +177,6 @@ namespace ExamProjectFirstYear
                 {
                     GameObjects[i].Update(gameTime);
                 }
-
             }
 
             //Makes a copy of the collider list, to avoid any exception when removing from the collider list.

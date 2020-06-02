@@ -54,7 +54,7 @@ namespace ExamProjectFirstYear
             
         }
 
-        public override void Destroy()
+        public void MoveToObjectPool()
         {
             //Use GameEvent and Notify, if (OnHitObject, OnPastBorders) then destroy collider
             switch (GameObject.Tag)
@@ -98,11 +98,13 @@ namespace ExamProjectFirstYear
         {
             if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM)
             {
+                MoveToObjectPool();
                 GameObject.Destroy();
                 //other.GameObject.Destroy();
             }
             if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
             {
+                MoveToObjectPool();
                 GameObject.Destroy();
             }
         }

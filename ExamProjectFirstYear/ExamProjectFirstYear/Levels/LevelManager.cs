@@ -63,10 +63,9 @@ namespace ExamProjectFirstYear
         {
             LoadBitmap();
             PopulateLevel(PlatformSection);
+            //PopulateLevel(TestLevel);
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
-
-            //PopulateLevel(TestLevel);
         }
 
         /// <summary>
@@ -126,6 +125,7 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 35, 900));
+                    createdObject.AddComponent(new Jump());
                     break;
 
                 case Tag.PLATFORM:
@@ -137,6 +137,10 @@ namespace ExamProjectFirstYear
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((FlyingEnemy)(createdObject.GetComponent(Tag.FLYINGENEMY))).AddTarget;
                     break;
+
+                //case Tag.MATERIAL:
+                //    createdObject.AddComponent(new Material(1));
+                //    break;
 
                 //case Tag.JOURNAL:
                 //    createdObject.AddComponent(GameWorld.Instance.journal);
