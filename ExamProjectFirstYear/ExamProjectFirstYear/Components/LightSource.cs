@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,27 @@ namespace ExamProjectFirstYear.Components
 {
 	class LightSource : Component
 	{
-		private float radius;
+		//private float radius;
 		private int intensity;
+		
+
+		private Texture2D lightMaskTexture;
+		private Effect lightEffect;
+		private RenderTarget2D lightsTarget;
+		private RenderTarget2D mainTarget;
+		private float lightRadiusScale;
 		private bool lightOn;
 
-		public LightSource()
+		public LightSource(float lightRadiusScale, bool lightOn)
 		{
-
+			this.lightRadiusScale = lightRadiusScale;
+			this.lightOn = lightOn;
 		}
 
 		public override void Awake()
 		{
-			base.Awake();
+			lightMaskTexture = GameWorld.Instance.Content.Load<Texture2D>("Lightmask");
+			lightEffect = GameWorld.Instance.Content.Load<Effect>("LightEffect");
 		}
 
 		public override void Start()
