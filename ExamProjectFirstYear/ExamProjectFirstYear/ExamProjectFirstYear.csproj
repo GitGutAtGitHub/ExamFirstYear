@@ -81,9 +81,16 @@
     <Compile Include="CommandPattern\CommandTag.cs" />
     <Compile Include="CommandPattern\ReleaseCommand.cs" />
     <Compile Include="Components\Door.cs" />
-    <Compile Include="Components\Inventory.cs" />
-    <Compile Include="Components\Journal.cs" />
+    <Compile Include="Components\Player\PlayerManaUI.cs" />
+    <Compile Include="Components\Player\Inventory.cs" />
+    <Compile Include="Components\Player\Journal.cs" />
     <Compile Include="Components\LightSource.cs" />
+    <Compile Include="Components\Player\PlayerHealthUI.cs" />
+    <Compile Include="Components\MenuHandler.cs" />
+    <Compile Include="MenuStatePattern\LoadingState.cs" />
+    <Compile Include="MenuStatePattern\PausedState.cs" />
+    <Compile Include="MenuStatePattern\PlayingState.cs" />
+    <Compile Include="MenuStatePattern\StartState.cs" />
     <Compile Include="ObjectPools\EnemyProjectilePool.cs" />
     <Compile Include="ObjectPools\BossProjectilePool.cs" />
     <Compile Include="CommandPattern\AttackCommand.cs" />
@@ -109,7 +116,7 @@
     <Compile Include="ObserverPattern\GameEvent.cs" />
     <Compile Include="ObserverPattern\IGameListener.cs" />
     <Compile Include="Components\SpriteRenderer.cs" />
-    <Compile Include="Components\Player.cs" />
+    <Compile Include="Components\Player\Player.cs" />
     <Compile Include="Components\Tag.cs" />
     <Compile Include="Components\Collider.cs" />
     <Compile Include="Components\Component.cs" />

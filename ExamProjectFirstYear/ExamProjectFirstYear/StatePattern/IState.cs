@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.StatePattern
 {
-    interface IState
+    public interface IState
     {
 		/// <summary>
 		/// Is called when an Entity changes state. Contains all the setup code necessary for the state to function.

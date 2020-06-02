@@ -8,9 +8,12 @@ using System.Xml;
 using System.Dynamic;
 using System.Threading;
 using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.Player;
 
 namespace ExamProjectFirstYear
 {
+    enum GameState { StartMenu, Loading, Playing, Paused }
+
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
@@ -89,19 +92,19 @@ namespace ExamProjectFirstYear
         /// </summary>
         protected override void Initialize()
         {
-            TimeElapsed = 0;
+            //TimeElapsed = 0;
 
-            //Create instances of Player, Journal and Inventory.
-            journal = new Journal(1);
-            player = new Player(journal.JournalID);
-            inventory = new Inventory(player.PlayerID);
+            ////Create instances of Player, Journal and Inventory.
+            //journal = new Journal(1);
+            //player = new Player(journal.JournalID);
+            //inventory = new Inventory(player.PlayerID);
 
-            //graphics.PreferredBackBufferWidth = 1920;
-            //graphics.PreferredBackBufferHeight = 1080;
-            //graphics.ApplyChanges();
-            IsMouseVisible = true;
+            ////graphics.PreferredBackBufferWidth = 1920;
+            ////graphics.PreferredBackBufferHeight = 1080;
+            ////graphics.ApplyChanges();
+            //IsMouseVisible = true;
 
-            camera = new Camera();
+            //camera = new Camera();
 
             base.Initialize();
         }
@@ -115,24 +118,33 @@ namespace ExamProjectFirstYear
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            for (int i = 0; i < GameObjects.Count; i++)
-            {
-                GameObjects[i].Awake();
-            }
+            startButton = Content.Load<Texture2D>("OopPlayerSprite2");
+            exitButton = Content.Load<Texture2D>("OopPlayerSprite2");
 
-            for (int i = 0; i < GameObjects.Count; i++)
-            {
-                GameObjects[i].Start();
-            }
+            loadingScreen = Content.Load<Texture2D>("OopGameScreen");
 
-            CreateUIObject(Tag.JOURNAL);
-            CreateUIObject(Tag.INVENTORY);
 
-            LevelManager.Instance.InitializeLevel();
 
-            NodeManager.Instance.InitializeGrid();
-            NodeManager.Instance.UpdateGrid();
-            NodeManager.Instance.LoadContent(Content);
+            //for (int i = 0; i < GameObjects.Count; i++)
+            //{
+            //    GameObjects[i].Awake();
+            //}
+
+            //for (int i = 0; i < GameObjects.Count; i++)
+            //{
+            //    GameObjects[i].Start();
+            //}
+
+            //CreateUIObject(Tag.JOURNAL);
+            //CreateUIObject(Tag.INVENTORY);
+            //CreateUIObject(Tag.PLAYERHEALTHUI);
+            //CreateUIObject(Tag.PLAYERMANAUI);
+
+            //LevelManager.Instance.InitializeLevel();
+
+            //NodeManager.Instance.InitializeGrid();
+            //NodeManager.Instance.UpdateGrid();
+            //NodeManager.Instance.LoadContent(Content);
         }
 
         /// <summary>
@@ -158,27 +170,64 @@ namespace ExamProjectFirstYear
                 Exit();
             }
 
-            TimeHandler(gameTime);
+            previousKeyState = currentKeyState;
+            currentKeyState = Keyboard.GetState();
 
-            InputHandler.Instance.Execute(player);
-
-            for (int i = 0; i < GameObjects.Count; i++)
+            if (gameState == GameState.StartMenu)
             {
-                if (GameObjects[i].Components.ContainsKey(Tag.PLAYER) || GameObjects[i].Components.ContainsKey(Tag.JOURNAL) || GameObjects[i].Components.ContainsKey(Tag.INVENTORY))
+                Console.WriteLine("Start menu state.");
+                if (currentKeyState.IsKeyUp(Keys.S) && previousKeyState.IsKeyDown(Keys.S))
                 {
-                    GameObjects[i].Update(gameTime);
+                    gameState = GameState.Playing;
+
+                    LoadGame();
                 }
 
-
-                else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
-                    (player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
-                    (GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
-                    (player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.width))
+                if (currentKeyState.IsKeyUp(Keys.E) && previousKeyState.IsKeyDown(Keys.E))
                 {
-                    GameObjects[i].Update(gameTime);
+                    Exit();
                 }
-
             }
+
+            if (gameState == GameState.Playing && isLoading == true)
+            {
+                LoadGame();
+
+                isLoading = false;
+            }
+
+            if (gameState == GameState.Loading && !isLoading)
+            {
+                backgroundThread = new Thread(LoadGame);
+
+                isLoading = true;
+
+                backgroundThread.Start();
+            }
+
+            //TimeHandler(gameTime);
+
+            //InputHandler.Instance.Execute(player);
+
+            //for (int i = 0; i < GameObjects.Count; i++)
+            //{
+            //    if (GameObjects[i].Components.ContainsKey(Tag.PLAYER) || GameObjects[i].Components.ContainsKey(Tag.JOURNAL)
+            //        || GameObjects[i].Components.ContainsKey(Tag.INVENTORY) || GameObjects[i].Components.ContainsKey(Tag.PLAYERHEALTHUI)
+            //        || GameObjects[i].Components.ContainsKey(Tag.PLAYERMANAUI))
+            //    {
+            //        GameObjects[i].Update(gameTime);
+            //    }
+
+
+            //    else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
+            //        (player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
+            //        (GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
+            //        (player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.width))
+            //    {
+            //        GameObjects[i].Update(gameTime);
+            //    }
+
+            //}
 
             //Makes a copy of the collider list, to avoid any exception when removing from the collider list.
             //OnColliding and OnNoLongerColliding is run from here rather than an Update method in Colliders, as they need a parameter
@@ -187,18 +236,18 @@ namespace ExamProjectFirstYear
 
             // NOTE!!!!!!!! MÅSKE SKAL VI PRØVE AT SE OM VI KAN FÅ DET TIL AT KØRE I COLLIDERS UPDATE MED EN CHECKCOLLISION METODE KIG EVT.
             //PÅ DET SENERE - EMMA
-            Collider[] tmpColliders = Colliders.ToArray();
+            //Collider[] tmpColliders = Colliders.ToArray();
 
-            for (int i = 0; i < tmpColliders.Length; i++)
-            {
-                for (int j = 0; j < tmpColliders.Length; j++)
-                {
-                    tmpColliders[i].OnColliding(tmpColliders[j]);
-                    tmpColliders[i].OnNoLongerColliding(tmpColliders[j]);
-                }
-            }
+            //for (int i = 0; i < tmpColliders.Length; i++)
+            //{
+            //    for (int j = 0; j < tmpColliders.Length; j++)
+            //    {
+            //        tmpColliders[i].OnColliding(tmpColliders[j]);
+            //        tmpColliders[i].OnNoLongerColliding(tmpColliders[j]);
+            //    }
+            //}
 
-            camera.FollowPlayer(player.GameObject);
+            //camera.FollowPlayer(player.GameObject);
 
             base.Update(gameTime);
         }
@@ -211,38 +260,62 @@ namespace ExamProjectFirstYear
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // The code in the ( ) is added to make sure the camera runs.
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: camera.TransformCamera);
+            spriteBatch.Begin();
 
-            for (int i = 0; i < GameObjects.Count; i++)
+            if (gameState == GameState.StartMenu)
             {
-                if (GameObjects[i].Components.ContainsKey(Tag.PLAYER) || GameObjects[i].Components.ContainsKey(Tag.JOURNAL) || GameObjects[i].Components.ContainsKey(Tag.INVENTORY))
-                {
-                    GameObjects[i].Draw(spriteBatch);
-                }
-
-
-                else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
-                    (player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
-                    (GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
-                    (player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.width))
-                {
-                    GameObjects[i].Draw(spriteBatch);
-                }
-
-                //else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (200) &&
-                //  (player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (200) &&
-                //  (GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (200) &&
-                //  (player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (200))
-                //{
-                //    GameObjects[i].Draw(spriteBatch);
-                //}
-
+                spriteBatch.Draw(startButton, startButtonPosition, Color.White);
+                spriteBatch.Draw(exitButton, exitButtonPosition, Color.White);
             }
 
-            NodeManager.Instance.Draw(spriteBatch);
+            if (gameState == GameState.Playing)
+            {
+                Console.WriteLine("Game is playing.");
+            }
+
+            if (gameState == GameState.Loading)
+            {
+                spriteBatch.Draw(loadingScreen, new Vector2((GraphicsDevice.Viewport.Width / 2) -
+                                (loadingScreen.Width / 2), (GraphicsDevice.Viewport.Height / 2) -
+                                (loadingScreen.Height / 2)), Color.YellowGreen);
+            }
 
             spriteBatch.End();
+
+            // The code in the ( ) is added to make sure the camera runs.
+            //spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: camera.TransformCamera);
+
+            //for (int i = 0; i < GameObjects.Count; i++)
+            //{
+            //    if (GameObjects[i].Components.ContainsKey(Tag.PLAYER) || GameObjects[i].Components.ContainsKey(Tag.JOURNAL)
+            //        || GameObjects[i].Components.ContainsKey(Tag.INVENTORY) || GameObjects[i].Components.ContainsKey(Tag.PLAYERHEALTHUI)
+            //        || GameObjects[i].Components.ContainsKey(Tag.PLAYERMANAUI))
+            //    {
+            //        GameObjects[i].Draw(spriteBatch);
+            //    }
+
+
+            //    else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
+            //        (player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
+            //        (GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
+            //        (player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.width))
+            //    {
+            //        GameObjects[i].Draw(spriteBatch);
+            //    }
+
+            //    //else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (200) &&
+            //    //  (player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (200) &&
+            //    //  (GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (200) &&
+            //    //  (player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (200))
+            //    //{
+            //    //    GameObjects[i].Draw(spriteBatch);
+            //    //}
+
+            //}
+
+            //NodeManager.Instance.Draw(spriteBatch);
+
+            //spriteBatch.End();
 
             base.Draw(gameTime);
         }
@@ -290,7 +363,6 @@ namespace ExamProjectFirstYear
         {
             GameObject createdObject = new GameObject();
             SpriteRenderer spriteRenderer = new SpriteRenderer();
-            Collider collider;
 
             switch (tag)
             {
@@ -303,9 +375,19 @@ namespace ExamProjectFirstYear
 
                 case Tag.INVENTORY:
                     createdObject.AddComponent(inventory);
-
-                    //SpriteLayer ensures that the text can later be drawn on top of the Inventory sprite.
                     spriteRenderer.SpriteLayer = 0.7f;
+                    break;
+
+                case Tag.PLAYERHEALTHUI:
+                    PlayerHealthUI playerHealthUI = new PlayerHealthUI();
+                    createdObject.AddComponent(playerHealthUI);
+                    spriteRenderer.SpriteLayer = 0.6f;
+                    break;
+
+                case Tag.PLAYERMANAUI:
+                    PlayerManaUI playerManaUI = new PlayerManaUI();
+                    createdObject.AddComponent(playerManaUI);
+                    spriteRenderer.SpriteLayer = 0.6f;
                     break;
             }
 
@@ -314,10 +396,6 @@ namespace ExamProjectFirstYear
             createdObject.Awake();
             createdObject.Start();
 
-            collider = new Collider(spriteRenderer);
-            createdObject.AddComponent(collider);
-
-            Colliders.Add(collider);
             GameObjects.Add(createdObject);
         }
 

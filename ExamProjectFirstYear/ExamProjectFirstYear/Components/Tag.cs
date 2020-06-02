@@ -35,6 +35,9 @@ namespace ExamProjectFirstYear
 		BLUEPRINT,
 		JOURNAL,
 		INVENTORY,
-		ENEMY
+		ENEMY,
+		PLAYERHEALTHUI,
+		PLAYERMANAUI,
+		MENUHANDLER
 	}
 }
