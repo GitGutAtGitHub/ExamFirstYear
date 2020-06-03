@@ -49,19 +49,19 @@ namespace ExamProjectFirstYear.Components
         /// </summary>
         private void MeleeAttack()
         {
-            if (canAttack)
-            {
-                GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
+            //if (canAttack)
+            //{
+            //    GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
 
-                SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
-                Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
+            //    SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
+            //    Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
 
-                tmpMeleeObject.Transform.Position = GameObject.Transform.Position;
+            //    tmpMeleeObject.Transform.Position = GameObject.Transform.Position;
 
-                GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
-                GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
-                canAttack = false;
-            }
+            //    GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
+            //    GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
+            //    canAttack = false;
+            //}
         }
 
         public override Tag ToEnum()

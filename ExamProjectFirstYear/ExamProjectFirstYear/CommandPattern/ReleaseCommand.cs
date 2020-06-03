@@ -45,8 +45,8 @@ namespace ExamProjectFirstYear.CommandPattern
 			if (releaseNumber <= 2)
 			{
 				rangedAttack.PlayerReleaseRangedAttack();
-				((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).ReleaseAttack(releaseNumber);
-				player.ReleaseAttack(releaseNumber);
+				//((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).ReleaseAttack(releaseNumber);
+				//player.ReleaseAttack(releaseNumber);
 			}
 			else
 			{

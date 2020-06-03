@@ -42,8 +42,8 @@ namespace ExamProjectFirstYear.CommandPattern
 			switch (attackNumber)
             {
 				case 1:
-				((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).Attack(attackNumber);
-				player.Attack(attackNumber);
+				//((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).Attack(attackNumber);
+				//player.Attack(attackNumber);
 					break;
 
 				case 2:
