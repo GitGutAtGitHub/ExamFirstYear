@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    class MeleeEnemy : Components.Enemy
+    class MeleeEnemy : Enemy
     {
         public override void Awake()
         {
-            SightRadius = 2 * NodeManager.Instance.CellSize;
+            SightRadius = 1 * NodeManager.Instance.CellSize;
             speed = 200f;
             GameObject.Tag = Tag.FLYINGENEMY;
             SwitchState(new EnemyIdleState());
@@ -69,6 +69,16 @@ namespace ExamProjectFirstYear.Components
         public override Tag ToEnum()
         {
             return Tag.MEELEEENEMY;
+        }
+
+        protected override void DropMaterialUponDeath()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void EnemyDeath()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -62,7 +62,7 @@ namespace ExamProjectFirstYear
         public void InitializeLevel()
         {
             LoadBitmap();
-            PopulateLevel(PlatformSection);
+            PopulateLevel(TestLevel);
             //PopulateLevel(TestLevel);
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
@@ -137,6 +137,7 @@ namespace ExamProjectFirstYear
                     break;
 
                 case Tag.PLATFORM:
+                    //spriteRenderer.Origin = new Vector2(createdObject.Transform.Position.X, createdObject.Transform.Position.Y);
                     createdObject.AddComponent(new Platform());
                     break;
 
@@ -150,6 +151,7 @@ namespace ExamProjectFirstYear
 
                 case Tag.MEELEEENEMY:
                     createdObject.AddComponent(new MeleeEnemy());
+                    createdObject.AddComponent(new LightSource(1f, true));
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     //createdObject.AddComponent(new Movement(true, 35, 900));
                     LevelInitializationDoneEvent += ((MeleeEnemy)(createdObject.GetComponent(Tag.MEELEEENEMY))).AddTarget;
