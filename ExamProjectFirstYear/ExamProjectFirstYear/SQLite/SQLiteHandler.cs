@@ -279,7 +279,7 @@ namespace ExamProjectFirstYear
         /// <param name="positionX"></param>
         /// <param name="positionY"></param>
         /// <param name="ID"></param>
-        public void SaveGame(int health, int openDoor,int ID)
+        public void SaveGame(int health, int openDoor, int ID, int mana)
         {
             //Her skal man også definere at parametrene er tilsvarende properties som er defineret for spiller.
             //Altså at f.eks.  positionX = Player.Position.X
@@ -288,7 +288,7 @@ namespace ExamProjectFirstYear
             int positionX = (int)GameWorld.Instance.player.GameObject.Transform.Position.X;
             int positionY = (int)GameWorld.Instance.player.GameObject.Transform.Position.Y;
 
-            UpdateTable("Journal", $"Health={health}, OpenDoor={openDoor}, PositionX={positionX}, PositionY={positionY}", $"ID={ID}");
+            UpdateTable("Journal", $"Health={health}, OpenDoor={openDoor}, PositionX={positionX}, PositionY={positionY}, Mana={mana}", $"ID={ID}");
         }
 
         #endregion
@@ -308,8 +308,9 @@ namespace ExamProjectFirstYear
             int openDoor = SelectIntValuesWhere("OpenDoor", "Journal", $"ID = {journalID}");
             int positionX = SelectIntValuesWhere("PositionX", "Journal", $"ID = {journalID}");
             int positiony = SelectIntValuesWhere("PositionY", "Journal", $"ID = {journalID}");
+            int mana = SelectIntValuesWhere("Mana", "Journal", $"ID = {journalID}");
 
-            TmpJournal tmpJournal = new TmpJournal(journalID, inventoryID, health, positionX, positiony, openDoor);
+            TmpJournal tmpJournal = new TmpJournal(journalID, inventoryID, health, positionX, positiony, openDoor, mana);
 
             return tmpJournal;
         }
