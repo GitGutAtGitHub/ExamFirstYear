@@ -62,11 +62,10 @@ namespace ExamProjectFirstYear
         public void InitializeLevel()
         {
             LoadBitmap();
-            PopulateLevel(TestLevel);
+            PopulateLevel(PlatformSection);
+            //PopulateLevel(TestLevel);
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
-
-            //PopulateLevel(TestLevel);
         }
 
         /// <summary>
@@ -133,6 +132,8 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 35, 900));
+                    createdObject.AddComponent(new LightSource(2f, true));
+                    createdObject.AddComponent(new Jump());
                     break;
 
                 case Tag.PLATFORM:
@@ -142,6 +143,7 @@ namespace ExamProjectFirstYear
                 case Tag.FLYINGENEMY:
                     createdObject.Tag = Tag.FLYINGENEMY;
                     createdObject.AddComponent(new FlyingEnemy());
+                    createdObject.AddComponent(new LightSource(1f, true));
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((FlyingEnemy)(createdObject.GetComponent(Tag.FLYINGENEMY))).AddTarget;
                     break;
@@ -183,13 +185,11 @@ namespace ExamProjectFirstYear
                 createdObject.AddComponent(new AttackMelee());
             }
 
-           
+
             else
             {
                 collider = new Collider(spriteRenderer);
             }
-
-            //Skulle sørge for at collider også advarer Movement component men det virker ikke
 
             createdObject.AddComponent(collider);
 

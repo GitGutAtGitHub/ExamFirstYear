@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-    interface IEntity
+    public interface IEntity
     {
     }
 }

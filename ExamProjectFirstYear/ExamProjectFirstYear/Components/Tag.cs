@@ -37,5 +37,9 @@ namespace ExamProjectFirstYear
 		INVENTORY,
 		ENEMY,
 		ATTACKMELEE
+		PLAYERHEALTHUI,
+		PLAYERMANAUI,
+		MENUHANDLER,
+		JUMP
 	}
 }

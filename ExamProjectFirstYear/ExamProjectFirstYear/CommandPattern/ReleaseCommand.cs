@@ -42,13 +42,12 @@ namespace ExamProjectFirstYear.CommandPattern
 				((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).ReleaseAttack(releaseNumber);
 				player.ReleaseAttack(releaseNumber);
 			}
-            else
-            {
-                Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
-                playerMovement.ReleaseJump();
-            }
-
-        }
+			else
+			{
+				Jump playerMovement = (Jump)player.GameObject.GetComponent(Tag.JUMP);
+				playerMovement.ReleaseJump();
+			}
+		}
 
 		public CommandTag GetCommandTag()
 		{

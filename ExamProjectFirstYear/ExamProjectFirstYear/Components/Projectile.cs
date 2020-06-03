@@ -51,10 +51,10 @@ namespace ExamProjectFirstYear
                 GameObject.Destroy();
                 timeUp = false;
             }
-            
+
         }
 
-        public override void Destroy()
+        public void MoveToObjectPool()
         {
             //Use GameEvent and Notify, if (OnHitObject, OnPastBorders) then destroy collider
             switch (GameObject.Tag)
@@ -96,13 +96,15 @@ namespace ExamProjectFirstYear
 
         public void Notify(GameEvent gameEvent, Component other)
         {
-            //if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM)
-            //{
-            //    GameObject.Destroy();
-            //    //other.GameObject.Destroy();
-            //}
+            if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM)
+            {
+                MoveToObjectPool();
+                GameObject.Destroy();
+                //other.GameObject.Destroy();
+            }
             if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
             {
+                MoveToObjectPool();
                 GameObject.Destroy();
             }
         }
