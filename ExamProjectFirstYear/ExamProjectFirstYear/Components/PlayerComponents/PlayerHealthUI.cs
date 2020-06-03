@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear.Components.Player
+namespace ExamProjectFirstYear.Components.PlayerComponents
 {
     /// <summary>
     /// The class that handles the UI for the Players health.

@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.StatePattern;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,8 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
         public void Execute()
         {
-            menuHandler.st = new Vector2((GraphicsDevice.Viewport.Width / 2) - 50, 200);
-            exitButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 50, 250);
+            //menuHandler = new Vector2((GraphicsDevice.Viewport.Width / 2) - 50, 200);
+            //exitButtonPosition = new Vector2((GraphicsDevice.Viewport.Width / 2) - 50, 250);
         }
 
         public void Exit()
