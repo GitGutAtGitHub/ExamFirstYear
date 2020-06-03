@@ -20,7 +20,6 @@ namespace ExamProjectFirstYear.Components
         #region Fields
 
         private Stack<Node> flyingPath;
-        private Vector2 prevNode = new Vector2(0, 0);
 
         #endregion
 
@@ -28,8 +27,8 @@ namespace ExamProjectFirstYear.Components
         #region PROPERTIES
 
         public Stack<Node> FlyingPath { get => flyingPath; set => flyingPath = value; }
-       
-        public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
+
+
 
         #endregion
 
@@ -37,12 +36,12 @@ namespace ExamProjectFirstYear.Components
         #region Override methods
 
         public override void Awake()
-        {            
+        {
             SightRadius = 6 * NodeManager.Instance.CellSize;
             health = 5;
             speed = 200f;
-            GameObject.Tag = Tag.FLYINGENEMY;
-            SwitchState(new EnemyAttackState());
+            GameObject.Tag = Tag.MEELEEENEMY;
+            SwitchState(new EnemyIdleState());
         }
 
         public override void Start()
@@ -65,7 +64,7 @@ namespace ExamProjectFirstYear.Components
         }
 
         public override void Update(GameTime gameTime)
-        {         
+        {
             currentState.Execute();
             Move();
             EnemyDeath();
@@ -81,7 +80,7 @@ namespace ExamProjectFirstYear.Components
 
         protected override void Notify()
         {
-            
+
         }
 
         protected override void Move()
@@ -131,7 +130,7 @@ namespace ExamProjectFirstYear.Components
         {
             //LevelManager.Instance.CreateObject(Tag.MATERIAL, (int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y,
             //                                                 (int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y);
-            
+
             GameObject droppedMaterial = new GameObject();
             SpriteRenderer spriteRenderer = new SpriteRenderer();
             Movement movementEnemy = new Movement(true, 0, 0);

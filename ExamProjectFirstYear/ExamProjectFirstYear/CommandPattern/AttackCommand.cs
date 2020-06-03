@@ -38,7 +38,9 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		public void Execute(Player player)
 		{
+			((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).Attack(attackNumber);
 			player.Attack(attackNumber);
+			
 		}
 
 		public CommandTag GetCommandTag()

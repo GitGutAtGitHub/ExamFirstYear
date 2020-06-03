@@ -25,7 +25,7 @@ namespace ExamProjectFirstYear
         {
             get
             {
-                if(instance == null)
+                if (instance == null)
                 {
                     instance = new PathFinder();
                 }
@@ -58,21 +58,137 @@ namespace ExamProjectFirstYear
             {
                 while (EnemiesNeedingPath.Count > 0)
                 {
-                    Enemy currentEnemy = EnemiesNeedingPath.Dequeue();
-                    (currentEnemy as FlyingEnemy).FlyingPath = FindPath(currentEnemy.GameObject.Transform.Position, currentEnemy.Target.Transform.Position);
 
-                    // Saves the previous target node (players position).
-                    // Used to prevent astar calculating for the same targetposition over and over again.
-                    (currentEnemy as FlyingEnemy).PrevTargetNode = new Vector2(
-                         (int)currentEnemy.Target.Transform.Position.X / NodeManager.Instance.CellSize,
-                         (int)currentEnemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize);
+                    Enemy currentEnemy = EnemiesNeedingPath.Dequeue();
+
+
+                    if (currentEnemy.GameObject.Components.ContainsKey(Tag.FLYINGENEMY))
+                    {
+
+                        currentEnemy.Path = FindPath(currentEnemy.GameObject.Transform.Position, currentEnemy.Target.Transform.Position);
+
+                        // Saves the previous target node (players position).
+                        // Used to prevent astar calculating for the same targetposition over and over again.
+                        currentEnemy.PrevTargetNode = new Vector2(
+                             (int)currentEnemy.Target.Transform.Position.X / NodeManager.Instance.CellSize,
+                             (int)currentEnemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize);
+                    }
+
+                    if (currentEnemy.GameObject.Components.ContainsKey(Tag.MEELEEENEMY))
+                    {
+
+                        currentEnemy.Path = FindPath(currentEnemy.GameObject.Transform.Position, FindMeleeTargetNode(currentEnemy.GameObject.Transform.Position));
+
+
+                    }
+
+
 
                 }
                 Thread.Sleep(500);
             }
         }
 
-                                 ///////IMPORTANT\\\\\\\\
+        /// <summary>
+        /// Method for finding the edge of an platform, to make the melee enemies able to walk front to back on a platform, not dependent on the size.
+        /// </summary>
+        /// <param name="startPosition"></param>
+        /// <returns></returns>
+        public Vector2 FindMeleeTargetNode(Vector2 startPosition)
+        {
+            Node startNode = NodeManager.Instance.Nodes[(int)(startPosition.X / NodeManager.Instance.CellSize), (int)(startPosition.Y / NodeManager.Instance.CellSize)];
+            Node targetNode = startNode;
+            Node LeftTargetNode = startNode;
+            Node RightTargetNode = startNode;
+            int numberOfStepsRight = 0;
+            int numberOfStepsLeft = 0;
+
+            Node currentNode = startNode;
+
+            //for checking both left and right.
+            for (int i = -1; i <= 1; i++)
+            {
+                //cant check the middle.
+                if (i == 0)
+                {
+                    continue;
+                }
+
+                currentNode = startNode;
+                int stepCounter = 0;
+                bool foundTarget = false;
+
+                while (foundTarget == false)
+                {
+                    int checkX = (int)currentNode.GetCoordinate().X;
+                    int checkY = (int)currentNode.GetCoordinate().Y;
+
+                    //if the curent node is wakable, and node beneath is not, then its on a platform
+                    if (NodeManager.Instance.Nodes[checkX, checkY].Walkable == true &&
+                       NodeManager.Instance.Nodes[checkX, checkY + 1].Walkable == false)
+                    {
+                        //for debug
+                        currentNode.NodeSprite = NodeManager.Instance.searchedSprite;
+
+                        //if the current node is walkable, and the node beneath is wakable, then it has found an edge.
+                        //or both nodes are unwakable, then it has found a wall
+                        if (NodeManager.Instance.Nodes[checkX + i, checkY].Walkable == true &&
+                            NodeManager.Instance.Nodes[checkX + i, checkY + 1].Walkable == true ||
+                            NodeManager.Instance.Nodes[checkX + i, checkY].Walkable == false &&
+                            NodeManager.Instance.Nodes[checkX + i, checkY + 1].Walkable == false)
+
+                        {
+
+                            targetNode = currentNode;
+                            foundTarget = true;
+                        }
+                        else
+                        {
+                            currentNode = NodeManager.Instance.Nodes[checkX + i, checkY];
+                            stepCounter++;
+                        }
+                    }
+                }
+
+                switch (i)
+                {
+                    case -1:
+                        numberOfStepsLeft = stepCounter;
+                        LeftTargetNode = targetNode;
+                        break;
+
+                    case 1:
+                        numberOfStepsRight = stepCounter;
+                        RightTargetNode = targetNode;
+                        break;
+
+                }
+                //if (i == -1)
+                //{
+                //    numberOfStepsLeft = stepCounter;
+                //    LeftTargetNode = targetNode;
+                //}
+                //if (i == 1)
+                //{
+                //    numberOfStepsRight = stepCounter;
+                //    RightTargetNode = targetNode;
+                //}
+
+            }
+
+            if (numberOfStepsLeft > numberOfStepsRight)
+            {
+                targetNode = LeftTargetNode;
+            }
+            else
+            {
+                targetNode = RightTargetNode;
+            }
+
+            return targetNode.Position;
+        }
+
+        ///////IMPORTANT\\\\\\\\
 
         // All of the code from here on in this class is taken from a former project made by the same group.
         // There has been made a few changes for this program to work as intended.
@@ -164,6 +280,8 @@ namespace ExamProjectFirstYear
             // Runs as longs as it hasn't reached the start.
             while (currentNode != startNode)
             {
+                //for debugging
+                currentNode.NodeSprite = NodeManager.Instance.chosenPathgridSprite;
                 // Adds the current node to the path list.
                 path.Push(currentNode);
 
@@ -189,6 +307,14 @@ namespace ExamProjectFirstYear
 
             Stack<Node> pathStack = new Stack<Node>();
 
+            //for debugging
+            foreach (Node node in NodeManager.Instance.Nodes)
+            {
+                node.NodeSprite = NodeManager.Instance.gridSprite;
+                node.HCost = 0;
+                node.GCost = 0;
+            }
+
             //List with all cells, with calculated fCost.
             List<Node> openList = new List<Node>();
 
@@ -202,6 +328,8 @@ namespace ExamProjectFirstYear
             {
                 // Starts at start node. Current node is the node with the lowest fCost.
                 Node currentNode = openList[0];
+
+
 
                 // Goes through the list.
                 for (int i = 0; i < openList.Count; i++)
