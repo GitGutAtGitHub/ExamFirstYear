@@ -8,20 +8,27 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
+    /// <summary>
+    /// Abstract Component class for components.
+    /// </summary>
 	public abstract class Component
 	{
         #region PROPERTIES
+
         /// <summary>
         /// Property used to get and set a gameObject outside of the Component class.
         /// </summary>
         public GameObject GameObject { get; set; }
 
-		#endregion
+        #endregion
 
-		/// <summary>
-		/// Awake is called once per component. Together with Start they in a sense replaces the LoadContent method.
-		/// </summary>
-		public virtual void Awake() { }
+
+        #region Methods
+
+        /// <summary>
+        /// Awake is called once per component. Together with Start they in a sense replaces the LoadContent method.
+        /// </summary>
+        public virtual void Awake() { }
 
         /// <summary>
         /// Start is Called after Awake, once per component.
@@ -43,7 +50,7 @@ namespace ExamProjectFirstYear
         /// <summary>
         /// Destroy for the component. Removes the Component from the Game. 
         /// </summary>
-        public virtual void Destroy() { }
+        //public virtual void Destroy() { }
 
         /// <summary>
         /// Returns the components Tag. Is used to tell Components apart. 
@@ -51,5 +58,7 @@ namespace ExamProjectFirstYear
         /// </summary>
         /// <returns></returns>
         public abstract Tag ToEnum();
+
+        #endregion
     }
 }

@@ -7,35 +7,40 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
+    /// <summary>
+    /// Material component class.
+    /// </summary>
     public class Material : Component, IGameListener
     {
         #region Fields
 
         private Movement movement;
-        private Blueprint blueprint;
 
         #endregion
 
 
         #region Properties
 
-        //public string MaterialName { get; set; }
-        public int ID { get; set; }
+        public int MaterialID { get; set; }
 
         #endregion
 
 
         #region Constructors
-
+        
+        /// <summary>
+        /// Constructor for material.
+        /// </summary>
+        /// <param name="iD"></param>
         public Material(int iD)
         {
-            ID = iD;
+            MaterialID = iD;
         }
 
         #endregion
 
 
-        #region Methods
+        #region Override methods
 
         public override Tag ToEnum()
         {
@@ -51,11 +56,16 @@ namespace ExamProjectFirstYear.Components
         public override void Start()
         {
             movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
-            GameObject.Transform.Translate(new Vector2(500, 10));
         }
+
+        #endregion
+
+
+        #region Other methods
 
         public void Notify(GameEvent gameEvent, Component component)
         {
+            //Players hit platforms when they collide with them.
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
             {
                 Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
@@ -67,14 +77,13 @@ namespace ExamProjectFirstYear.Components
                     //Top platform.
                     if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, -intersection.Height));
-                        movement.Grounded = true;
+                        GameObject.Transform.Translate(new Vector2(0, -intersection.Height + 1));
                     }
 
                     //Bottom platform.
                     if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height));
+                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height - 1));
                     }
                 }
 
@@ -97,16 +106,5 @@ namespace ExamProjectFirstYear.Components
         }
 
         #endregion
-    }
-
-    public struct TmpMaterialType
-    {
-        public string TmpName { get; set; }
-
-
-        public TmpMaterialType(string tmpName)
-        {
-            TmpName = tmpName;
-        }
     }
 }

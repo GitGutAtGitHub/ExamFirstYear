@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.CommandPattern
 {
+	/// <summary>
+	/// Enums for command classes.
+	/// </summary>
 	public enum CommandTag
 	{
 		KEYDOWN,

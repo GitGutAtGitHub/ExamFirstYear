@@ -23,8 +23,9 @@ namespace ExamProjectFirstYear
 
         private SQLiteCommand command;
 
-        private MouseState previousMouseState;
-        private MouseState currentMouseState;
+        private Journal journal;
+
+        private Inventory inventory;
 
         #endregion
 
@@ -129,29 +130,35 @@ namespace ExamProjectFirstYear
             ExecuteNonQuerySQLiteCommand($"UPDATE {tableName} SET {updateDefinition} WHERE {whereDefinition};");
         }
 
-        /// <summary>
-        /// Select values from a table. Can be used for displaying tables.
-        /// </summary>
-        /// <param name="selectDefinition"></param>
-        /// <param name="tableName"></param>
-        public void SelectFromTable(string selectDefinition, string tableName)
-        {
-            ExecuteNonQuerySQLiteCommand($"SELECT {selectDefinition} FROM {tableName};");
-        }
+
+
+
+        ///// <summary>
+        ///// Select values from a table. Can be used for displaying tables.
+        ///// </summary>
+        ///// <param name="selectDefinition"></param>
+        ///// <param name="tableName"></param>
+        //public void SelectFromTable(string selectDefinition, string tableName)
+        //{
+        //    ExecuteNonQuerySQLiteCommand($"SELECT {selectDefinition} FROM {tableName};");
+        //}
+
+        ///// <summary>
+        ///// Select values from a table with a specified WHERE. Can be used for displaying tables.
+        ///// </summary>
+        ///// <param name="selectDefinition"></param>
+        ///// <param name="tableName"></param>
+        ///// <param name="whereDefinition"></param>
+        //public void SelectFromTableWhere(string selectDefinition, string tableName, string whereDefinition)
+        //{
+        //    ExecuteNonQuerySQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE {whereDefinition};");
+        //}
+
+
+
 
         /// <summary>
-        /// Select values from a table with a specified WHERE. Can be used for displaying tables.
-        /// </summary>
-        /// <param name="selectDefinition"></param>
-        /// <param name="tableName"></param>
-        /// <param name="whereDefinition"></param>
-        public void SelectFromTableWhere(string selectDefinition, string tableName, string whereDefinition)
-        {
-            ExecuteNonQuerySQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE {whereDefinition};");
-        }
-
-        /// <summary>
-        /// Returns an int value from a specfied table row.
+        /// Returns an int value from a specfied table row with a WHERE condition.
         /// </summary>
         /// <param name="selectDefinition"></param>
         /// <param name="tableName"></param>
@@ -161,11 +168,12 @@ namespace ExamProjectFirstYear
         {
             //return ExecuteNonQuerySQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE {whereDefinition};");
             int value;
+
             connection = new SQLiteConnection(LoadSQLiteConnectionString());
-            connection.Open();
 
             using (connection)
             {
+                connection.Open();
                 command = new SQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE {whereDefinition};", connection);
                 value = Convert.ToInt32(command.ExecuteScalar());
             }
@@ -174,7 +182,7 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-        /// Returns a string value from a specfied table row.
+        /// Returns a string value from a specfied table row with a WHERE condition.
         /// </summary>
         /// <param name="selectDefinition"></param>
         /// <param name="tableName"></param>
@@ -183,13 +191,36 @@ namespace ExamProjectFirstYear
         public string SelectStringValuesWhere(string selectDefinition, string tableName, string whereDefinition)
         {
             string value;
-            connection = new SQLiteConnection(LoadSQLiteConnectionString());
-            connection.Open();
 
+            connection = new SQLiteConnection(LoadSQLiteConnectionString());
+            
             using (connection)
             {
+                connection.Open();
                 command = new SQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE {whereDefinition};", connection);
                 value = Convert.ToString(command.ExecuteScalar());
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Returns an int value from a specfied table row.
+        /// </summary>
+        /// <param name="selectDefinition"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public int SelectIntValues(string selectDefinition, string tableName)
+        {
+            int value;
+
+            connection = new SQLiteConnection(LoadSQLiteConnectionString());
+            
+            using (connection)
+            {
+                connection.Open();
+                command = new SQLiteCommand($"SELECT {selectDefinition} FROM {tableName}", connection);
+                value = Convert.ToInt32(command.ExecuteScalar());
             }
 
             return value;
@@ -206,6 +237,7 @@ namespace ExamProjectFirstYear
         /// <param name="materialName"></param>
         public void IncreaseAmountStoredMaterial(int materialTypeID)
         {
+            GameWorld.Instance.inventory.MaterialTypeIDs.Add(materialTypeID);
             UpdateTable("StoredMaterial", "Amount=Amount+1", $"MaterialTypeID={materialTypeID}");
         }
 
@@ -215,6 +247,7 @@ namespace ExamProjectFirstYear
         /// <param name="materialName"></param>
         public void DecreaseAmountStoredMaterial(int materialTypeID)
         {
+            GameWorld.Instance.inventory.MaterialTypeIDs.Remove(materialTypeID);
             UpdateTable("StoredMaterial", "Amount=Amount-1", $"MaterialTypeID={materialTypeID}");
         }
 
@@ -224,6 +257,7 @@ namespace ExamProjectFirstYear
         /// <param name="blueprintName"></param>
         public void AddRecordedBP(int blueprintID, int journalID)
         {
+            GameWorld.Instance.journal.RecordedBlueprintIDs.Add(blueprintID);
             InsertIntoTable($"RecordedBP", $"{blueprintID}, {journalID}");
         }
 
@@ -233,29 +267,34 @@ namespace ExamProjectFirstYear
         /// <param name="blueprintName"></param>
         public void AddRecordedCreature(int creatureID, int journalID)
         {
+            GameWorld.Instance.journal.RecordedCreatureIDs.Add(creatureID);
             InsertIntoTable($"RecordedCreature", $"{creatureID}, {journalID}");
         }
 
         /// <summary>
-        /// Method for saving the game in a specific Journal ID (save slot).
+        /// Method for saving the game in a specific JournalID (save slot).
         /// </summary>
         /// <param name="health"></param>
         /// <param name="openDoor"></param>
         /// <param name="positionX"></param>
         /// <param name="positionY"></param>
         /// <param name="ID"></param>
-        public void SaveGame(int health, int openDoor, float positionX, float positionY, int ID)
+        public void SaveGame(int health, int openDoor, int ID, int mana)
         {
             //Her skal man også definere at parametrene er tilsvarende properties som er defineret for spiller.
             //Altså at f.eks.  positionX = Player.Position.X
             //Eller at  openDoor = Door.Open
-            UpdateTable("Journal", $"Health={health}, OpenDoor={openDoor}, PositionX={positionX}, PositionY={positionY}", $"ID={ID}");
+
+            int positionX = (int)GameWorld.Instance.player.GameObject.Transform.Position.X;
+            int positionY = (int)GameWorld.Instance.player.GameObject.Transform.Position.Y;
+
+            UpdateTable("Journal", $"Health={health}, OpenDoor={openDoor}, PositionX={positionX}, PositionY={positionY}, Mana={mana}", $"ID={ID}");
         }
 
         #endregion
 
 
-        #region Get Table Methods
+        #region GetTable Methods
 
         /// <summary>
         /// Returns a temporary Journal that can be interacted with outside SQLite.
@@ -267,10 +306,11 @@ namespace ExamProjectFirstYear
             int inventoryID = SelectIntValuesWhere("InventoryID", "Journal", $"ID = {journalID}");
             int health = SelectIntValuesWhere("Health", "Journal", $"ID = {journalID}");
             int openDoor = SelectIntValuesWhere("OpenDoor", "Journal", $"ID = {journalID}");
-            float positionX = SelectIntValuesWhere("PositionX", "Journal", $"ID = {journalID}");
-            float positiony = SelectIntValuesWhere("PositionY", "Journal", $"ID = {journalID}");
+            int positionX = SelectIntValuesWhere("PositionX", "Journal", $"ID = {journalID}");
+            int positiony = SelectIntValuesWhere("PositionY", "Journal", $"ID = {journalID}");
+            int mana = SelectIntValuesWhere("Mana", "Journal", $"ID = {journalID}");
 
-            TmpJournal tmpJournal = new TmpJournal(journalID, inventoryID, health, positionX, positiony, openDoor);
+            TmpJournal tmpJournal = new TmpJournal(journalID, inventoryID, health, positionX, positiony, openDoor, mana);
 
             return tmpJournal;
         }
@@ -344,30 +384,28 @@ namespace ExamProjectFirstYear
         /// <returns></returns>
         public TmpStoredMaterial GetStoredMaterial(int materialTypeID, int inventoryID)
         {
-            int amount = SelectIntValuesWhere("Amunt", "StoredMaterial", $"MaterialTypeID = {materialTypeID}");
-            int slot = SelectIntValuesWhere("Slot", "StoredMaterial", $"MaterialTypeID = {materialTypeID}");
+            int amount = SelectIntValuesWhere("Amount", "StoredMaterial", $"MaterialTypeID = {materialTypeID} AND InventoryID = {inventoryID}");
+            int slot = SelectIntValuesWhere("Slot", "StoredMaterial", $"MaterialTypeID = {materialTypeID} AND InventoryID = {inventoryID}");
 
             TmpStoredMaterial tmpStoredMaterial = new TmpStoredMaterial(amount, slot);
 
             return tmpStoredMaterial;
         }
-        #endregion
 
         /// <summary>
-        /// Method for testing database logic.
+        /// Returns a temporary Inventory to get values from the table.
         /// </summary>
-        //public void TestMethod()
-        //{
-        //    previousMouseState = currentMouseState;
-        //    currentMouseState = Mouse.GetState();
+        /// <param name="creatureID"></param>
+        /// <returns></returns>
+        public TmpInventory GetInventory()
+        {
+            int iD = SelectIntValuesWhere("ID", "Inventory", $"ID = {GameWorld.Instance.player.PlayerID}");
 
-        //    if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
-        //    {
-        //        Console.WriteLine("Button pressed");
+            TmpInventory tmpInventory = new TmpInventory(iD);
 
-        //        //Insert the method you want to test here.
-        //        SaveGame(100, 0, 50, 50, 1);
-        //    }
-        //}
+            return tmpInventory;
+        }
+
+        #endregion
     }
 }

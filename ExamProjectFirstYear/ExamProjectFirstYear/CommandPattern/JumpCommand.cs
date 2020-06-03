@@ -7,24 +7,38 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.CommandPattern
 {
+	/// <summary>
+	/// Jump command for the player.
+	/// </summary>
 	class JumpCommand : ICommand
 	{
+		#region Constructors
+
+		/// <summary>
+		/// Constructor for JumpCommand.
+		/// </summary>
 		public JumpCommand()
 		{
 
 		}
 
+		#endregion
+
+		// Check on material er sat sammen med player pos
+
+		#region Methods
+
 		public void Execute(Player player)
 		{
-			//player.Movement.Jump();
-			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
-			//playerMovement.ManageMomentum();
-			playerMovement.Jump();
+			Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
+			playerJump.PlayerJump();
 		}
 
 		public CommandTag GetCommandTag()
 		{
 			return CommandTag.KEYDOWN;
 		}
-	}
+
+        #endregion
+    }
 }

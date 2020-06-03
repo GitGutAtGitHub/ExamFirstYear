@@ -52,7 +52,7 @@ namespace ExamProjectFirstYear.Components
 
 		public override void Update(GameTime gameTime)
 		{
-			
+
 		}
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace ExamProjectFirstYear.Components
 			if (LightOn == true)
 			{
 				spriteBatch.Draw(lightMaskTexture, GameObject.Transform.Position, null, Color.White, 0, lightOrigin, LightRadiusScale, SpriteEffects.None, 1f);
-				
+
 			}
 		}
 

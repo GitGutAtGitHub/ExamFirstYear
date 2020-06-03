@@ -7,14 +7,32 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
+	/// <summary>
+	/// Door component class.
+	/// </summary>
 	class Door : Component
 	{
+		#region Fields
+
 		private bool isLocked = true;
 
+		#endregion
+
+
+		#region Constructors
+
+		/// <summary>
+		/// Constructor for Door.
+		/// </summary>
 		public Door()
 		{
 
 		}
+
+		#endregion
+
+
+		#region Override methods
 
 		public override void Awake()
 		{
@@ -26,15 +44,24 @@ namespace ExamProjectFirstYear.Components
 			base.Start();
 		}
 
+		public override Tag ToEnum()
+		{
+			return Tag.DOOR;
+		}
 
+		#endregion
+
+
+		#region Other methods
+
+		/// <summary>
+		/// Method for setting a door to unlocked after opening it.
+		/// </summary>
 		public void OpenDoor()
 		{
 			isLocked = false;
 		}
 
-		public override Tag ToEnum()
-		{
-			return Tag.DOOR;
-		}
-	}
+        #endregion
+    }
 }

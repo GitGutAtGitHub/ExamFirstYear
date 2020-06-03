@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
+    /// <summary>
+    /// Abstract Enemy class for different enemy types.
+    /// </summary>
     abstract class Enemy : Component, IEntity
     {
         #region FIELDS
@@ -46,6 +49,10 @@ namespace ExamProjectFirstYear.Components
         public abstract void AddTarget();
 
         protected abstract void Move();
+
+        protected abstract void DropMaterialUponDeath();
+
+        protected abstract void EnemyDeath();
 
         public override Tag ToEnum()
         {

@@ -7,13 +7,33 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.CommandPattern
 {
+	/// <summary>
+	/// Release command for the player.
+	/// </summary>
 	class ReleaseCommand : ICommand
 	{
+		#region Fields
+
 		private int releaseNumber;
+
+		#endregion
+
+
+		#region Constructors
+
+		/// <summary>
+		/// Constructor for ReleaseCommand.
+		/// </summary>
+		/// <param name="releaseNumber"></param>
 		public ReleaseCommand(int releaseNumber)
 		{
 			this.releaseNumber = releaseNumber;
 		}
+
+		#endregion
+
+
+		#region Methods
 
 		public void Execute(Player player)
 		{
@@ -23,15 +43,16 @@ namespace ExamProjectFirstYear.CommandPattern
 			}
 			else
 			{
-				Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
+				Jump playerMovement = (Jump)player.GameObject.GetComponent(Tag.JUMP);
 				playerMovement.ReleaseJump();
-			}
-			
+			}		
 		}
 
 		public CommandTag GetCommandTag()
 		{
 			return CommandTag.KEYUP;
 		}
-	}
+
+        #endregion
+    }
 }

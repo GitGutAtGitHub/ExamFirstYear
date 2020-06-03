@@ -8,19 +8,33 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
+    /// <summary>
+    /// Component for projectiles.
+    /// </summary>
     public class Projectile : Component, IGameListener
     {
+        #region Fields
+
         private float timer = 0.2f;
         private bool timeUp = false;
 
+        #endregion
+
+
+        #region Constructors
+
+        /// <summary>
+        /// Constructor for projectiles.
+        /// </summary>
         public Projectile()
         {
+
         }
 
-        public Projectile Clone()
-        {
-            return (Projectile)this.MemberwiseClone();
-        }
+        #endregion
+
+
+        #region Override methods
 
         public override void Update(GameTime gameTime)
         {
@@ -40,7 +54,7 @@ namespace ExamProjectFirstYear
             
         }
 
-        public override void Destroy()
+        public void MoveToObjectPool()
         {
             //Use GameEvent and Notify, if (OnHitObject, OnPastBorders) then destroy collider
             switch (GameObject.Tag)
@@ -66,17 +80,35 @@ namespace ExamProjectFirstYear
             return Tag.PROJECTILE;
         }
 
+        #endregion
+
+
+        #region Other methods
+
+        /// <summary>
+        /// Create a projectile clone.
+        /// </summary>
+        /// <returns></returns>
+        public Projectile Clone()
+        {
+            return (Projectile)this.MemberwiseClone();
+        }
+
         public void Notify(GameEvent gameEvent, Component other)
         {
             if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM)
             {
+                MoveToObjectPool();
                 GameObject.Destroy();
                 //other.GameObject.Destroy();
             }
             if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
             {
+                MoveToObjectPool();
                 GameObject.Destroy();
             }
         }
+
+        #endregion
     }
 }

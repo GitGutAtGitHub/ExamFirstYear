@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
+    /// <summary>
+    /// Component for game platforms.
+    /// </summary>
     class Platform : Component
     {
+        #region Methods
+
         public override Tag ToEnum()
         {
             return Tag.PLATFORM;
@@ -19,10 +24,11 @@ namespace ExamProjectFirstYear.Components
             GameObject.Tag = Tag.PLATFORM;
         }
 
-        public override void Start()
-        {
+		public override void Start()
+		{
+			GameObject.SpriteName = "Platform";
+		}
 
-            GameObject.SpriteName = "Platform";
-        }
+        #endregion
     }
 }
