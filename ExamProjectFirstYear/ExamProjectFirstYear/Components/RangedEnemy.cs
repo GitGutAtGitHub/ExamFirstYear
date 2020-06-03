@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear.Components.GameObjects.Enemy
+namespace ExamProjectFirstYear.Components
 {
     class RangedEnemy
     {

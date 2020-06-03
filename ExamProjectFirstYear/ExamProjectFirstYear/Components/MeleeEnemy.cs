@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear.Components.GameObjects.Enemy
+namespace ExamProjectFirstYear.Components
 {
-    class MeleeEnemy : Enemy
+    class MeleeEnemy : Components.Enemy
     {
         public override void Awake()
         {

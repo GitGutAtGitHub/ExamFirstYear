@@ -1,10 +1,8 @@
 ﻿using ExamProjectFirstYear.Components;
-using ExamProjectFirstYear.Components.GameObjects.Enemy;
 using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using System;
 using System.Drawing;
-using MeleeEnemy = ExamProjectFirstYear.Components.GameObjects.Enemy.MeleeEnemy;
 //using Microsoft.Xna.Framework;
 
 

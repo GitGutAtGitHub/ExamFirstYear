@@ -1,5 +1,4 @@
 ﻿using ExamProjectFirstYear.Components;
-using ExamProjectFirstYear.Components.GameObjects.Enemy;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

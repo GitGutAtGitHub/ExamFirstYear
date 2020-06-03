@@ -1,5 +1,4 @@
 ﻿using ExamProjectFirstYear.Components;
-using ExamProjectFirstYear.Components.GameObjects.Enemy;
 using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using System;

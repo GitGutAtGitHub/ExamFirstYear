@@ -86,7 +86,6 @@
     <Compile Include="Components\Inventory.cs" />
     <Compile Include="Components\Journal.cs" />
     <Compile Include="Components\LightSource.cs" />
-    <Compile Include="Components\MeleeEnemy.cs" />
     <Compile Include="Components\RangedEnemy.cs" />
     <Compile Include="ObjectPools\EnemyProjectilePool.cs" />
     <Compile Include="ObjectPools\BossProjectilePool.cs" />

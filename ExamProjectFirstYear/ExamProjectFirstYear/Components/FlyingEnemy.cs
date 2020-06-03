@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear.Components.GameObjects.Enemy
+namespace ExamProjectFirstYear.Components
 {
     /// <summary>
     /// Flying Enemy component class.
