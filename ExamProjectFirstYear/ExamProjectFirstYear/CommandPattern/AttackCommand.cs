@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExamProjectFirstYear.Components;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -37,7 +38,9 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		public void Execute(Player player)
 		{
+			((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).Attack(attackNumber);
 			player.Attack(attackNumber);
+			
 		}
 
 		public CommandTag GetCommandTag()

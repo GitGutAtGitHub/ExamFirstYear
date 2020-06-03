@@ -15,7 +15,7 @@ namespace ExamProjectFirstYear
     {
         #region Fields
 
-        private float timer = 0.2f;
+        private float timer = 0.5f;
         private bool timeUp = false;
 
         #endregion
@@ -96,11 +96,11 @@ namespace ExamProjectFirstYear
 
         public void Notify(GameEvent gameEvent, Component other)
         {
-            if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM)
-            {
-                GameObject.Destroy();
-                //other.GameObject.Destroy();
-            }
+            //if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM)
+            //{
+            //    GameObject.Destroy();
+            //    //other.GameObject.Destroy();
+            //}
             if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
             {
                 GameObject.Destroy();

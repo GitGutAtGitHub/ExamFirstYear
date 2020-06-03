@@ -35,6 +35,7 @@ namespace ExamProjectFirstYear
 		BLUEPRINT,
 		JOURNAL,
 		INVENTORY,
-		ENEMY
+		ENEMY,
+		ATTACKMELEE
 	}
 }

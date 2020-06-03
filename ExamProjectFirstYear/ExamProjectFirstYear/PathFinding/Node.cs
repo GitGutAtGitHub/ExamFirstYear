@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace ExamProjectFirstYear.PathFinding
 
         private int gCost = 0;
         private int hCost = 0;
-
+        public Texture2D NodeSprite { get; set; }
         private Vector2 position;
 
         private bool walkable;

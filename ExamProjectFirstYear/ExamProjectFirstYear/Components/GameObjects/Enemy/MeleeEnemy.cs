@@ -5,52 +5,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear.Components
+namespace ExamProjectFirstYear.Components.GameObjects.Enemy
 {
-    /// <summary>
-    /// Flying Enemy component class.
-    /// </summary>
-    class FlyingEnemy : Enemy
+    class MeleeEnemy : Enemy
     {
-        #region Fields
-
-        private Stack<Node> flyingPath;
-        private Vector2 prevNode = new Vector2(0, 0);
-
-        #endregion
-
-
-        #region PROPERTIES
-
-        public Stack<Node> FlyingPath { get => flyingPath; set => flyingPath = value; }
-       
-        public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
-
-        #endregion
-
-
-        #region Override methods
-
         public override void Awake()
-        {            
-            SightRadius = 6 * NodeManager.Instance.CellSize;         
+        {
+            SightRadius = 6 * NodeManager.Instance.CellSize;
             speed = 200f;
             GameObject.Tag = Tag.FLYINGENEMY;
-            SwitchState(new EnemyAttackState());
+            SwitchState(new EnemyIdleState());
         }
 
         public override void Start()
         {
-            GameObject.SpriteName = "smol";
+            GameObject.SpriteName = "FlyingEnemy";
         }
+
+        public override void AddTarget()
+        {
+            Target = GameWorld.Instance.player.GameObject;
+        }
+
+ 
 
         public override void SwitchState(IState newState)
         {
-            // Makes sure the state isn't null when exiting a state.
-            // This is done to avoid an exception.
             if (currentState != null)
             {
                 currentState.Exit();
@@ -62,14 +44,9 @@ namespace ExamProjectFirstYear.Components
         }
 
         public override void Update(GameTime gameTime)
-        {         
+        {
             currentState.Execute();
             Move();
-        }
-
-        protected override void Notify()
-        {
-            
         }
 
         protected override void Move()
@@ -84,16 +61,14 @@ namespace ExamProjectFirstYear.Components
             GameObject.Transform.Translate(Velocity * GameWorld.Instance.DeltaTime);
         }
 
-        public override void AddTarget()
+        protected override void Notify()
         {
-            Target = GameWorld.Instance.player.GameObject;
+            throw new NotImplementedException();
         }
 
         public override Tag ToEnum()
         {
-            return Tag.FLYINGENEMY;
+            return Tag.MEELEEENEMY;
         }
-
-        #endregion
     }
 }

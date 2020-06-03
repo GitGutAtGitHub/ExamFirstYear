@@ -39,15 +39,16 @@ namespace ExamProjectFirstYear.CommandPattern
 		{
 			if (releaseNumber <= 2)
 			{
+				((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).ReleaseAttack(releaseNumber);
 				player.ReleaseAttack(releaseNumber);
 			}
-			else
-			{
-				Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
-				playerMovement.ReleaseJump();
-			}
-			
-		}
+            else
+            {
+                Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
+                playerMovement.ReleaseJump();
+            }
+
+        }
 
 		public CommandTag GetCommandTag()
 		{

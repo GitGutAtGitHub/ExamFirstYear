@@ -61,6 +61,18 @@
 /processorParam:TextureFormat=Color
 /build:CollisionTexture.png
 
+#begin FlyingEnemy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:FlyingEnemy.png
+
 #begin InventoryClosed.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -99,8 +111,7 @@
 /processorParam:TextureFormat=Compressed
 /build:JournalText.spritefont
 
-
-#begin FlyingEnemy.png
+#begin MeleeObject.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -110,7 +121,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:FlyingEnemy.png
+/build:MeleeObject.png
 
 #begin NodeGridTexture.png
 /importer:TextureImporter
@@ -184,6 +195,18 @@
 /processorParam:TextureFormat=Color
 /build:Platform.png
 
+#begin searched area.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:searched area.png
+
 #begin smol.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -214,3 +237,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UnWalkableNode.png
+
