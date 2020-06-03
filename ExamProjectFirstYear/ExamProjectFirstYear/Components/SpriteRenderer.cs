@@ -17,7 +17,7 @@ namespace ExamProjectFirstYear
 
 		public Texture2D Sprite { get; set; }
 		public Vector2 Origin { get; set; }
-		public float SpriteLayer { get; set; }
+		public float SpriteLayer { get; set; } = 0.4f;
 
 		#endregion
 

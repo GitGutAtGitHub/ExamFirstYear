@@ -85,7 +85,7 @@ namespace ExamProjectFirstYear
                     //Saves the current pixels color as a Color field.
                     System.Drawing.Color input = level.GetPixel(x, y);
 
-                    //if the pixel is black
+                    //if the pixel is black - Place platform
                     if (input.R == 0 && input.G == 0 && input.B == 0 && SpotOccupied[x, y] == false)
                     {
                         //add a platform
@@ -104,6 +104,13 @@ namespace ExamProjectFirstYear
                     {
                         //add a platform
                         CreateObject(Tag.PLAYER, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
+
+                    //if the pixel is orange
+                    if (input.R == 255 && input.G == 99 && input.B == 0)
+                    {
+                        //add a platform
+                        CreateObject(Tag.MEELEEENEMY, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
                 }
             }
@@ -126,37 +133,45 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 35, 900));
+                    createdObject.AddComponent(new LightSource(2f, true));
                     createdObject.AddComponent(new Jump());
                     createdObject.AddComponent(new RangedAttack());
                     break;
 
                 case Tag.PLATFORM:
+                    //spriteRenderer.Origin = new Vector2(createdObject.Transform.Position.X, createdObject.Transform.Position.Y);
                     createdObject.AddComponent(new Platform());
                     break;
 
                 case Tag.FLYINGENEMY:
+                    createdObject.Tag = Tag.FLYINGENEMY;
                     createdObject.AddComponent(new FlyingEnemy());
+                    createdObject.AddComponent(new LightSource(1f, true));
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((FlyingEnemy)(createdObject.GetComponent(Tag.FLYINGENEMY))).AddTarget;
                     break;
 
-                //case Tag.MATERIAL:
-                //    createdObject.AddComponent(new Material(1));
-                //    break;
+                case Tag.MEELEEENEMY:
+                    createdObject.AddComponent(new MeleeEnemy());
+                    createdObject.AddComponent(new LightSource(1f, true));
+                    // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
+                    //createdObject.AddComponent(new Movement(true, 35, 900));
+                    LevelInitializationDoneEvent += ((MeleeEnemy)(createdObject.GetComponent(Tag.MEELEEENEMY))).AddTarget;
+                    break;
 
-                //case Tag.JOURNAL:
-                //    createdObject.AddComponent(GameWorld.Instance.journal);
-                //    spriteRenderer.SpriteLayer = 0.9f;
-                //    break;
+                    //case Tag.JOURNAL:
+                    //    createdObject.AddComponent(GameWorld.Instance.journal);
+                    //    spriteRenderer.SpriteLayer = 0.9f;
+                    //    break;
 
-                //case Tag.INVENTORY:
-                //    createdObject.AddComponent(GameWorld.Instance.inventory);
-                //    spriteRenderer.SpriteLayer = 0.8f;
-                //    break;
+                    //case Tag.INVENTORY:
+                    //    createdObject.AddComponent(GameWorld.Instance.inventory);
+                    //    spriteRenderer.SpriteLayer = 0.8f;
+                    //    break;
 
-                //default:
-                //    spriteRenderer.SpriteLayer = 0.6f;
-                //    break;
+                    //default:
+                    //    spriteRenderer.SpriteLayer = 0.6f;
+                    //    break;
 
             }
 
@@ -171,6 +186,7 @@ namespace ExamProjectFirstYear
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
                 collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
+                createdObject.AddComponent(new AttackMelee());
             }
             else if (tag == Tag.FLYINGENEMY)
             {
@@ -180,8 +196,6 @@ namespace ExamProjectFirstYear
             {
                 collider = new Collider(spriteRenderer);
             }
-
-            //Skulle sørge for at collider også advarer Movement component men det virker ikke
 
             createdObject.AddComponent(collider);
 

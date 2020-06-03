@@ -15,7 +15,7 @@ namespace ExamProjectFirstYear
     {
         #region Fields
 
-        private float timer = 0.2f;
+        private float timer = 0.5f;
         private bool timeUp = false;
 
         #endregion
@@ -50,7 +50,8 @@ namespace ExamProjectFirstYear
             {
                 GameObject.Destroy();
                 timeUp = false;
-            }        
+            }
+
         }
 
         public void MoveToObjectPool()

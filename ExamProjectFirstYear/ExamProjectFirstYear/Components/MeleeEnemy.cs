@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ExamProjectFirstYear.PathFinding;
+using ExamProjectFirstYear.StatePattern;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,36 +9,76 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    /// <summary>
-    /// Melee Enemy component class.
-    /// </summary>
-    public class MeleeEnemy : Component
+    class MeleeEnemy : Enemy
     {
-        #region Override methods
+        public override void Awake()
+        {
+            SightRadius = 1 * NodeManager.Instance.CellSize;
+            speed = 200f;
+            GameObject.Tag = Tag.FLYINGENEMY;
+            SwitchState(new EnemyIdleState());
+        }
+
+        public override void Start()
+        {
+            GameObject.SpriteName = "FlyingEnemy";
+        }
+
+        public override void AddTarget()
+        {
+            Target = GameWorld.Instance.player.GameObject;
+        }
+
+ 
+
+        public override void SwitchState(IState newState)
+        {
+            if (currentState != null)
+            {
+                currentState.Exit();
+            }
+
+            currentState = newState;
+            // "This" means the FlyingEnemy.
+            currentState.Enter(this);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            currentState.Execute();
+            Move();
+        }
+
+        protected override void Move()
+        {
+            if (Velocity != Vector2.Zero)
+            {
+                Velocity.Normalize();
+            }
+
+            Velocity *= speed;
+
+            GameObject.Transform.Translate(Velocity * GameWorld.Instance.DeltaTime);
+        }
+
+        protected override void Notify()
+        {
+            throw new NotImplementedException();
+        }
 
         public override Tag ToEnum()
         {
             return Tag.MEELEEENEMY;
         }
 
-        #endregion
-
-
-        #region Other methods
-
-        public void DropMaterial(int materialID)
+        protected override void DropMaterialUponDeath()
         {
-            GameObject createdObject = new GameObject();
-            Material material;
-
-            createdObject.AddComponent(material = new Material(materialID));
-
-            createdObject.Awake();
-            createdObject.Start();
-
-            GameWorld.Instance.GameObjects.Add(createdObject);
+            throw new NotImplementedException();
         }
 
-        #endregion
+        protected override void EnemyDeath()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

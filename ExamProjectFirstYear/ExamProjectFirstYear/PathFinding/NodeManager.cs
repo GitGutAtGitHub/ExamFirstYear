@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace ExamProjectFirstYear.PathFinding
 {
@@ -16,8 +17,9 @@ namespace ExamProjectFirstYear.PathFinding
 
         public List<Node> DebugPath = new List<Node>();
         private static NodeManager instance;
-        Texture2D gridSprite;
-        Texture2D chosenPathgridSprite;
+        public Texture2D gridSprite;
+        public Texture2D searchedSprite;
+        public Texture2D chosenPathgridSprite;
         Texture2D unwalkableSprite;
         SpriteFont spriteFont;
         private List<Node> grid;
@@ -113,31 +115,37 @@ namespace ExamProjectFirstYear.PathFinding
         #region DRAW NODES FOR DEBUG ONLY
         public void LoadContent(ContentManager contentManager)
         {
-           gridSprite = contentManager.Load<Texture2D>("NodeGridTexture");
-           chosenPathgridSprite = contentManager.Load<Texture2D>("ChoosenPathTexture");
+            gridSprite = contentManager.Load<Texture2D>("NodeGridTexture");
+            chosenPathgridSprite = contentManager.Load<Texture2D>("ChoosenPathTexture");
             unwalkableSprite = contentManager.Load<Texture2D>("UnWalkableNode");
-            spriteFont = contentManager.Load<SpriteFont>("spriteFont");
+            searchedSprite = contentManager.Load<Texture2D>("searched area");
+            spriteFont = contentManager.Load<SpriteFont>("spritefont");
+
+            foreach (Node node in Nodes)
+            {
+                node.NodeSprite = gridSprite;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
 
-            //foreach (Node node in Nodes)
-            //{
-            //    if (node.Walkable == true)
-            //    {
-            //        spriteBatch.Draw(gridSprite, node.Position, Color.White);
-            //    }
-            //    else
-            //    {
-            //        spriteBatch.Draw(unwalkableSprite, node.Position, Color.White);
-            //    }
+            foreach (Node node in Nodes)
+            {
+                if (node.Walkable == true)
+                {
+                    spriteBatch.Draw(node.NodeSprite, node.Position, Color.White);
+                }
+                else
+                {
+                    spriteBatch.Draw(unwalkableSprite, node.Position, Color.White);
+                }
 
-            //    spriteBatch.DrawString(spriteFont, $"G: {node.GCost}", new Vector2((node.Position.X), (node.Position.Y)), Color.DarkRed, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
-            //    spriteBatch.DrawString(spriteFont, $"H: {node.HCost}", new Vector2((node.Position.X + 60), (node.Position.Y)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
-            //    spriteBatch.DrawString(spriteFont, $"F: {node.FCost}", new Vector2((node.Position.X), (node.Position.Y + 80)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                spriteBatch.DrawString(spriteFont, $"G: {node.GCost}", new Vector2((node.Position.X), (node.Position.Y)), Color.DarkRed, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                spriteBatch.DrawString(spriteFont, $"H: {node.HCost}", new Vector2((node.Position.X + 60), (node.Position.Y)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                spriteBatch.DrawString(spriteFont, $"F: {node.FCost}", new Vector2((node.Position.X), (node.Position.Y + 80)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
 
-            //}
+            }
 
 
             //foreach (Node node in DebugPath)
