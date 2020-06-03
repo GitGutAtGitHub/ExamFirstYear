@@ -96,11 +96,18 @@ namespace ExamProjectFirstYear.Components
             GameObject.Transform.Translate(Velocity * GameWorld.Instance.DeltaTime);
         }
 
+        /// <summary>
+        /// Adds the player as enemy's target.
+        /// </summary>
         public override void AddTarget()
         {
             Target = GameWorld.Instance.player.GameObject;
         }
 
+        /// <summary>
+        /// If the enemies health reaches 0, tthe enemy is removed from the game.
+        /// As it dies, it drops a(n) material/item using the DropMaterialUponDeath method.
+        /// </summary>
         protected override void EnemyDeath()
         {
             if (health <= 0)
@@ -110,12 +117,16 @@ namespace ExamProjectFirstYear.Components
             }
         }
 
+        // FOR DEBUGGING. DELETE LATER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         public void LooseHp()
         {
             health--;
             Console.WriteLine(health);
         }
 
+        /// <summary>
+        /// Instantiates a new material.
+        /// </summary>
         protected override void DropMaterialUponDeath()
         {
             //LevelManager.Instance.CreateObject(Tag.MATERIAL, (int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y,
@@ -135,7 +146,6 @@ namespace ExamProjectFirstYear.Components
             droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
 
             Collider collider = new Collider(spriteRenderer, (Material)droppedMaterial.GetComponent(Tag.MATERIAL)) { CheckCollisionEvents = true };
-            //collider.AttachListener((Movement)droppedMaterial.GetComponent(Tag.MOVEMENT));
 
             droppedMaterial.AddComponent(collider);
 

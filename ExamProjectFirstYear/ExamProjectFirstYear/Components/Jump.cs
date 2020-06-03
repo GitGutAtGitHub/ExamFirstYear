@@ -45,7 +45,6 @@ namespace ExamProjectFirstYear.Components
                 playerMovement.Grounded = false;
             }
 
-
             //This is if the jump should never change and always be a constant height
             //if (Grounded == true && HasJumped == false)
             //{
