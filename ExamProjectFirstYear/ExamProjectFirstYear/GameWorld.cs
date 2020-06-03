@@ -217,38 +217,50 @@ namespace ExamProjectFirstYear
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.Black);
-
-			// The code in the ( ) is added to make sure the camera runs.
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: camera.TransformCamera);
 			GraphicsDevice.SetRenderTarget(lightTarget);
 
-			foreach (LightSource lightSource in LightSources)
-			{
-				lightSource.Draw(spriteBatch);
-			}
-
-			spriteBatch.End();
+			DrawLightSourcesWithCameraCulling();
 
 			GraphicsDevice.SetRenderTarget(mainTarget);
 			GraphicsDevice.Clear(Color.BlanchedAlmond);
 
+			DrawGameObjectsWithCameraCulling();
+
+			GraphicsDevice.SetRenderTarget(null);
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+			lightEffect.Parameters["lightMask"].SetValue(lightTarget);
+			lightEffect.CurrentTechnique.Passes[0].Apply();
+			spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
+			spriteBatch.End();
+
+			base.Draw(gameTime);
+		}
+
+		/// <summary>
+		/// This method holds the code that is used to draw GameObjects when they are within a certain range of player. 
+		/// </summary>
+		private void DrawGameObjectsWithCameraCulling()
+		{
 			spriteBatch.Begin(transformMatrix: camera.TransformCamera);
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
+				// ER DET NØDVENDIGT MED DENNE HER? PLAYERS POSITION VIL JO ALTID SØRGE FOR AT PLAYER BLIVER TEGNET. KAN DOG GODT VÆRE DEN SKAL
+				//BRUGES TIL UI OBJEKTER (JOURNALEN OG HEARTS).
 				if (GameObjects[i].Components.ContainsKey(Tag.PLAYER))
 				{
 					GameObjects[i].Draw(spriteBatch);
 				}
 
-
+				// If the GameObject is not player it will only be drawn when it is within a certain distance of player. 
 				else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
-					(player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
-					(GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
-					(player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.width))
+								(player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
+								(GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
+								(player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.width))
 				{
 					GameObjects[i].Draw(spriteBatch);
 				}
+				// MÅ DET HER SLETTES?
 
 				//else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (200) &&
 				//  (player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (200) &&
@@ -257,26 +269,35 @@ namespace ExamProjectFirstYear
 				//{
 				//    GameObjects[i].Draw(spriteBatch);
 				//}
-
 			}
-
-			spriteBatch.End();
-
-			GraphicsDevice.SetRenderTarget(null);
-			//GraphicsDevice.Clear(Color.Blue);
-
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			lightEffect.Parameters["lightMask"].SetValue(lightTarget);
-			lightEffect.CurrentTechnique.Passes[0].Apply();
-			spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
-
-
+			// HVAD BRUGER VI DENNE HER TIL METODEN ER TOM
 			NodeManager.Instance.Draw(spriteBatch);
 
+			spriteBatch.End();
+		}
+
+		/// <summary>
+		/// This method holds the code that is used to draw LightSources when they are within a certain range of player. 
+		/// </summary>
+		private void DrawLightSourcesWithCameraCulling()
+		{
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: camera.TransformCamera);
+
+			for (int i = 0; i < LightSources.Count; i++)
+			{
+				if ((LightSources[i].GameObject.Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
+							(player.GameObject.Transform.Position.X - LightSources[i].GameObject.Transform.Position.X) < (ScreenSize.width) &&
+							(LightSources[i].GameObject.Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
+							(player.GameObject.Transform.Position.Y - LightSources[i].GameObject.Transform.Position.Y) < (ScreenSize.width))
+				{
+
+					LightSources[i].Draw(spriteBatch);
+				}
+			}
+			
+
 
 			spriteBatch.End();
-
-			base.Draw(gameTime);
 		}
 
 		/// <summary>
