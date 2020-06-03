@@ -47,7 +47,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void Start()
         {
-            GameObject.SpriteName = "smol";
+            GameObject.SpriteName = "FlyingEnemy";
         }
 
         public override void SwitchState(IState newState)

@@ -1,4 +1,5 @@
-﻿using ExamProjectFirstYear.PathFinding;
+﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

@@ -111,7 +111,13 @@
 /processorParam:TextureFormat=Compressed
 /build:JournalText.spritefont
 
-#begin MeleeObject.png
+#begin LightEffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:LightEffect.fx
+
+#begin Lightmask.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -121,7 +127,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:MeleeObject.png
+/build:Lightmask.png
 
 #begin NodeGridTexture.png
 /importer:TextureImporter
@@ -249,4 +255,3 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UnWalkableNode.png
-
