@@ -43,10 +43,9 @@ namespace ExamProjectFirstYear.CommandPattern
 			}
 			else
 			{
-				Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
+				Jump playerMovement = (Jump)player.GameObject.GetComponent(Tag.JUMP);
 				playerMovement.ReleaseJump();
-			}
-			
+			}		
 		}
 
 		public CommandTag GetCommandTag()

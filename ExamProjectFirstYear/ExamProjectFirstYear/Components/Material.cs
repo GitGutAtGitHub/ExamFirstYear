@@ -56,7 +56,6 @@ namespace ExamProjectFirstYear.Components
         public override void Start()
         {
             movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
-            GameObject.Transform.Translate(new Vector2(500, 10));
         }
 
         #endregion
@@ -66,6 +65,7 @@ namespace ExamProjectFirstYear.Components
 
         public void Notify(GameEvent gameEvent, Component component)
         {
+            //Players hit platforms when they collide with them.
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
             {
                 Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
@@ -77,14 +77,13 @@ namespace ExamProjectFirstYear.Components
                     //Top platform.
                     if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, -intersection.Height));
-                        movement.Grounded = true;
+                        GameObject.Transform.Translate(new Vector2(0, -intersection.Height + 1));
                     }
 
                     //Bottom platform.
                     if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
                     {
-                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height));
+                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height - 1));
                     }
                 }
 

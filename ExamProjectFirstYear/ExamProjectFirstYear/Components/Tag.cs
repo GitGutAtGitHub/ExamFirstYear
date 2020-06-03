@@ -38,6 +38,7 @@ namespace ExamProjectFirstYear
 		ENEMY,
 		PLAYERHEALTHUI,
 		PLAYERMANAUI,
-		MENUHANDLER
+		MENUHANDLER,
+		JUMP
 	}
 }

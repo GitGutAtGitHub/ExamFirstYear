@@ -1,8 +1,10 @@
 ﻿using ExamProjectFirstYear.PathFinding;
 using ExamProjectFirstYear.StatePattern;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -36,7 +38,8 @@ namespace ExamProjectFirstYear.Components
 
         public override void Awake()
         {            
-            SightRadius = 6 * NodeManager.Instance.CellSize;         
+            SightRadius = 6 * NodeManager.Instance.CellSize;
+            health = 5;
             speed = 200f;
             GameObject.Tag = Tag.FLYINGENEMY;
             SwitchState(new EnemyAttackState());
@@ -65,6 +68,15 @@ namespace ExamProjectFirstYear.Components
         {         
             currentState.Execute();
             Move();
+            EnemyDeath();
+
+
+            // FOR DEBUGGING. DELETE LATER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            KeyboardState keyState = Keyboard.GetState();
+            if (keyState.IsKeyDown(Keys.L))
+            {
+                LooseHp();
+            }
         }
 
         protected override void Notify()
@@ -89,10 +101,53 @@ namespace ExamProjectFirstYear.Components
             Target = GameWorld.Instance.player.GameObject;
         }
 
+        protected override void EnemyDeath()
+        {
+            if (health <= 0)
+            {
+                GameObject.Destroy();
+                DropMaterialUponDeath();
+            }
+        }
+
+        public void LooseHp()
+        {
+            health--;
+            Console.WriteLine(health);
+        }
+
+        protected override void DropMaterialUponDeath()
+        {
+            //LevelManager.Instance.CreateObject(Tag.MATERIAL, (int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y,
+            //                                                 (int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y);
+            
+            GameObject droppedMaterial = new GameObject();
+            SpriteRenderer spriteRenderer = new SpriteRenderer();
+            Movement movementEnemy = new Movement(true, 0, 0);
+
+            droppedMaterial.AddComponent(new Material(1));
+            droppedMaterial.AddComponent(movementEnemy);
+            droppedMaterial.AddComponent(spriteRenderer);
+
+            droppedMaterial.Awake();
+            droppedMaterial.Start();
+
+            droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
+
+            Collider collider = new Collider(spriteRenderer, (Material)droppedMaterial.GetComponent(Tag.MATERIAL)) { CheckCollisionEvents = true };
+            //collider.AttachListener((Movement)droppedMaterial.GetComponent(Tag.MOVEMENT));
+
+            droppedMaterial.AddComponent(collider);
+
+            GameWorld.Instance.Colliders.Add(collider);
+            GameWorld.Instance.GameObjects.Add(droppedMaterial);
+        }
+
         public override Tag ToEnum()
         {
             return Tag.FLYINGENEMY;
         }
+
 
         #endregion
     }

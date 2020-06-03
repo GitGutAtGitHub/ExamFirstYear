@@ -50,6 +50,10 @@ namespace ExamProjectFirstYear.Components
 
         protected abstract void Move();
 
+        protected abstract void DropMaterialUponDeath();
+
+        protected abstract void EnemyDeath();
+
         public override Tag ToEnum()
         {
             return Tag.ENEMY;

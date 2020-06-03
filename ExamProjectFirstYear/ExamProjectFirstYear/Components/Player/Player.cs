@@ -23,29 +23,24 @@ namespace ExamProjectFirstYear
         private bool saveLoaded;
 
         private SpriteRenderer spriteRenderer;
+        private Jump jump;
 
         #endregion
 
 
         #region Properties
         public int PlayerID { get; set; }
-
         public int InventoryID { get; set; }
         public int Health { get; set; }
         public int Mana { get; set; }
         public int OpenDoor { get; set; }
-
         public float PositionX { get; set; }
         public float PositionY { get; set; }
-
-        public Movement Movement { get; private set; }
-
-        public TmpJournal TmpJournal { get; private set; }
-
-        public Vector2 Direction { get; set; } = new Vector2(1, 0);
-
         public bool canAttack { get; set; } = true;
         public bool canShoot { get; set; } = true;
+        public Movement Movement { get; private set; }
+        public TmpJournal TmpJournal { get; private set; }
+        public Vector2 Direction { get; set; } = new Vector2(1, 0);
 
         #endregion
 
@@ -79,7 +74,12 @@ namespace ExamProjectFirstYear
 
             Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
             spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+            jump = (Jump)GameObject.GetComponent(Tag.JUMP);
+            saveLoaded = true;
+        }
 
+        public override void Start()
+        {
             saveLoaded = true;
         }
 
@@ -200,7 +200,7 @@ namespace ExamProjectFirstYear
                 Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
 
                 tmpMeleeObject.Transform.Position = GameObject.Transform.Position + (new Vector2(Direction.X * tmpMeleeRenderer.Sprite.Width, Direction.Y));
-                
+
                 GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
                 GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
 
