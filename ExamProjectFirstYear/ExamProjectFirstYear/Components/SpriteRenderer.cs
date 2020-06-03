@@ -14,6 +14,7 @@ namespace ExamProjectFirstYear
 	public class SpriteRenderer : Component
 	{
 		#region PROPERTIES
+
 		public Texture2D Sprite { get; set; }
 		public Vector2 Origin { get; set; }
 		public float SpriteLayer { get; set; }
