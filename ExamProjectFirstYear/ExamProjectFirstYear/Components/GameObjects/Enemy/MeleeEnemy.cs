@@ -13,7 +13,7 @@ namespace ExamProjectFirstYear.Components.GameObjects.Enemy
     {
         public override void Awake()
         {
-            SightRadius = 6 * NodeManager.Instance.CellSize;
+            SightRadius = 2 * NodeManager.Instance.CellSize;
             speed = 200f;
             GameObject.Tag = Tag.FLYINGENEMY;
             SwitchState(new EnemyIdleState());
