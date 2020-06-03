@@ -126,7 +126,7 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 35, 900));
-                    createdObject.AddComponent(new LightSource(1f, true));
+                    createdObject.AddComponent(new LightSource(2f, true));
                     break;
 
                 case Tag.PLATFORM:
