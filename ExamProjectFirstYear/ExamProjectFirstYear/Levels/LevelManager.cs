@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.PlayerComponents;
 using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using System;
@@ -62,8 +63,8 @@ namespace ExamProjectFirstYear
         public void InitializeLevel()
         {
             LoadBitmap();
-            PopulateLevel(PlatformSection);
-            //PopulateLevel(TestLevel);
+            //PopulateLevel(PlatformSection);
+            PopulateLevel(TestLevel);
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
         }
@@ -126,6 +127,7 @@ namespace ExamProjectFirstYear
                     //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 35, 900));
                     createdObject.AddComponent(new Jump());
+                    createdObject.AddComponent(new RangedAttack());
                     break;
 
                 case Tag.PLATFORM:
@@ -169,6 +171,10 @@ namespace ExamProjectFirstYear
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
                 collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
+            }
+            else if (tag == Tag.FLYINGENEMY)
+            {
+                collider = new Collider(spriteRenderer, (FlyingEnemy)createdObject.GetComponent(Tag.FLYINGENEMY)) { CheckCollisionEvents = true };
             }
             else
             {

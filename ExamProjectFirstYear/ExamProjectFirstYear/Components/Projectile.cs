@@ -50,8 +50,7 @@ namespace ExamProjectFirstYear
             {
                 GameObject.Destroy();
                 timeUp = false;
-            }
-            
+            }        
         }
 
         public void MoveToObjectPool()
@@ -102,11 +101,29 @@ namespace ExamProjectFirstYear
                 GameObject.Destroy();
                 //other.GameObject.Destroy();
             }
-            if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
-            {
-                MoveToObjectPool();
-                GameObject.Destroy();
-            }
+            //if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //}
+
+            //if (gameEvent.Title == "Colliding" && this.GameObject.Tag == Tag.PLAYERPROJECTILE && other.GameObject.Tag == Tag.FLYINGENEMY)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //}
+
+            //if (gameEvent.Title == "Colliding" && this.GameObject.Tag == Tag.PLAYERPROJECTILE && other.GameObject.Tag == Tag.MEELEEENEMY)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //}
+
+            //if (gameEvent.Title == "Colliding" && this.GameObject.Tag == Tag.PLAYERPROJECTILE && other.GameObject.Tag == Tag.RANGEDENEMY)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //}
         }
 
         #endregion

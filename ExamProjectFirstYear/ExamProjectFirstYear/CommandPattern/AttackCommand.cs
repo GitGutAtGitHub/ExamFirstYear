@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.PlayerComponents;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -38,7 +39,17 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		public void Execute(Player player)
 		{
-			player.Attack(attackNumber);
+			switch (attackNumber)
+            {
+				case 1:
+
+					break;
+
+				case 2:
+					RangedAttack rangedAttack = (RangedAttack)player.GameObject.GetComponent(Tag.RANGEDATTACK);
+					rangedAttack.PlayerRangedAttack();
+					break;
+            }
 		}
 
 		public CommandTag GetCommandTag()

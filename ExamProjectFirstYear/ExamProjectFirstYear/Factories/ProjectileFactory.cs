@@ -40,7 +40,7 @@ namespace ExamProjectFirstYear
 		private ProjectileFactory()
 		{
 			CreateProjectilePrototype(ref bossProjectile, ref bossProjectileRenderer, "OopPlayerSprite2");
-			CreateProjectilePrototype(ref playerProjectile, ref playerProjectileRenderer, "OopPlayerSprite2");
+			CreateProjectilePrototype(ref playerProjectile, ref playerProjectileRenderer, "OopPlayerProjectileSprite3");
 			CreateProjectilePrototype(ref playerMeleeObject, ref playerMeleeObjectRenderer, "MeleeObject");
 			CreateProjectilePrototype(ref enemyProjectile, ref enemyProjectileRenderer, "OopPlayerSprite2");
 		}

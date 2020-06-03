@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.PlayerComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,9 +38,13 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		public void Execute(Player player)
 		{
+			RangedAttack rangedAttack = (RangedAttack)player.GameObject.GetComponent(Tag.RANGEDATTACK);
+
+			// releaseNumber is used to make sure this method is only called, when the rangedAttack button is released.
+			// Meaning the bool CanShoot will be set to true once again, enabling the players ranged attack ability.
 			if (releaseNumber <= 2)
 			{
-				player.ReleaseAttack(releaseNumber);
+				rangedAttack.PlayerReleaseRangedAttack();
 			}
 			else
 			{

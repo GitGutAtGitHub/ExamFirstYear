@@ -15,7 +15,7 @@ namespace ExamProjectFirstYear.Components
     /// <summary>
     /// Flying Enemy component class.
     /// </summary>
-    class FlyingEnemy : Enemy
+    class FlyingEnemy : Enemy, IGameListener
     {
         #region Fields
 
@@ -39,7 +39,7 @@ namespace ExamProjectFirstYear.Components
         public override void Awake()
         {            
             SightRadius = 6 * NodeManager.Instance.CellSize;
-            health = 5;
+            health = 2;
             speed = 200f;
             GameObject.Tag = Tag.FLYINGENEMY;
             SwitchState(new EnemyAttackState());
@@ -69,19 +69,6 @@ namespace ExamProjectFirstYear.Components
             currentState.Execute();
             Move();
             EnemyDeath();
-
-
-            // FOR DEBUGGING. DELETE LATER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            KeyboardState keyState = Keyboard.GetState();
-            if (keyState.IsKeyDown(Keys.L))
-            {
-                LooseHp();
-            }
-        }
-
-        protected override void Notify()
-        {
-            
         }
 
         protected override void Move()
@@ -105,7 +92,7 @@ namespace ExamProjectFirstYear.Components
         }
 
         /// <summary>
-        /// If the enemies health reaches 0, tthe enemy is removed from the game.
+        /// If the enemies health reaches 0, the enemy is removed from the game.
         /// As it dies, it drops a(n) material/item using the DropMaterialUponDeath method.
         /// </summary>
         protected override void EnemyDeath()
@@ -113,44 +100,21 @@ namespace ExamProjectFirstYear.Components
             if (health <= 0)
             {
                 GameObject.Destroy();
-                DropMaterialUponDeath();
+                // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                DropMaterialUponDeath(1);
             }
         }
 
-        // FOR DEBUGGING. DELETE LATER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        public void LooseHp()
+        public void Notify(GameEvent gameEvent, Component other)
         {
-            health--;
-            Console.WriteLine(health);
-        }
-
-        /// <summary>
-        /// Instantiates a new material.
-        /// </summary>
-        protected override void DropMaterialUponDeath()
-        {
-            //LevelManager.Instance.CreateObject(Tag.MATERIAL, (int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y,
-            //                                                 (int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y);
-            
-            GameObject droppedMaterial = new GameObject();
-            SpriteRenderer spriteRenderer = new SpriteRenderer();
-            Movement movementEnemy = new Movement(true, 0, 0);
-
-            droppedMaterial.AddComponent(new Material(1));
-            droppedMaterial.AddComponent(movementEnemy);
-            droppedMaterial.AddComponent(spriteRenderer);
-
-            droppedMaterial.Awake();
-            droppedMaterial.Start();
-
-            droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
-
-            Collider collider = new Collider(spriteRenderer, (Material)droppedMaterial.GetComponent(Tag.MATERIAL)) { CheckCollisionEvents = true };
-
-            droppedMaterial.AddComponent(collider);
-
-            GameWorld.Instance.Colliders.Add(collider);
-            GameWorld.Instance.GameObjects.Add(droppedMaterial);
+            // If the enemy is hit by players projectile from the ranged attack or the melee attack,
+            // the projectile is removed from the game and enemy looses 1 hp.
+            if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERPROJECTILE ||
+                gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
+            {
+                other.GameObject.Destroy();
+                health--;
+            }
         }
 
         public override Tag ToEnum()

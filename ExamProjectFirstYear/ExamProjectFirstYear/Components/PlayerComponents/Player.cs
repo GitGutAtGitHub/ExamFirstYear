@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.PlayerComponents;
 using ExamProjectFirstYear.ObjectPools;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -21,9 +22,19 @@ namespace ExamProjectFirstYear
         private MouseState currentMouseState;
 
         private bool saveLoaded;
+        private float manaRegenerateTimer;
+        // First wait is sat high, as to ensure the mana doesn't regenerate until after a short while from when the last time they used mana.
+        private float initialRegenerationTimer = 2.5f;
+        // After the first wait, the timer is not sat to 0, so it takes less time for mana to regenerate once the regeneration has begun.
+        private float regenerationTimer = 1.5f;
+        private float invulnerabilityTimer;
+        private float invulnerabilityFrames = 0.8f;
+        private byte fullMana = 5;
 
         private SpriteRenderer spriteRenderer;
+        private RangedAttack rangedAttack;
         private Jump jump;
+        private Player player = GameWorld.Instance.player;
 
         #endregion
 
@@ -36,11 +47,10 @@ namespace ExamProjectFirstYear
         public int OpenDoor { get; set; }
         public float PositionX { get; set; }
         public float PositionY { get; set; }
-        public bool canAttack { get; set; } = true;
-        public bool canShoot { get; set; } = true;
+        public bool CanRegenerateMana { get; set; }
+        public Vector2 Direction { get; set; } = new Vector2(1, 0);
         public Movement Movement { get; private set; }
         public TmpJournal TmpJournal { get; private set; }
-        public Vector2 Direction { get; set; } = new Vector2(1, 0);
 
         #endregion
 
@@ -72,14 +82,15 @@ namespace ExamProjectFirstYear
 
             TmpJournal = SQLiteHandler.Instance.GetJournal(PlayerID);
 
-            Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
-            spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
-            jump = (Jump)GameObject.GetComponent(Tag.JUMP);
             saveLoaded = true;
         }
 
         public override void Start()
         {
+            //Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+            //spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+            //jump = (Jump)GameObject.GetComponent(Tag.JUMP);
+
             saveLoaded = true;
         }
 
@@ -87,12 +98,30 @@ namespace ExamProjectFirstYear
         {
             LoadSave();
             TestMethod();
+            RegenerateMana();
         }
 
         #endregion
 
 
         #region Other methods
+
+        /// <summary>
+        /// Method used when the player takes damage.
+        /// Invulnerability frames have been added so the player has a chance to get away
+        /// before taking more damage.
+        /// </summary>
+        public void TakeDamage()
+        {
+            invulnerabilityTimer -= GameWorld.Instance.DeltaTime;
+
+            if (invulnerabilityTimer <= 0)
+            {
+                Health--;
+                //Console.WriteLine(Health);
+                invulnerabilityTimer = invulnerabilityFrames;
+            }
+        }
 
         public void Notify(GameEvent gameEvent, Component component)
         {
@@ -102,6 +131,14 @@ namespace ExamProjectFirstYear
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
                 component.GameObject.Destroy();
                 SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
+            }
+
+            // Player looses health when colliding with an enemy.
+            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.FLYINGENEMY ||
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MEELEEENEMY ||
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.RANGEDENEMY)
+            {
+                TakeDamage();
             }
 
             //Players hit platforms when they collide with them.
@@ -158,79 +195,46 @@ namespace ExamProjectFirstYear
             saveLoaded = false;
         }
 
-        public void ReleaseAttack(int attackNumber)
-        {
-            if (attackNumber == 1)
-            {
-                canAttack = true;
-            }
-            if (attackNumber == 2)
-            {
-                canShoot = true;
-            }
-        }
-
         /// <summary>
-        /// Players method for attacking.
+        /// Method used to regenerate mana when needed and under certain conditions.
+        /// A timer is used to make sure mana regenerates over time. Once the first mana point has regenerated,
+        /// the rest regenerates faster. However, if the player fires another ranged attack, the timer is resat to 0,
+        /// and the regeneration will be slow to get the first next mana point back, and then mana starts regenerating faster once again.
         /// </summary>
-        /// <param name="attackNumber"></param>
-        public void Attack(int attackNumber)
+        private void RegenerateMana()
         {
-            switch (attackNumber)
-            {
-                case 1:
-                    MeleeAttak();
-                    break;
+            //Console.WriteLine(manaRegenerateTimer);
 
-                case 2:
-                    RangedAttack();
-                    break;
+            // Once mana is lower than the full amount of mana, a timer starts and regeneration of mana can begin.
+            if (Mana < fullMana)
+            {
+                manaRegenerateTimer += GameWorld.Instance.DeltaTime;
+
+                // Once the manaRegenerateTimer reachers initialRegenerationTimer, mana is regenerated.
+                if (manaRegenerateTimer >= initialRegenerationTimer)
+                {
+                    // Adds one mana.
+                    Mana++;
+                    
+                    // Resets the timer.
+                    manaRegenerateTimer = regenerationTimer;
+                }
             }
-        }
 
-        /// <summary>
-        /// Melee attack for Player.
-        /// </summary>
-        private void MeleeAttak()
-        {
-            if (canAttack)
+            // If the player shoots the timer resets to 0. This is to make the mana regeneration more smooth
+            // and to ensure the player takes a break from using the ranged attack to let their mana regenerate.
+            if (CanRegenerateMana == false)
             {
-                GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
-                SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
-                Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
+                manaRegenerateTimer = 0;
 
-                tmpMeleeObject.Transform.Position = GameObject.Transform.Position + (new Vector2(Direction.X * tmpMeleeRenderer.Sprite.Width, Direction.Y));
-
-                GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
-                GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
-
-                canAttack = false;
+                // Sets the bool to true, so the timer manaRegenerator can start going up again.
+                CanRegenerateMana = true;
             }
-        }
 
-        /// <summary>
-        /// Ranged attack for Player.
-        /// </summary>
-        private void RangedAttack()
-        {
-            //MANGLER KODE DER FORHINDRER AT MAN KAN LAVE MERE END ÉT ANGREB AF GANGEN
-            //MANGLER OGSÅ KODE DER SØRGER FOR AT SPILLEREN MISTER LYS/MANA.
-            if (canShoot)
+            if (Mana == fullMana)
             {
-                GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject();
-                Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
-
-                tmpProjectileObject.Transform.Position = GameObject.Transform.Position;
-
-                Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
-
-                tmpMovement.Velocity = Direction;
-
-                //tmpMovement.Speed = 1000f;
-                GameWorld.Instance.Colliders.Add(tmpProjectileCollider);
-                GameWorld.Instance.GameObjects.Add(tmpProjectileObject);
-
-                canShoot = false;
+                // Once mana is full, the timer is resat to 0.
+                manaRegenerateTimer = 0;
             }
         }
 
