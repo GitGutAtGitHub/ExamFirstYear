@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.PlayerComponents;
 using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using System;
@@ -62,8 +63,8 @@ namespace ExamProjectFirstYear
         public void InitializeLevel()
         {
             LoadBitmap();
+            //PopulateLevel(PlatformSection);
             PopulateLevel(TestLevel);
-            //PopulateLevel(TestLevel);
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
         }
@@ -131,9 +132,10 @@ namespace ExamProjectFirstYear
                 case Tag.PLAYER:
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
-                    createdObject.AddComponent(new Movement(true, 35, 900));
+                    createdObject.AddComponent(new Movement(true, 900));
                     createdObject.AddComponent(new LightSource(2f, true));
-                    createdObject.AddComponent(new Jump());
+                    createdObject.AddComponent(new Jump(35));
+                    createdObject.AddComponent(new RangedAttack());
                     break;
 
                 case Tag.PLATFORM:
@@ -184,10 +186,13 @@ namespace ExamProjectFirstYear
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
                 collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
+                collider.AttachListener((Jump)createdObject.GetComponent(Tag.JUMP));
                 createdObject.AddComponent(new AttackMelee());
             }
-
-
+            else if (tag == Tag.FLYINGENEMY)
+            {
+                collider = new Collider(spriteRenderer, (FlyingEnemy)createdObject.GetComponent(Tag.FLYINGENEMY)) { CheckCollisionEvents = true };
+            }
             else
             {
                 collider = new Collider(spriteRenderer);

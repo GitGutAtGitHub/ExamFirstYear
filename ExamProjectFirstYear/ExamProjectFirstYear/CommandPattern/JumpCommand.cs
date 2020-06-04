@@ -31,7 +31,7 @@ namespace ExamProjectFirstYear.CommandPattern
 		public void Execute(Player player)
 		{
 			Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
-			playerJump.PlayerJump();
+			playerJump.PlayerJump((Movement)player.GameObject.GetComponent(Tag.MOVEMENT));
 		}
 
 		public CommandTag GetCommandTag()

@@ -40,6 +40,7 @@ namespace ExamProjectFirstYear
 		PLAYERHEALTHUI,
 		PLAYERMANAUI,
 		MENUHANDLER,
-		JUMP
+		JUMP,
+		RANGEDATTACK
 	}
 }

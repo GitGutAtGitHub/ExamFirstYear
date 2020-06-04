@@ -40,8 +40,8 @@ namespace ExamProjectFirstYear
 		private ProjectileFactory()
 		{
 			CreateProjectilePrototype(ref bossProjectile, ref bossProjectileRenderer, "OopPlayerSprite2");
-			CreateProjectilePrototype(ref playerProjectile, ref playerProjectileRenderer, "OopPlayerSprite2");
-			CreateProjectilePrototype(ref playerMeleeObject, ref playerMeleeObjectRenderer, "MeleeObject");
+			CreateProjectilePrototype(ref playerProjectile, ref playerProjectileRenderer, "OopPlayerProjectileSprite3");
+			CreateProjectilePrototype(ref playerMeleeObject, ref playerMeleeObjectRenderer, "MeleeObject2");
 			CreateProjectilePrototype(ref enemyProjectile, ref enemyProjectileRenderer, "OopPlayerSprite2");
 		}
 
@@ -67,7 +67,7 @@ namespace ExamProjectFirstYear
 					gameObject.AddComponent(playerProjectile.Clone());
 					gameObject.AddComponent(playerProjectileRenderer.Clone());
 					gameObject.AddComponent(new Collider(playerProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
-					gameObject.AddComponent(new Movement(false, 0, 1000));
+					gameObject.AddComponent(new Movement(false, 1000));
 					break;
 				case Tag.PLAYERMELEEATTACK:
 					gameObject.AddComponent(playerMeleeObject.Clone());
