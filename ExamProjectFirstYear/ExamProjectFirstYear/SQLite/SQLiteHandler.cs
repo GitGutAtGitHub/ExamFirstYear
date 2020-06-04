@@ -6,7 +6,6 @@ using System.Configuration;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
@@ -22,10 +21,6 @@ namespace ExamProjectFirstYear
         private SQLiteConnection connection;
 
         private SQLiteCommand command;
-
-        private Journal journal;
-
-        private Inventory inventory;
 
         #endregion
 

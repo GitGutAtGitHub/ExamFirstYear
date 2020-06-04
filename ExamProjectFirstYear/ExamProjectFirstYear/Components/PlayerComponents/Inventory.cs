@@ -65,8 +65,11 @@ namespace ExamProjectFirstYear.Components
         {
             GameObject.Tag = Tag.INVENTORY;
             GameObject.SpriteName = "InventoryClosed";
+
             inventoryRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+
             MaterialTypeIDs.Add(1);
+
             inventoryHeading = GameWorld.Instance.Content.Load<SpriteFont>("JournalHeading");
             inventoryText = GameWorld.Instance.Content.Load<SpriteFont>("JournalText");
         }
