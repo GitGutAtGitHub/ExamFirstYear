@@ -14,7 +14,6 @@ namespace Testing
         SQLiteConnection connection;
         SQLiteCommand command;
 
-
         [TestMethod]
         public void LoadConnectionStringTest()
         {
