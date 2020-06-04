@@ -318,7 +318,7 @@ namespace ExamProjectFirstYear
 
 			//spriteBatch.End();
 
-			base.Draw(gameTime);
+			//base.Draw(gameTime);
 		}
 
 		/// <summary>

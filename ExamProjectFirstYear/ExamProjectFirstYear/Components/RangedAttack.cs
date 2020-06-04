@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,6 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
     class RangedAttack : Component
     {
         #region FIELDS
-        //private Player player = GameWorld.Instance.player;
 
         // Used to make sure the player can only shoot once every X-amount of seconds.
         private float rangedAttackTimer;
@@ -54,6 +54,14 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
 
                 tmpMovement.Velocity = player.Direction;
 
+                if (player.Direction.X < 0)
+                {
+                    ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).spriteEffect = SpriteEffects.None;
+                }
+                if (player.Direction.X > 0)
+                {
+                    ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).spriteEffect = SpriteEffects.FlipHorizontally;
+                }
                 //tmpMovement.Speed = 1000f;
                 GameWorld.Instance.Colliders.Add(tmpProjectileCollider);
                 GameWorld.Instance.GameObjects.Add(tmpProjectileObject);
