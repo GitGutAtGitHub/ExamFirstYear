@@ -10,7 +10,7 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
     class RangedAttack : Component
     {
         #region FIELDS
-        private Player player = GameWorld.Instance.player;
+        //private Player player = GameWorld.Instance.player;
 
         // Used to make sure the player can only shoot once every X-amount of seconds.
         private float rangedAttackTimer;
@@ -38,7 +38,7 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
         /// <summary>
         /// Ranged attack for Player.
         /// </summary>
-        public void PlayerRangedAttack()
+        public void PlayerRangedAttack(Player player)
         {
             // CANSHOOT SKAL MÅSKE SLETTES. TROR IKKE DEN ER NØDVENDIG MERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // rangedAttackTimer makes sure the ranged attack can only be used once every x-amount of seconds.

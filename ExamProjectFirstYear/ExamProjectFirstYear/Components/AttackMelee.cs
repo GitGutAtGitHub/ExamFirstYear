@@ -11,43 +11,17 @@ namespace ExamProjectFirstYear.Components
     class AttackMelee : Component, IAttack
     {
         public bool canAttack { get; set; } = true;
-        public bool canShoot { get; set; } = true;
 
 
-        public void ReleaseAttack(int attackNumber)
+        public void ReleaseMeleeMeleeAttack()
         {
-            if (attackNumber == 1)
-            {
-                canAttack = true;
-            }
-            if (attackNumber == 2)
-            {
-                canShoot = true;
-            }
-        }
-
-        /// <summary>
-        /// Players method for attacking.
-        /// </summary>
-        /// <param name="attackNumber"></param>
-        public void Attack(int attackNumber)
-        {
-            switch (attackNumber)
-            {
-                case 1:
-                    MeleeAttack();
-                    break;
-
-                    //case 2:
-                    //    RangedAttack();
-                    //    break;
-            }
+            canAttack = true;
         }
 
         /// <summary>
         /// Melee attack for Player.
         /// </summary>
-        private void MeleeAttack()
+        public void PlayerMeleeAttack(Player player)
         {
             //if (canAttack)
             //{
@@ -56,7 +30,7 @@ namespace ExamProjectFirstYear.Components
             //    SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
             //    Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
 
-            //    tmpMeleeObject.Transform.Position = GameObject.Transform.Position;
+            //    tmpMeleeObject.Transform.Position = player.GameObject.Transform.Position;
 
             //    GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
             //    GameWorld.Instance.Colliders.Add(tmpMeleeCollider);

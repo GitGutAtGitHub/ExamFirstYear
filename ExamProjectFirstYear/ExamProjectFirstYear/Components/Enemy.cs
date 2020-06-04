@@ -70,7 +70,7 @@ namespace ExamProjectFirstYear.Components
         {
             GameObject droppedMaterial = new GameObject();
             SpriteRenderer spriteRenderer = new SpriteRenderer();
-            Movement movementEnemy = new Movement(true, 0, 0);
+            Movement movementEnemy = new Movement(true, 0);
 
             droppedMaterial.AddComponent(new Material(materialID));
 

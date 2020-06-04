@@ -67,7 +67,7 @@ namespace ExamProjectFirstYear
 					gameObject.AddComponent(playerProjectile.Clone());
 					gameObject.AddComponent(playerProjectileRenderer.Clone());
 					gameObject.AddComponent(new Collider(playerProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
-					gameObject.AddComponent(new Movement(false, 0, 1000));
+					gameObject.AddComponent(new Movement(false, 1000));
 					break;
 				case Tag.PLAYERMELEEATTACK:
 					gameObject.AddComponent(playerMeleeObject.Clone());

@@ -9,54 +9,54 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.CommandPattern
 {
-	/// <summary>
-	/// Attack command for player.
-	/// </summary>
-	class AttackCommand : ICommand
-	{
-		#region Fields
+    /// <summary>
+    /// Attack command for player.
+    /// </summary>
+    class AttackCommand : ICommand
+    {
+        #region Fields
 
-		private int attackNumber;
+        private int attackNumber;
 
-		#endregion
-
-
-		#region Constructors
-
-		/// <summary>
-		/// Constructor for AttackCommand
-		/// </summary>
-		/// <param name="attackNumber"></param>
-		public AttackCommand(int attackNumber)
-		{
-			this.attackNumber = attackNumber;
-		}
-
-		#endregion
+        #endregion
 
 
-		#region Methods
+        #region Constructors
 
-		public void Execute(Player player)
-		{
-			switch (attackNumber)
+        /// <summary>
+        /// Constructor for AttackCommand
+        /// </summary>
+        /// <param name="attackNumber"></param>
+        public AttackCommand(int attackNumber)
+        {
+            this.attackNumber = attackNumber;
+        }
+
+        #endregion
+
+
+        #region Methods
+
+        public void Execute(Player player)
+        {
+            switch (attackNumber)
             {
-				case 1:
-				//((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).Attack(attackNumber);
-				//player.Attack(attackNumber);
-					break;
+                case 1:
+                    AttackMelee playerAttackMelee = (AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE);
+                    playerAttackMelee.PlayerMeleeAttack(player);
+                    break;
 
-				case 2:
-					RangedAttack rangedAttack = (RangedAttack)player.GameObject.GetComponent(Tag.RANGEDATTACK);
-					rangedAttack.PlayerRangedAttack();
-					break;
+                case 2:
+                    RangedAttack rangedAttack = (RangedAttack)player.GameObject.GetComponent(Tag.RANGEDATTACK);
+                    rangedAttack.PlayerRangedAttack(player);
+                    break;
             }
-		}
+        }
 
-		public CommandTag GetCommandTag()
-		{
-			return CommandTag.KEYDOWN;
-		}
+        public CommandTag GetCommandTag()
+        {
+            return CommandTag.KEYDOWN;
+        }
 
         #endregion
     }
