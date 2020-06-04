@@ -146,7 +146,7 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 900));
-                    createdObject.AddComponent(new LightSource(2f, true));
+                    createdObject.AddComponent(new LightSource(6f, true));
                     createdObject.AddComponent(new Jump(35));
                     createdObject.AddComponent(new RangedAttack());
                     break;
@@ -167,7 +167,7 @@ namespace ExamProjectFirstYear
                 case Tag.MEELEEENEMY:
                     createdObject.AddComponent(new MeleeEnemy());
                     createdObject.AddComponent(new LightSource(1f, true));
-                    createdObject.AddComponent(new Movement(true, 35, 900));
+                    createdObject.AddComponent(new Movement(true, 900));
 
 
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
@@ -223,6 +223,11 @@ namespace ExamProjectFirstYear
             else if (tag == Tag.FLYINGENEMY)
             {
                 collider = new Collider(spriteRenderer, (FlyingEnemy)createdObject.GetComponent(Tag.FLYINGENEMY)) { CheckCollisionEvents = true };
+            }
+
+            else if (tag == Tag.RANGEDENEMY)
+            {
+                collider = new Collider(spriteRenderer, (RangedEnemy)createdObject.GetComponent(Tag.RANGEDENEMY)) { CheckCollisionEvents = true };
             }
 
             //else if (tag != Tag.PLATFORM)
