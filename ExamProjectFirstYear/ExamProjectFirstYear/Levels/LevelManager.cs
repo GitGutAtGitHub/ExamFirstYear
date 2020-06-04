@@ -186,6 +186,7 @@ namespace ExamProjectFirstYear
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
                 collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
+				collider.AttachListener((Jump)createdObject.GetComponent(Tag.JUMP));
                 createdObject.AddComponent(new AttackMelee());
             }
             else if (tag == Tag.FLYINGENEMY)

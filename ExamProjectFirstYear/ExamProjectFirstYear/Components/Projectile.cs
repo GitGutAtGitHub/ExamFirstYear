@@ -96,12 +96,12 @@ namespace ExamProjectFirstYear
 
         public void Notify(GameEvent gameEvent, Component other)
         {
-            if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM)
-            {
-                MoveToObjectPool();
-                GameObject.Destroy();
-                //other.GameObject.Destroy();
-            }
+            //if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM && this.GameObject.Tag != Tag.ATTACKMELEE)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //    //other.GameObject.Destroy();
+            //}
             //if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
             //{
             //    MoveToObjectPool();
