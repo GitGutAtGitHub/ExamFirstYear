@@ -9,14 +9,22 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    class AttackMelee : Component, IGameListener
+    class AttackMelee : Component
     {
+        #region FIELDS
+
         private float attackRange = 1.2f;
         private float attackRangeLeft = -1.2f;
         private Vector2 attackDirection;
+        private SpriteEffects flip = SpriteEffects.FlipHorizontally;
+
+        #endregion
+
 
         public bool canAttack { get; set; } = true;
 
+
+        #region METHODS
 
         public void ReleaseMeleeMeleeAttack()
         {
@@ -32,23 +40,28 @@ namespace ExamProjectFirstYear.Components
             {
                 GameObject tmpMeleeObject = PlayerMeleeAttackPool.Instance.GetObject();
                 SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
-                //tmpMeleeRenderer.Origin = new Vector2(tmpMeleeRenderer.Sprite.Width / 2, tmpMeleeRenderer.Sprite.Height / 2);
-                //Collider tmpMeleeCollider = new Collider(tmpMeleeRenderer, (AttackMelee)tmpMeleeObject.GetComponent(Tag.ATTACKMELEE)) { CheckCollisionEvents = true };
                 Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
 
+                //Makes sure the attack appears on the right side of the player.
                 if(player.Direction.X == 1)
                 {
                     attackDirection = new Vector2(player.GameObject.Transform.Position.X +
                                                                 (((SpriteRenderer)player.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Width / attackRange),
                                                                 player.GameObject.Transform.Position.Y -
                                                                 (((SpriteRenderer)player.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
+
+                    tmpMeleeRenderer.spriteEffect = SpriteEffects.None;
                 }
+                // Makes sure the attack appears on the left side of the player.
                 if (player.Direction.X == -1)
                 {
                     attackDirection = new Vector2(player.GameObject.Transform.Position.X -
                                                                 (((SpriteRenderer)player.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange),
                                                                 player.GameObject.Transform.Position.Y -
                                                                 (((SpriteRenderer)player.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
+
+                    tmpMeleeRenderer.spriteEffect = SpriteEffects.FlipHorizontally;
+                   // tmpMeleeRenderer.flip;
                 }
 
                 tmpMeleeObject.Transform.Position = attackDirection;
@@ -65,9 +78,6 @@ namespace ExamProjectFirstYear.Components
             return Tag.ATTACKMELEE;
         }
 
-        public void Notify(GameEvent gameEvent, Component component)
-        {
-
-        }
+        #endregion
     }
 }
