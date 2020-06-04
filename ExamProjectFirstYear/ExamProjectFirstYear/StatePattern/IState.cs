@@ -24,5 +24,9 @@ namespace ExamProjectFirstYear.StatePattern
 		/// This method comes with the IState interface but is not used in this program.
 		/// </summary>
 		void Exit();
+
+		Tag ToTag();
+
+
 	}
 }

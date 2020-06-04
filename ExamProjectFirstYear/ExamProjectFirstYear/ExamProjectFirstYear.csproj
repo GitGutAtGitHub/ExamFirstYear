@@ -132,6 +132,8 @@
     <Compile Include="Components\Projectile.cs" />
     <Compile Include="Factories\ProjectileFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sound\SoundEngine.cs" />
+    <Compile Include="Sound\SoundItem.cs" />
     <Compile Include="SpriteSheetCutter.cs" />
     <Compile Include="StatePattern\EnemyAttackState.cs" />
     <Compile Include="StatePattern\EnemyIdleState.cs" />

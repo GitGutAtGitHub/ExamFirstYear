@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    class MeleeEnemy : Enemy
+    class MeleeEnemy : Enemy, IGameListener
     {
         public override void Awake()
         {
-            SightRadius = 1 * NodeManager.Instance.CellSize;
+            SightRadius = 5 * NodeManager.Instance.CellSize;
+            health = 2;
             speed = 200f;
-            GameObject.Tag = Tag.FLYINGENEMY;
+            GameObject.Tag = Tag.MEELEEENEMY;
             SwitchState(new EnemyIdleState());
         }
 
@@ -29,24 +30,25 @@ namespace ExamProjectFirstYear.Components
             Target = GameWorld.Instance.player.GameObject;
         }
 
- 
+
 
         public override void SwitchState(IState newState)
         {
-            if (currentState != null)
+            if (CurrentState != null)
             {
-                currentState.Exit();
+                CurrentState.Exit();
             }
 
-            currentState = newState;
+            CurrentState = newState;
             // "This" means the FlyingEnemy.
-            currentState.Enter(this);
+            CurrentState.Enter(this);
         }
 
         public override void Update(GameTime gameTime)
         {
-            currentState.Execute();
+            CurrentState.Execute();
             Move();
+            EnemyDeath();
         }
 
         protected override void Move()
@@ -68,7 +70,72 @@ namespace ExamProjectFirstYear.Components
 
         protected override void EnemyDeath()
         {
-            throw new NotImplementedException();
+            if (health <= 0)
+            {
+                GameObject.Destroy();
+                // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                DropMaterialUponDeath(1);
+            }
         }
+
+        public void Notify(GameEvent gameEvent, Component component)
+        {
+            // If the enemy is hit by players projectile from the ranged attack or the melee attack,
+            // the projectile is removed from the game and enemy looses 1 hp.
+            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLAYERPROJECTILE ||
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLAYERMELEEATTACK)
+            {
+                component.GameObject.Destroy();
+                health--;
+            }
+
+            //Players collect materials when they collide with them.
+            else if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MATERIAL)
+            {
+                Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
+                component.GameObject.Destroy();
+                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
+            }
+
+            //Players hit platforms when they collide with them.
+            else if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
+            {
+                Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
+                                        ((Collider)(GameObject.GetComponent(Tag.COLLIDER))).CollisionBox);
+
+                //Top and bottom platform.
+                if (intersection.Width > intersection.Height)
+                {
+                    //Top platform.
+                    if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
+                    {
+                        GameObject.Transform.Translate(new Vector2(0, -intersection.Height + 2));
+                    }
+
+                    //Bottom platform.
+                    if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
+                    {
+                        GameObject.Transform.Translate(new Vector2(0, +intersection.Height - 2));
+                    }
+                }
+
+                //// Left and right platform.
+                //else if (intersection.Width < intersection.Height)
+                //{
+                //    //Right platform.
+                //    if (component.GameObject.Transform.Position.X < GameObject.Transform.Position.X)
+                //    {
+                //        GameObject.Transform.Translate(new Vector2(+intersection.Width, 0));
+                //    }
+
+                //    //Left platform.
+                //    if ((component.GameObject.Transform.Position.X > GameObject.Transform.Position.X))
+                //    {
+                //        GameObject.Transform.Translate(new Vector2(-intersection.Width, 0));
+                //    }
+                //}
+            }
+        }
+        
     }
 }

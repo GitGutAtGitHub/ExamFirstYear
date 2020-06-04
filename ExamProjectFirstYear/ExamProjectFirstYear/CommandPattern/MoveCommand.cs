@@ -45,6 +45,8 @@ namespace ExamProjectFirstYear.CommandPattern
 			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
 			player.Direction = velocity;
 			playerMovement.Move(velocity);
+			//SoundEngine.Instance.AddSoundEffect(SoundEngine.Instance.Footsteps);
+
 		}
 
 		public CommandTag GetCommandTag()
