@@ -130,10 +130,10 @@ namespace ExamProjectFirstYear.Components
                     }
 
                     //Bottom platform.
-                    if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
-                    {
-                        //Following ensures that players jump is interrupted if the hit a platform.
-                    }
+                    //if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
+                    //{
+                    //    //Following ensures that players jump is interrupted if the hit a platform.
+                    //}
                 }
             }
 
