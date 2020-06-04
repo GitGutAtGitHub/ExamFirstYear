@@ -13,7 +13,6 @@ namespace ExamProjectFirstYear.Components
         private float momentum;
 		private bool hasJumped = true;
 
-
         public Jump(float maxMomentum)
 		{
 			this.maxMomentum = maxMomentum;
