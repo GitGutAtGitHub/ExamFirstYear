@@ -132,7 +132,7 @@
     <Compile Include="SpriteSheetCutter.cs" />
     <Compile Include="StatePattern\EnemyStatePattern\EnemyAttackState.cs" />
     <Compile Include="StatePattern\EnemyStatePattern\EnemyIdleState.cs" />
-    <Compile Include="StatePattern\EnemyStatePattern\IEnemyState.cs" />
+    <Compile Include="StatePattern\EnemyStatePattern\IState.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="SQLite\SQLiteHandler.cs" />
     <Compile Include="TwoDimensionalSize.cs" />
