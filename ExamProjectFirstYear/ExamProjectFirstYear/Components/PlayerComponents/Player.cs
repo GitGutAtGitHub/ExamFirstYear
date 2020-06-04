@@ -75,12 +75,13 @@ namespace ExamProjectFirstYear
             Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
             spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
             jump = (Jump)GameObject.GetComponent(Tag.JUMP);
+
             saveLoaded = true;
         }
 
         public override void Start()
         {
-            saveLoaded = true;
+
         }
 
         public override void Update(GameTime gameTime)

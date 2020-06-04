@@ -197,7 +197,7 @@ namespace ExamProjectFirstYear.Components
         private void DrawRecordedBlueprintStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(journalHeading, "Recorded Blueprints", new Vector2(playerPositionX - 800, playerPositionY - 450),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.73f);
 
             TmpBlueprint tmpBlueprint;
             TmpRequiredMaterial tmpRequiredMaterial;
@@ -216,7 +216,7 @@ namespace ExamProjectFirstYear.Components
                 spriteBatch.DrawString(journalText, $"Name: {tmpBlueprint.TmpName} \nDescription: {tmpBlueprint.TmpDescription}" +
                                        $"\nMaterials: {tmpMaterialType.TmpName} ({tmpRequiredMaterial.TmpAmount})",
                                        new Vector2(positionX, positionY),
-                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.73f);
 
                 positionY += 150;
             }
@@ -228,7 +228,7 @@ namespace ExamProjectFirstYear.Components
         private void DrawRecordedCreatureStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(journalHeading, "Recorded Creatures", new Vector2(playerPositionX - 800, playerPositionY - 450),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.73f);
 
             TmpCreature tmpCreature;
             TmpMaterialType tmpMaterialType;
@@ -246,7 +246,7 @@ namespace ExamProjectFirstYear.Components
                                         $"\nDescription: {tmpCreature.TmpDescription} " +
                                         $"\nDrops: {tmpMaterialType.TmpName}\nLocation: {tmpCreature.TmpLocation}",
                                         new Vector2(positionX, positionY),
-                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.73f);
 
                 positionY += 190;
             }

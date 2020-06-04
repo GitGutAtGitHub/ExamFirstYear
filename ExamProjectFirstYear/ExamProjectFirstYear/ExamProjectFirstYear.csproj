@@ -88,10 +88,11 @@
     <Compile Include="Components\LightSource.cs" />
     <Compile Include="Components\PlayerComponents\PlayerHealthUI.cs" />
     <Compile Include="Components\MenuHandler.cs" />
-    <Compile Include="MenuStatePattern\LoadingState.cs" />
-    <Compile Include="MenuStatePattern\PausedState.cs" />
-    <Compile Include="MenuStatePattern\PlayingState.cs" />
-    <Compile Include="MenuStatePattern\StartState.cs" />
+    <Compile Include="StatePattern\MenuStatePattern\IMenuHandlerState.cs" />
+    <Compile Include="StatePattern\MenuStatePattern\LoadingState.cs" />
+    <Compile Include="StatePattern\MenuStatePattern\PausedState.cs" />
+    <Compile Include="StatePattern\MenuStatePattern\PlayingState.cs" />
+    <Compile Include="StatePattern\MenuStatePattern\StartState.cs" />
     <Compile Include="ObjectPools\EnemyProjectilePool.cs" />
     <Compile Include="ObjectPools\BossProjectilePool.cs" />
     <Compile Include="CommandPattern\AttackCommand.cs" />
@@ -104,7 +105,7 @@
     <Compile Include="Components\Platform.cs" />
     <Compile Include="Components\Enemy.cs" />
     <Compile Include="Components\FlyingEnemy.cs" />
-    <Compile Include="IEntity.cs" />
+    <Compile Include="StatePattern\IEntity.cs" />
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="Levels\LevelManager.cs" />
     <Compile Include="ObjectPools\ObjectPool.cs" />
@@ -129,9 +130,9 @@
     <Compile Include="Factories\ProjectileFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteSheetCutter.cs" />
-    <Compile Include="StatePattern\EnemyAttackState.cs" />
-    <Compile Include="StatePattern\EnemyIdleState.cs" />
-    <Compile Include="StatePattern\IState.cs" />
+    <Compile Include="StatePattern\EnemyStatePattern\EnemyAttackState.cs" />
+    <Compile Include="StatePattern\EnemyStatePattern\EnemyIdleState.cs" />
+    <Compile Include="StatePattern\EnemyStatePattern\IEnemyState.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="SQLite\SQLiteHandler.cs" />
     <Compile Include="TwoDimensionalSize.cs" />

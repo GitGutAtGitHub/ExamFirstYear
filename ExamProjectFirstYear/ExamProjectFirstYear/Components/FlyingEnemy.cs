@@ -50,7 +50,7 @@ namespace ExamProjectFirstYear.Components
             GameObject.SpriteName = "smol";
         }
 
-        public override void SwitchState(IState newState)
+        public override void SwitchState(IEnemyState newState)
         {
             // Makes sure the state isn't null when exiting a state.
             // This is done to avoid an exception.

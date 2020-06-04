@@ -55,7 +55,8 @@ namespace ExamProjectFirstYear
 
             if (component.ToEnum() == Tag.SPRITERENDERER || component.ToEnum() == Tag.COLLIDER
                 || component.ToEnum() == Tag.JOURNAL || component.ToEnum() == Tag.INVENTORY
-                || component.ToEnum() == Tag.PLAYERHEALTHUI || component.ToEnum() == Tag.PLAYERMANAUI)
+                || component.ToEnum() == Tag.PLAYERHEALTHUI || component.ToEnum() == Tag.PLAYERMANAUI
+                || component.ToEnum() == Tag.MENUHANDLER)
             {
                 drawnComponents.Add(component.ToEnum(), component);
             }

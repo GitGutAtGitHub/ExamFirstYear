@@ -23,7 +23,7 @@ namespace ExamProjectFirstYear.Components
         //it is a public variable, to be able to edit the specific X and Y values, it has to be a variable.
         public Vector2 Velocity;
         
-        protected IState currentState;
+        protected IEnemyState currentState;
         private GameObject target; 
        
 
@@ -42,7 +42,7 @@ namespace ExamProjectFirstYear.Components
 
         #region METHODS
 
-        public abstract void SwitchState(IState newState);
+        public abstract void SwitchState(IEnemyState newState);
 
         protected abstract void Notify();
 

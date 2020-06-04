@@ -168,7 +168,7 @@ namespace ExamProjectFirstYear.Components
         private void DrawStoredMaterialStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(inventoryHeading, "Inventory", new Vector2(playerPositionX - 890, playerPositionY - 300),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.8f);
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.72f);
 
             TmpMaterialType tmpMaterialType;
             TmpStoredMaterial tmpStoredMaterial;
@@ -186,7 +186,7 @@ namespace ExamProjectFirstYear.Components
 
                 spriteBatch.DrawString(inventoryText, $"{tmpMaterialType.TmpName}: {tmpStoredMaterial.TmpAmount}",
                                        new Vector2(positionX, positionY),
-                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.8f);
+                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.72f);
 
                 positionY += 60;
             }   

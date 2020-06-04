@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.StatePattern
 {
-    class EnemyIdleState : IState
+    class EnemyIdleState : IEnemyState
     {
         private Enemy enemy;
 

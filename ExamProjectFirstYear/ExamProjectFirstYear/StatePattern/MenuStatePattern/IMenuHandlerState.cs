@@ -1,13 +1,16 @@
-﻿using ExamProjectFirstYear.Components;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear.StatePattern
+namespace ExamProjectFirstYear.StatePattern.MenuStatePattern
 {
-    public interface IState
+	/// <summary>
+	/// The interface for handling MenuHandler states.
+	/// </summary>
+    public interface IMenuHandlerState
     {
 		/// <summary>
 		/// Is called when an Entity changes state. Contains all the setup code necessary for the state to function.
