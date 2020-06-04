@@ -1,5 +1,6 @@
 ﻿using ExamProjectFirstYear.Components;
 using ExamProjectFirstYear.PathFinding;
+using ExamProjectFirstYear.StatePattern;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -74,15 +75,21 @@ namespace ExamProjectFirstYear
                              (int)currentEnemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize);
                     }
 
-                    if (currentEnemy.GameObject.Components.ContainsKey(Tag.MEELEEENEMY))
+                    if (currentEnemy.GameObject.Components.ContainsKey(Tag.MEELEEENEMY) || currentEnemy.GameObject.Components.ContainsKey(Tag.RANGEDENEMY))
                     {
-
-                        currentEnemy.Path = FindPath(currentEnemy.GameObject.Transform.Position, FindMeleeTargetNode(currentEnemy.GameObject.Transform.Position));
-
-
+                        if (currentEnemy.CurrentState.ToTag() == Tag.ENEMYATTACKSTATE)
+                        {
+                            currentEnemy.Path = FindPath(currentEnemy.GameObject.Transform.Position, currentEnemy.Target.Transform.Position);
+                                                    currentEnemy.PrevTargetNode = new Vector2(
+                             (int)currentEnemy.Target.Transform.Position.X / NodeManager.Instance.CellSize,
+                             (int)currentEnemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize);
+                        }
+                        else if (currentEnemy.CurrentState.ToTag() == Tag.ENEMYIDLESTATE)
+                        {
+                            currentEnemy.Path = FindPath(currentEnemy.GameObject.Transform.Position, FindMeleeTargetNode(currentEnemy.GameObject.Transform.Position));
+                        }
+                        
                     }
-
-
 
                 }
                 Thread.Sleep(500);
@@ -148,6 +155,10 @@ namespace ExamProjectFirstYear
                             stepCounter++;
                         }
                     }
+                    //else
+                    //{
+                    //    foundTarget = true;
+                    //}
                 }
 
                 switch (i)

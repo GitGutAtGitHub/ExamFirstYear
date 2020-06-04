@@ -148,19 +148,6 @@ namespace ExamProjectFirstYear.PathFinding
             }
 
 
-            //foreach (Node node in DebugPath)
-            //{
-            //    spriteBatch.Draw(chosenPathgridSprite, node.Position, Color.White);
-            //}
-
-
-            //for (int i = 0; i < DebugPath.Count; i++)
-            //{
-            //    Node tmp = DebugPath[i];
-            //    spriteBatch.Draw(chosenPathgridSprite, tmp.Position, Color.White);
-
-            //}
-
 
         }
         #endregion 

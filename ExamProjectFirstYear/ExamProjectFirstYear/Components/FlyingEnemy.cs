@@ -53,19 +53,19 @@ namespace ExamProjectFirstYear.Components
         {
             // Makes sure the state isn't null when exiting a state.
             // This is done to avoid an exception.
-            if (currentState != null)
+            if (CurrentState != null)
             {
-                currentState.Exit();
+                CurrentState.Exit();
             }
 
-            currentState = newState;
+            CurrentState = newState;
             // "This" means the FlyingEnemy.
-            currentState.Enter(this);
+            CurrentState.Enter(this);
         }
 
         public override void Update(GameTime gameTime)
         {
-            currentState.Execute();
+            CurrentState.Execute();
             Move();
             EnemyDeath();
 

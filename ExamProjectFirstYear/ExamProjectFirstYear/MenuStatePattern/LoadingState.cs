@@ -25,5 +25,10 @@ namespace ExamProjectFirstYear.MenuStatePattern
         {
 
         }
+
+        public Tag ToTag()
+        {
+            return Tag.ENEMYIDLESTATE;
+        }
     }
 }

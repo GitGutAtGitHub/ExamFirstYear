@@ -124,6 +124,8 @@ namespace ExamProjectFirstYear
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
+			SoundEngine.Instance.LoadContent(Content);
+			SoundEngine.Instance.PlayAmbience();
 			//startButton = Content.Load<Texture2D>("OopPlayerSprite2");
 			//exitButton = Content.Load<Texture2D>("OopPlayerSprite2");
 
@@ -182,6 +184,8 @@ namespace ExamProjectFirstYear
 				Exit();
 			}
 
+			SoundEngine.Instance.PlaySoundEffects();
+
 			//previousKeyState = currentKeyState;
 			//currentKeyState = Keyboard.GetState();
 
@@ -234,7 +238,7 @@ namespace ExamProjectFirstYear
 				else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
 					(player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
 					(GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
-					(player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.width))
+					(player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.height))
 				{
 					GameObjects[i].Update(gameTime);
 				}
@@ -352,7 +356,7 @@ namespace ExamProjectFirstYear
 				if ((LightSources[i].GameObject.Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
 							(player.GameObject.Transform.Position.X - LightSources[i].GameObject.Transform.Position.X) < (ScreenSize.width) &&
 							(LightSources[i].GameObject.Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
-							(player.GameObject.Transform.Position.Y - LightSources[i].GameObject.Transform.Position.Y) < (ScreenSize.width))
+							(player.GameObject.Transform.Position.Y - LightSources[i].GameObject.Transform.Position.Y) < (ScreenSize.height))
 				{
 
 					LightSources[i].Draw(spriteBatch);
@@ -378,10 +382,10 @@ namespace ExamProjectFirstYear
 				}
 
 				// If the GameObject is not player it will only be drawn when it is within a certain distance of player.
-				else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
+				else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width/2) &&
 								(player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
 								(GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
-								(player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.width))
+								(player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.height))
 				{
 					GameObjects[i].Draw(spriteBatch);
 				}

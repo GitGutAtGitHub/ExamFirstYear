@@ -73,6 +73,12 @@
 /processorParam:TextureFormat=Color
 /build:FlyingEnemy.png
 
+#begin footsteps.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:footsteps.mp3
+
 #begin InventoryClosed.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -249,6 +255,18 @@
 /processorParam:TextureFormat=Color
 /build:smol.png
 
+#begin Soundtrack_mixdown.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Soundtrack_mixdown.mp3
+
+#begin Soundtrack_mixdown2.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Soundtrack_mixdown2.mp3
+
 #begin spriteFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -267,3 +285,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UnWalkableNode.png
+
