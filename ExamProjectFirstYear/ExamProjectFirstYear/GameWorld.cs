@@ -400,7 +400,7 @@ namespace ExamProjectFirstYear
 				//}
 			}
 			// HVAD BRUGER VI DENNE HER TIL METODEN ER TOM
-			NodeManager.Instance.Draw(spriteBatch);
+			//NodeManager.Instance.Draw(spriteBatch);
 
 			spriteBatch.End();
 		}

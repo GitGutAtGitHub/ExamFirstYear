@@ -9,8 +9,6 @@ namespace ExamProjectFirstYear.Components
 {
     class Jump : Component, IGameListener
     {
-		Player player;
-		Movement playerMovement;
 		private float maxMomentum;
         private float momentum;
 		private bool hasJumped = true;
@@ -18,8 +16,6 @@ namespace ExamProjectFirstYear.Components
 
         public Jump(float maxMomentum)
 		{
-			player = GameWorld.Instance.player;
-			playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
 			this.maxMomentum = maxMomentum;
         }
 
@@ -36,7 +32,7 @@ namespace ExamProjectFirstYear.Components
 
             if (momentum >= maxMomentum)
             {
-                hasJumped = true;
+                hasJumped = true; //Ensure that player can't jump higher than the maxMomentum
                 momentum = 0;
             }
 
@@ -48,11 +44,11 @@ namespace ExamProjectFirstYear.Components
         }
 
         /// <summary>
-        /// Sets Jump to true.
+        /// Sets Jump to true when the player isn't pressing the jump key. This is to ensure that the player can't jump again midair. 
         /// </summary>
         public void ReleaseJump()
         {
-            hasJumped = false;
+            hasJumped = true;
         }
 
         public override Tag ToEnum()
@@ -62,37 +58,33 @@ namespace ExamProjectFirstYear.Components
 
 		public void Notify(GameEvent gameEvent, Component component)
 		{
-			if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
+			if (gameEvent.Title == "Colliding")
 			{
 				Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
 									((Collider)(GameObject.GetComponent(Tag.COLLIDER))).CollisionBox);
 
-				//Top and bottom platform.
-				if (intersection.Width > intersection.Height)
+				if (component.GameObject.Tag == Tag.PLATFORM)
 				{
-					//Top platform.
-					if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
+					//Top and bottom platform.
+					if (intersection.Width > intersection.Height)
 					{
-						//Following ensures that player can jump again when landing on top of a platform.
+						//Top platform.
+						if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
+						{
+							//Following ensures that player can jump again when landing on top of a platform.
+							momentum = 0;
+							hasJumped = false;
+						}
 
-						playerMovement.Grounded = true;
-						momentum = 0;
-						hasJumped = false;
-					}
-
-					//Bottom platform.
-					if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
-					{
-						//Following ensures that players jump is interrupted if the hit a platform.
-						momentum = 0;
-						hasJumped = true;
+						//Bottom platform.
+						if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
+						{
+							//Following ensures that players jump is interrupted if they hit a platform.
+							momentum = 0;
+							hasJumped = true;
+						}
 					}
 				}
-			}
-
-			if (gameEvent.Title == "NoLongerColliding" && component.GameObject.Tag == Tag.PLATFORM)
-			{
-				playerMovement.Grounded = false;
 			}
 		}
 	}
