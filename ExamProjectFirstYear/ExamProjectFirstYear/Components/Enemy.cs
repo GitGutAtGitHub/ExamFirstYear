@@ -21,7 +21,6 @@ namespace ExamProjectFirstYear.Components
         protected float speed;
         protected int health;
         private int sightRadius;
-        private Vector2 targetPosition;
         //it is a public variable, to be able to edit the specific X and Y values, it has to be a variable.
         public Vector2 Velocity;
         private bool hasPath = false;
@@ -57,15 +56,40 @@ namespace ExamProjectFirstYear.Components
 
         public abstract void SwitchState(IState newState);
 
-        protected abstract void Notify();
-
         public abstract void AddTarget();
 
         protected abstract void Move();
 
-        protected abstract void DropMaterialUponDeath();
-
         protected abstract void EnemyDeath();
+
+        /// <summary>
+        /// Used by all enemies that drop materials when they die.
+        /// This methods instantiates whatever material the enemy needs to drop.
+        /// </summary>
+        /// <param name="materialID"></param>
+        public void DropMaterialUponDeath(byte materialID)
+        {
+            GameObject droppedMaterial = new GameObject();
+            SpriteRenderer spriteRenderer = new SpriteRenderer();
+            Movement movementEnemy = new Movement(true, 0);
+
+            droppedMaterial.AddComponent(new Material(materialID));
+
+            droppedMaterial.AddComponent(movementEnemy);
+            droppedMaterial.AddComponent(spriteRenderer);
+
+            droppedMaterial.Awake();
+            droppedMaterial.Start();
+
+            droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
+
+            Collider collider = new Collider(spriteRenderer, (Material)droppedMaterial.GetComponent(Tag.MATERIAL)) { CheckCollisionEvents = true };
+
+            droppedMaterial.AddComponent(collider);
+
+            GameWorld.Instance.Colliders.Add(collider);
+            GameWorld.Instance.GameObjects.Add(droppedMaterial);
+        }
 
         public override Tag ToEnum()
         {

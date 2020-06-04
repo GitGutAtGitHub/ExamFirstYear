@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.PlayerComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,15 +38,21 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		public void Execute(Player player)
 		{
-			if (releaseNumber <= 2)
+			// releaseNumber is used to make sure this method is only called, when a certain attack button is released.
+			if (releaseNumber == 1)
 			{
-				((AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE)).ReleaseAttack(releaseNumber);
-				player.ReleaseAttack(releaseNumber);
+				AttackMelee playerMelee = (AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE);
+				playerMelee.ReleaseMeleeMeleeAttack();
 			}
-			else
+			else if (releaseNumber == 2)
 			{
-				Jump playerMovement = (Jump)player.GameObject.GetComponent(Tag.JUMP);
-				playerMovement.ReleaseJump();
+				RangedAttack rangedAttack = (RangedAttack)player.GameObject.GetComponent(Tag.RANGEDATTACK);
+				rangedAttack.PlayerReleaseRangedAttack();
+			}
+			else if (releaseNumber == 3)
+			{
+				Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
+				playerJump.ReleaseJump();
 			}
 		}
 

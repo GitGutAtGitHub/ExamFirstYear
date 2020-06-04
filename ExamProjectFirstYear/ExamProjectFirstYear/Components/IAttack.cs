@@ -8,12 +8,12 @@ namespace ExamProjectFirstYear.Components
 {
     interface IAttack
     {
-        bool canAttack { get; set; }
-        bool canShoot { get; set; }
+        //bool canAttack { get; set; }
+        //bool canShoot { get; set; }
 
-        void ReleaseAttack(int releasenumber);
+        //void ReleaseAttack(int releasenumber);
 
-        void Attack(int attackNumber);
+        //void Attack(int attackNumber);
 
 
 

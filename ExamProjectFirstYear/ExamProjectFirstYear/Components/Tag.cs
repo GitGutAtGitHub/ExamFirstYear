@@ -43,5 +43,6 @@ namespace ExamProjectFirstYear
 		JUMP,
 		ENEMYATTACKSTATE,
 		ENEMYIDLESTATE
+		RANGEDATTACK
 	}
 }

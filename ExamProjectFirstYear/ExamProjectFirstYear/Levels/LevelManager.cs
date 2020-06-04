@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.PlayerComponents;
 using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using System;
@@ -62,8 +63,9 @@ namespace ExamProjectFirstYear
         public void InitializeLevel()
         {
             LoadBitmap();
+            //PopulateLevel(PlatformSection);
             PopulateLevel(TestLevel);
-          
+
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
         }
@@ -127,7 +129,7 @@ namespace ExamProjectFirstYear
             {
                 LevelInitializationDoneEvent();
             }
-         
+
         }
 
 
@@ -143,9 +145,10 @@ namespace ExamProjectFirstYear
                 case Tag.PLAYER:
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
-                    createdObject.AddComponent(new Movement(true, 35, 900));
-                    createdObject.AddComponent(new LightSource(1.5f, true));
-                    createdObject.AddComponent(new Jump());
+                    createdObject.AddComponent(new Movement(true, 900));
+                    createdObject.AddComponent(new LightSource(2f, true));
+                    createdObject.AddComponent(new Jump(35));
+                    createdObject.AddComponent(new RangedAttack());
                     break;
 
                 case Tag.PLATFORM:
@@ -165,7 +168,7 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(new MeleeEnemy());
                     createdObject.AddComponent(new LightSource(1f, true));
                     createdObject.AddComponent(new Movement(true, 35, 900));
-                    
+
 
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     //createdObject.AddComponent(new Movement(true, 35, 900));
@@ -206,6 +209,7 @@ namespace ExamProjectFirstYear
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
                 collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
+                collider.AttachListener((Jump)createdObject.GetComponent(Tag.JUMP));
                 createdObject.AddComponent(new AttackMelee());
             }
 
@@ -214,6 +218,11 @@ namespace ExamProjectFirstYear
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
                 //spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, -spriteRenderer.Sprite.Height);
                 collider = new Collider(spriteRenderer, (MeleeEnemy)createdObject.GetComponent(Tag.MEELEEENEMY)) { CheckCollisionEvents = true };
+            }
+
+            else if (tag == Tag.FLYINGENEMY)
+            {
+                collider = new Collider(spriteRenderer, (FlyingEnemy)createdObject.GetComponent(Tag.FLYINGENEMY)) { CheckCollisionEvents = true };
             }
 
             //else if (tag != Tag.PLATFORM)

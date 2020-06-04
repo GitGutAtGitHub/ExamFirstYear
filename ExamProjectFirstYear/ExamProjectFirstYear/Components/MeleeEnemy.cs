@@ -61,19 +61,9 @@ namespace ExamProjectFirstYear.Components
             GameObject.Transform.Translate(Velocity * GameWorld.Instance.DeltaTime);
         }
 
-        protected override void Notify()
-        {
-            throw new NotImplementedException();
-        }
-
         public override Tag ToEnum()
         {
             return Tag.MEELEEENEMY;
-        }
-
-        protected override void DropMaterialUponDeath()
-        {
-            throw new NotImplementedException();
         }
 
         protected override void EnemyDeath()
