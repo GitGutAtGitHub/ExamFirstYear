@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database.cs" />
+    <Compile Include="Enemies.cs" />
     <Compile Include="PathFinding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

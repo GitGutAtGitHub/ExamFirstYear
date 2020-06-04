@@ -66,6 +66,7 @@ namespace ExamProjectFirstYear
             //PopulateLevel(PlatformSection);
             PopulateLevel(TestLevel);
 
+
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
         }
 
@@ -112,11 +113,23 @@ namespace ExamProjectFirstYear
                         //add a platform
                         CreateObject(Tag.MEELEEENEMY, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
+
+                    //if the pixel is slightly red
+                    if (input.R == 255 && input.G == 100 && input.B == 100)
+                    {
+                        //add a flying
+                        CreateObject(Tag.RANGEDENEMY, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
                 }
             }
             // The event is raised. It calls the method AddTarget,
             // which is added to each enemy in the CreateObject method.
-            LevelInitializationDoneEvent();
+
+            if (LevelInitializationDoneEvent!= null)
+            {
+                LevelInitializationDoneEvent();
+            }
+
         }
 
 
@@ -133,7 +146,7 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 900));
-                    createdObject.AddComponent(new LightSource(2f, true));
+                    createdObject.AddComponent(new LightSource(6f, true));
                     createdObject.AddComponent(new Jump(35));
                     createdObject.AddComponent(new RangedAttack());
                     break;
@@ -154,9 +167,19 @@ namespace ExamProjectFirstYear
                 case Tag.MEELEEENEMY:
                     createdObject.AddComponent(new MeleeEnemy());
                     createdObject.AddComponent(new LightSource(1f, true));
+                    createdObject.AddComponent(new Movement(true, 900));
+
+
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     //createdObject.AddComponent(new Movement(true, 35, 900));
                     LevelInitializationDoneEvent += ((MeleeEnemy)(createdObject.GetComponent(Tag.MEELEEENEMY))).AddTarget;
+                    break;
+
+                case Tag.RANGEDENEMY:
+                    createdObject.AddComponent(new RangedEnemy());
+                    createdObject.AddComponent(new LightSource(1f, true));
+                    // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
+                    LevelInitializationDoneEvent += ((RangedEnemy)(createdObject.GetComponent(Tag.RANGEDENEMY))).AddTarget;
                     break;
 
                     //case Tag.JOURNAL:
@@ -189,10 +212,31 @@ namespace ExamProjectFirstYear
                 collider.AttachListener((Jump)createdObject.GetComponent(Tag.JUMP));
                 createdObject.AddComponent(new AttackMelee());
             }
+
+            else if (tag == Tag.MEELEEENEMY)
+            {
+                spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
+                //spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, -spriteRenderer.Sprite.Height);
+                collider = new Collider(spriteRenderer, (MeleeEnemy)createdObject.GetComponent(Tag.MEELEEENEMY)) { CheckCollisionEvents = true };
+            }
+
             else if (tag == Tag.FLYINGENEMY)
             {
                 collider = new Collider(spriteRenderer, (FlyingEnemy)createdObject.GetComponent(Tag.FLYINGENEMY)) { CheckCollisionEvents = true };
             }
+
+            else if (tag == Tag.RANGEDENEMY)
+            {
+                collider = new Collider(spriteRenderer, (RangedEnemy)createdObject.GetComponent(Tag.RANGEDENEMY)) { CheckCollisionEvents = true };
+            }
+
+            //else if (tag != Tag.PLATFORM)
+            //{
+            //    spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
+            //    collider = new Collider(spriteRenderer);
+            //}
+
+
             else
             {
                 collider = new Collider(spriteRenderer);

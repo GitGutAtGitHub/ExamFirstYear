@@ -29,7 +29,7 @@ namespace ExamProjectFirstYear.Components
 
         private Stack<Node> path = new Stack<Node>();
 
-        protected IState currentState;
+        private IState currentState;
         private GameObject target; 
        
 
@@ -46,6 +46,7 @@ namespace ExamProjectFirstYear.Components
         public Stack<Node> Path { get => path; set => path = value; }
 
         public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
+        public IState CurrentState { get => currentState; set => currentState = value; }
 
 
         #endregion
@@ -112,7 +113,7 @@ namespace ExamProjectFirstYear.Components
             }
         }
 
-        public virtual void FollowPath()
+        public virtual void FollowPath(bool XAndY)
         {
             float dstX;
             float dstY;
@@ -124,19 +125,28 @@ namespace ExamProjectFirstYear.Components
                 {
                     TargetPosition = new Vector2((Path.Peek().Position.X + NodeManager.Instance.CellSize / 2),
                                                                         (Path.Peek().Position.Y + NodeManager.Instance.CellSize / 2));
-
+                   
                     //calculating the direction-vector between the enemy and its target position
                     float vectorX = (TargetPosition.X) - (GameObject.Transform.Position.X);
                     float vectorY = (TargetPosition.Y) - (GameObject.Transform.Position.Y);
 
-                    Velocity = new Vector2(vectorX, vectorY);
+                    if (XAndY == true)
+                    {
+                        Velocity = new Vector2(vectorX, vectorY);
+                    } else
+                    {
+                        Velocity = new Vector2(vectorX, 0);
+
+                    }
+
+                  
 
                     //checking the distance between the enemy and the targetposition.
                     dstX = Math.Abs(GameObject.Transform.Position.X - TargetPosition.X);
                     dstY = Math.Abs(GameObject.Transform.Position.Y - TargetPosition.Y);
 
                     //it has reached the end of the node, and is ready to get instructions for the next node.
-                    if (dstX < 8 && dstY < 8)
+                    if (dstX < 8 && dstY < 8 || dstX < 16 && XAndY == false)
                     {
                         //if there is still path nodes, then pop the current
                         if (Path.Count > 0)
@@ -148,6 +158,8 @@ namespace ExamProjectFirstYear.Components
                 }
             }
         }
+
+      
 
 
         #endregion

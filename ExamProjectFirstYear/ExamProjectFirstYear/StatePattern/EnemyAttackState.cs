@@ -32,6 +32,7 @@ namespace ExamProjectFirstYear.StatePattern
                 switch (enemy.ToEnum())
                 {
                     case Tag.MEELEEENEMY:
+                        MeleeEnemyAttack();
                         break;
 
                     case Tag.FLYINGENEMY:
@@ -39,6 +40,7 @@ namespace ExamProjectFirstYear.StatePattern
                         break;
 
                     case Tag.RANGEDENEMY:
+                        RangedEnemyAttack();
                         break;
                 }
             }
@@ -49,7 +51,7 @@ namespace ExamProjectFirstYear.StatePattern
                 switch (enemy.ToEnum())
                 {
                     case Tag.MEELEEENEMY:
-
+                        (enemy as MeleeEnemy).SwitchState(new EnemyIdleState());
                         break;
 
                     case Tag.FLYINGENEMY:
@@ -57,6 +59,7 @@ namespace ExamProjectFirstYear.StatePattern
                         break;
 
                     case Tag.RANGEDENEMY:
+                        (enemy as RangedEnemy).SwitchState(new EnemyIdleState());
                         break;
                 }
             }
@@ -68,21 +71,29 @@ namespace ExamProjectFirstYear.StatePattern
         public void FlyingEnemyAttack()
         {
             enemy.GeneratePath();
-            enemy.FollowPath();
+            enemy.FollowPath(true);
+
+            if (true)
+            {
+
+            }
         }
 
         public void MeleeEnemyAttack()
         {
-            enemy.Path.Clear();
+            
 
             enemy.GeneratePath();
-            enemy.FollowPath();
+            enemy.FollowPath(false);
 
         }
 
         public void RangedEnemyAttack()
         {
+            enemy.Velocity = Vector2.Zero;
+            enemy.Path.Clear();
 
+            Console.WriteLine("BOOOM");
         }
 
         public void Exit()
@@ -91,7 +102,10 @@ namespace ExamProjectFirstYear.StatePattern
         }
 
 
-
+        public Tag ToTag()
+        {
+            return Tag.ENEMYATTACKSTATE;
+        }
 
 
     }
