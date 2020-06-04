@@ -32,7 +32,7 @@ namespace ExamProjectFirstYear.Components
 
             if (momentum >= maxMomentum)
             {
-                hasJumped = true;
+                hasJumped = true; //Ensure that player can't jump higher than the maxMomentum
                 momentum = 0;
             }
 
@@ -44,7 +44,7 @@ namespace ExamProjectFirstYear.Components
         }
 
         /// <summary>
-        /// Sets Jump to true.
+        /// Sets Jump to true when the player isn't pressing the jump key. This is to ensure that the player can't jump again midair. 
         /// </summary>
         public void ReleaseJump()
         {
@@ -72,7 +72,6 @@ namespace ExamProjectFirstYear.Components
 						if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
 						{
 							//Following ensures that player can jump again when landing on top of a platform.
-
 							momentum = 0;
 							hasJumped = false;
 						}
@@ -80,7 +79,7 @@ namespace ExamProjectFirstYear.Components
 						//Bottom platform.
 						if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
 						{
-							//Following ensures that players jump is interrupted if the hit a platform.
+							//Following ensures that players jump is interrupted if they hit a platform.
 							momentum = 0;
 							hasJumped = true;
 						}
