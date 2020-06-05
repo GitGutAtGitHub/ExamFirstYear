@@ -16,7 +16,6 @@ namespace ExamProjectFirstYear.Components
         private float attackRange = 1.2f;
         private float attackRangeLeft = -1.2f;
         private Vector2 attackDirection;
-        private SpriteEffects flip = SpriteEffects.FlipHorizontally;
 
         #endregion
 
@@ -61,7 +60,6 @@ namespace ExamProjectFirstYear.Components
                                                                 (((SpriteRenderer)player.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
 
                     tmpMeleeRenderer.spriteEffect = SpriteEffects.FlipHorizontally;
-                   // tmpMeleeRenderer.flip;
                 }
 
                 tmpMeleeObject.Transform.Position = attackDirection;
