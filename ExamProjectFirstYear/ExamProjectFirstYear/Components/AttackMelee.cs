@@ -16,7 +16,6 @@ namespace ExamProjectFirstYear.Components
         private float attackRange = 1.2f;
         private float attackRangeLeft = -1.2f;
         private Vector2 attackDirection;
-        private SpriteEffects flip = SpriteEffects.FlipHorizontally;
 
         #endregion
 
@@ -37,14 +36,14 @@ namespace ExamProjectFirstYear.Components
 
             switch (component.ToEnum())
             {
-               
+
                 case Tag.PLAYER:
                     tmpTag = Tag.PLAYERMELEEATTACK;
                     break;
                 case Tag.MEELEEENEMY:
                     tmpTag = Tag.ENEMYMELEEATTACK;
                     break;
-            
+
             }
 
             if (canAttack)
@@ -73,7 +72,6 @@ namespace ExamProjectFirstYear.Components
                                                                 (((SpriteRenderer)component.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
 
                     tmpMeleeRenderer.spriteEffect = SpriteEffects.FlipHorizontally;
-                    // tmpMeleeRenderer.flip;
                 }
 
                 tmpMeleeObject.Transform.Position = attackDirection;

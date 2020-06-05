@@ -11,7 +11,10 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-    class PathFinder
+    /// <summary>
+    /// This class is public to make Unit Testing possible.
+    /// </summary>
+    public class PathFinder
     {
         private static PathFinder instance;
 
@@ -207,11 +210,13 @@ namespace ExamProjectFirstYear
         #region Astar Pathfinding
         /// <summary>
         /// Calculates the distance between two nodes
+        /// 
+        /// This Method is made public for Unit Testing purposes.
         /// </summary>
         /// <param name="inputNode"></param>
         /// <param name="targetNode"></param>
         /// <returns></returns>
-        private int CalculateDistance(Node inputNode, Node targetNode)
+        public int CalculateDistance(Node inputNode, Node targetNode)
         {
             //distance between the two nodes, x and y
             int dstX = Math.Abs((int)inputNode.GetCoordinate().X - (int)targetNode.GetCoordinate().X);
@@ -276,11 +281,12 @@ namespace ExamProjectFirstYear
 
         /// <summary>
         /// returns a stack with a Path retraced from the parents.
+        /// Made public to enable Unit Testing
         /// </summary>
         /// <param name="startNode"></param>
         /// <param name="endNode"></param>
         /// <returns></returns>
-        private Stack<Node> RetracePath(Node startNode, Node endNode)
+        public Stack<Node> RetracePath(Node startNode, Node endNode)
         {
             // Makes a new list with the found path.
             Stack<Node> path = new Stack<Node>();
@@ -292,7 +298,7 @@ namespace ExamProjectFirstYear
             while (currentNode != startNode)
             {
                 //for debugging
-                currentNode.NodeSprite = NodeManager.Instance.chosenPathgridSprite;
+                //currentNode.NodeSprite = NodeManager.Instance.chosenPathgridSprite;
                 // Adds the current node to the path list.
                 path.Push(currentNode);
 

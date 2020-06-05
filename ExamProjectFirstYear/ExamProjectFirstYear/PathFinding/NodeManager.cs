@@ -11,7 +11,10 @@ using Color = Microsoft.Xna.Framework.Color;
 
 namespace ExamProjectFirstYear.PathFinding
 {
-    class NodeManager
+    /// <summary>
+    /// This class is public to make Unit Testing possible.
+    /// </summary>
+    public class NodeManager
     {
         #region FIELDS
 
