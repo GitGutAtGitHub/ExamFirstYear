@@ -11,7 +11,10 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.StatePattern
 {
-    class EnemyAttackState : IState
+    /// <summary>
+    /// public for unit testing
+    /// </summary>
+    public class EnemyAttackState : IState
     {
         private Enemy enemy;
         private float dstX;
@@ -112,6 +115,7 @@ namespace ExamProjectFirstYear.StatePattern
 
             enemy.GeneratePath();
             enemy.FollowPath(false);
+
 
         }
 

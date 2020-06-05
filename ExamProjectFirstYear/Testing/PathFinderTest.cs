@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExamProjectFirstYear.PathFinding;
+
 using ExamProjectFirstYear;
 using Microsoft.Xna.Framework;
+using ExamProjectFirstYear.Components;
+using System.Drawing;
 
 namespace Testing
 {
@@ -20,91 +23,118 @@ namespace Testing
         {
             PathFinder pathFinder = new PathFinder();
 
+
+            NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(20, 20);
+            NodeManager.Instance.InitializeGrid();
+
+            Node startNode = NodeManager.Instance.Nodes[6, 4];
+
+            //making five nodes unwalkable, to simulate a platform.
+            //for (int i = 0; i <= 4; i++)
+            //{
+            //    NodeManager.Instance.Nodes[5+i, 5].Walkable = false;
+            //}
+            NodeManager.Instance.Nodes[5, 5].Walkable = false;
+            NodeManager.Instance.Nodes[6, 5].Walkable = false;
+            NodeManager.Instance.Nodes[7, 5].Walkable = false;
+            NodeManager.Instance.Nodes[8, 5].Walkable = false;
+
+            Vector2 actual = pathFinder.FindMeleeTargetNode(startNode.Position);
+
+            //checking if it has found the 
+            Vector2 expected = new Vector2((int)NodeManager.Instance.Nodes[8,4].Position.X, (int)NodeManager.Instance.Nodes[8, 4].Position.Y);
+
+            Assert.AreEqual(expected, actual);
+
         }
 
-        [TestMethod]
-        public void TestCellRowCount()
+        public void TestPopulateLevel()
         {
+            NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(20, 20);
 
+            NodeManager.Instance.InitializeGrid();
+            //NodeManager.Instance.UpdateGrid();
+        }
+
+        /// <summary>
+        /// Testing if Getcoordinate returns the correct position in the node array, even though the coordinates is not specificly 96 x 1 or 2 etc...
+        /// The value is parsed as an int, so it drops the decimal numbers.
+        /// /// </summary>
+        [TestMethod]
+        public void TestGetCoordinate()
+        {
+            Node testNode = new Node(new Vector2(395, 285), true);
+
+            var actual = new Vector2((int)testNode.GetCoordinate().X, (int)testNode.GetCoordinate().Y);
+
+            var expected = new Vector2(4, 2);
+
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void TestFindPath()
         {
+            NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(20, 20);
+
+            NodeManager.Instance.InitializeGrid();
+            //NodeManager.Instance.UpdateGrid();
+
+            Node startNode = NodeManager.Instance.Nodes[1, 5];
+            Node targetNode = NodeManager.Instance.Nodes[5, 7];
+
             PathFinder pathFinder = new PathFinder();
 
-            Vector2 sp = new Vector2(1, 1);
-            Vector2 tp = new Vector2(5, 1);
+            var actual = pathFinder.FindPath(startNode.Position, targetNode.Position);
+
+            List<Vector2> actual2 = new List<Vector2>();
+
+            foreach (Node node in actual)
+            {
+                actual2.Add(new Vector2((int)node.GetCoordinate().X, (int)node.GetCoordinate().Y));
+            }
 
             Stack<Node> expected = new Stack<Node>();
 
-            Node node1 = new Node(new Vector2(1 * NodeManager.Instance.CellSize, 1 * NodeManager.Instance.CellSize), true);
-            Node node2 = new Node(new Vector2(2 * NodeManager.Instance.CellSize, 1 * NodeManager.Instance.CellSize), true);
-            Node node3 = new Node(new Vector2(3 * NodeManager.Instance.CellSize, 1 * NodeManager.Instance.CellSize), true);
-            Node node4 = new Node(new Vector2(4 * NodeManager.Instance.CellSize, 1 * NodeManager.Instance.CellSize), true);
-            Node node5 = new Node(new Vector2(5 * NodeManager.Instance.CellSize, 1 * NodeManager.Instance.CellSize), true);
-            
+            List<Vector2> expected2 = new List<Vector2>();
+            expected2.Add(new Vector2(2, 6));
+            expected2.Add(new Vector2(3, 7));
+            expected2.Add(new Vector2(4, 7));
+            expected2.Add(new Vector2(5, 7));
+
+            expected.Push(NodeManager.Instance.Nodes[2, 6]);
+            expected.Push(NodeManager.Instance.Nodes[3, 7]);
+            expected.Push(NodeManager.Instance.Nodes[4, 7]);
+            expected.Push(NodeManager.Instance.Nodes[5, 7]);
+
+            expected2.Reverse<Vector2>();
+
             //NodeManager.Instance.Nodes = new Node[NodeManager.Instance.CellRowCountTwo.width, NodeManager.Instance.CellRowCountTwo.height];
 
-            expected.Push(node1);
-            expected.Push(node2);
-            expected.Push(node3);
-            expected.Push(node4);
-            expected.Push(node5);
-            expected.Reverse();
+            //var actual = pathFinder.FindPath(sp, tp);
 
-            //Stack<Node> actual = new Stack<Node>();
-
-            var actual = pathFinder.FindPath(sp, tp);
-
-            CollectionAssert.AreEqual(actual, expected);
+            CollectionAssert.AreEqual(actual2, expected2);
         }
 
         [TestMethod]
         public void TestCalculateDistance()
         {
-            PathFinder pathFinder = new PathFinder();
-            // These nodes are for visual purposes.
-            Node start = new Node(new Vector2(3, 5), true);
-            // for when X < Y.
-            Node target1 = new Node(new Vector2(1, 4), true);
-            // for when X > Y.
-            //Node target2 = new Node(new Vector2(1, 4), true);
+            NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(20, 20);
 
-            // First we calculate start.X minus target1.X. 3 - 1 = 2. (dstX)
-            // Then we calcculate start.Y minus target1.Y. 5 - 4 = 1. (dstY)
-            // In this case, X > Y.
-            // 14 * 3 + 10 * (2 - 3).
+            NodeManager.Instance.InitializeGrid();
+            //NodeManager.Instance.UpdateGrid();
 
-            int expected1 = 14 * 3 + 10 * (2 - 1);
-            //int expected1 = 52;
+            Node startNode = NodeManager.Instance.Nodes[1, 5];
+            Node targetNode = NodeManager.Instance.Nodes[5, 7];
 
-            int actual1 = pathFinder.CalculateDistance(start, target1);
-
-            Assert.AreEqual(expected1, actual1);
-        }
-
-        [TestMethod]
-        public void TestRetracePath()
-        {
             PathFinder pathFinder = new PathFinder();
 
-            Stack<Node> expected = new Stack<Node>();
+            int actual = pathFinder.CalculateDistance(startNode, targetNode);
+            int expected = 48;
 
-            Node node1 = new Node(new Vector2(1, 3), true);
-            Node node2 = new Node(new Vector2(2, 3), true);
-            Node node3 = new Node(new Vector2(3, 3), true);
-
-            expected.Push(node1);
-            expected.Push(node2);
-            expected.Push(node3);
-            expected.Reverse();
-
-            //Stack<Node> actual = new Stack<Node>();
-
-            var actual = pathFinder.RetracePath(node1, node2);
-
-            CollectionAssert.AreEqual(expected, actual);
+            Assert.AreEqual(actual, expected);
         }
+
+       
     }
 }

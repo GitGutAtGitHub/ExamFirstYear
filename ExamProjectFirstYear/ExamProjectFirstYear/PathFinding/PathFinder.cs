@@ -60,9 +60,9 @@ namespace ExamProjectFirstYear
         {
             while (GameWorld.Instance.GameIsRunning == true)
             {
+               // FindPath(NodeManager.Instance.Nodes[1, 5].Position,NodeManager.Instance.Nodes[5, 7].Position);
                 while (EnemiesNeedingPath.Count > 0)
                 {
-
                     Enemy currentEnemy = EnemiesNeedingPath.Dequeue();
 
 
@@ -298,7 +298,7 @@ namespace ExamProjectFirstYear
             while (currentNode != startNode)
             {
                 //for debugging
-                //currentNode.NodeSprite = NodeManager.Instance.chosenPathgridSprite;
+                currentNode.NodeSprite = NodeManager.Instance.chosenPathgridSprite;
                 // Adds the current node to the path list.
                 path.Push(currentNode);
 

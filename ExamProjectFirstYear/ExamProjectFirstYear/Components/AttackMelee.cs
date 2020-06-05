@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    class AttackMelee : Component
+    /// <summary>
+    /// public for unit test
+    /// </summary>
+    public class AttackMelee : Component
     {
         #region FIELDS
 
