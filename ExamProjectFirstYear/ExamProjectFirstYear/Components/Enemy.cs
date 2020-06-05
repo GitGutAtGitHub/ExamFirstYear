@@ -13,8 +13,9 @@ namespace ExamProjectFirstYear.Components
 {
     /// <summary>
     /// Abstract Enemy class for different enemy types.
+    /// This class is public to make Unit Testing possible.
     /// </summary>
-    abstract class Enemy : Component, IEntity
+    public abstract class Enemy : Component, IEntity
     {
         #region FIELDS
 
