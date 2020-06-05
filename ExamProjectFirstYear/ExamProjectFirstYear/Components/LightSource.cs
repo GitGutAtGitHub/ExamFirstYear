@@ -55,6 +55,11 @@ namespace ExamProjectFirstYear.Components
 
 		}
 
+		private void ManageLightRadius()
+		{
+
+		}
+
 		/// <summary>
 		/// Draws the lightsource component.
 		/// </summary>

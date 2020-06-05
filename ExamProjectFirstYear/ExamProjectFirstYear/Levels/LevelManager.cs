@@ -146,9 +146,10 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 900));
-                    createdObject.AddComponent(new LightSource(6f, true));
+                    createdObject.AddComponent(new LightSource(2.75f, true));
                     createdObject.AddComponent(new Jump(35));
                     createdObject.AddComponent(new RangedAttack());
+                    //createdObject.AddComponent(new AttackMelee());
                     break;
 
                 case Tag.PLATFORM:
@@ -159,14 +160,14 @@ namespace ExamProjectFirstYear
                 case Tag.FLYINGENEMY:
                     createdObject.Tag = Tag.FLYINGENEMY;
                     createdObject.AddComponent(new FlyingEnemy());
-                    createdObject.AddComponent(new LightSource(1f, true));
+                    createdObject.AddComponent(new LightSource(0.5f, true));
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((FlyingEnemy)(createdObject.GetComponent(Tag.FLYINGENEMY))).AddTarget;
                     break;
 
                 case Tag.MEELEEENEMY:
                     createdObject.AddComponent(new MeleeEnemy());
-                    createdObject.AddComponent(new LightSource(1f, true));
+                    createdObject.AddComponent(new LightSource(0.5f, true));
                     createdObject.AddComponent(new Movement(true, 900));
 
 
@@ -177,7 +178,7 @@ namespace ExamProjectFirstYear
 
                 case Tag.RANGEDENEMY:
                     createdObject.AddComponent(new RangedEnemy());
-                    createdObject.AddComponent(new LightSource(1f, true));
+                    createdObject.AddComponent(new LightSource(0.5f, true));
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((RangedEnemy)(createdObject.GetComponent(Tag.RANGEDENEMY))).AddTarget;
                     break;
