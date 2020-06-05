@@ -9,7 +9,10 @@ using System.Drawing;
 
 namespace ExamProjectFirstYear
 {
-    class LevelManager
+    /// <summary>
+    /// public because of unitTest
+    /// </summary>
+    public class LevelManager
     {
         //event for checking if the level is done populating.
         //Used for setting the enemies target, and making sure the player is intantiated when the target filed is set.
@@ -51,10 +54,13 @@ namespace ExamProjectFirstYear
 
         }
 
-        Bitmap TestLevel;
+        //public for unit testing
+        public Bitmap TestLevel;
+
         Bitmap PlatformSection;
 
-        private void LoadBitmap()
+        //public because of unit tests
+        public void LoadBitmap()
         {
             TestLevel = (Bitmap)Image.FromFile(GetPath("TestLevel"));
             PlatformSection = (Bitmap)Image.FromFile(GetPath("PlatformSection"));

@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    class MeleeEnemy : Enemy, IGameListener
+    /// <summary>
+    /// public for unit testing
+    /// </summary>
+    public class MeleeEnemy : Enemy, IGameListener
     {
         public override void Awake()
         {

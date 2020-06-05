@@ -284,12 +284,14 @@ namespace ExamProjectFirstYear
 			GraphicsDevice.Clear(Color.BlanchedAlmond);
 
 			DrawGameObjectsWithCameraCulling();
-
+			
 			GraphicsDevice.SetRenderTarget(null);
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+			
 			lightEffect.Parameters["lightMask"].SetValue(lightTarget);
 			lightEffect.CurrentTechnique.Passes[0].Apply();
 			spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
+			
 			spriteBatch.End();
 
 			DrawUIObjects();
@@ -372,6 +374,7 @@ namespace ExamProjectFirstYear
 		private void DrawGameObjectsWithCameraCulling()
 		{
 			spriteBatch.Begin(transformMatrix: camera.TransformCamera);
+			NodeManager.Instance.Draw(spriteBatch);
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
