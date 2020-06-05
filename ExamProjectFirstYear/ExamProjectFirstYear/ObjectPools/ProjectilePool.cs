@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.ObjectPools
 {
-	class PlayerMeleeAttackPool : ObjectPool
-	{
-		private static PlayerMeleeAttackPool instance;
+    class ProjectilePool : ObjectPool
+    {
+		private static ProjectilePool instance;
 
-		public static PlayerMeleeAttackPool Instance
+		public static ProjectilePool Instance
 		{
 			get
 			{
 				if (instance == null)
 				{
-					instance = new PlayerMeleeAttackPool();
+					instance = new ProjectilePool();
 				}
 
 				return instance;
@@ -30,7 +30,7 @@ namespace ExamProjectFirstYear.ObjectPools
 
 		protected override GameObject Create(Tag sender)
 		{
-			return ProjectileFactory.Instance.Create(Tag.PLAYERMELEEATTACK, sender);
+			return ProjectileFactory.Instance.Create(Tag.PROJECTILE, sender);
 		}
 	}
 }

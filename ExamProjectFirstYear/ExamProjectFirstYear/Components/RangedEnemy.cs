@@ -14,7 +14,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void Awake()
         {
-            SightRadius = 1 * NodeManager.Instance.CellSize;
+            SightRadius = 5 * NodeManager.Instance.CellSize;
             speed = 200f;
             health = 1;
             GameObject.Tag = Tag.RANGEDENEMY;

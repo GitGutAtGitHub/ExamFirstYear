@@ -111,8 +111,10 @@
     <Compile Include="IEntity.cs" />
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="Levels\LevelManager.cs" />
+    <Compile Include="ObjectPools\MeleeAttackPool.cs" />
     <Compile Include="ObjectPools\ObjectPool.cs" />
     <Compile Include="ObjectPools\PlayerMeleeAttackPool.cs" />
+    <Compile Include="ObjectPools\ProjectilePool.cs" />
     <Compile Include="PathFinding\Node.cs" />
     <Compile Include="PathFinding\NodeManager.cs" />
     <Compile Include="PathFinding\PathFinder.cs" />

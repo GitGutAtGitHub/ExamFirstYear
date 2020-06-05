@@ -43,12 +43,12 @@ namespace ExamProjectFirstYear.CommandPattern
             {
                 case 1:
                     AttackMelee playerAttackMelee = (AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE);
-                    playerAttackMelee.PlayerMeleeAttack(player);
+                    playerAttackMelee.MeleeAttack(player, player.Velocity);
                     break;
 
                 case 2:
                     RangedAttack rangedAttack = (RangedAttack)player.GameObject.GetComponent(Tag.RANGEDATTACK);
-                    rangedAttack.PlayerRangedAttack(player);
+                    rangedAttack.RangedAttackMethod(player,player.Velocity);
                     break;
             }
         }

@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.ObjectPools
 {
-	class PlayerMeleeAttackPool : ObjectPool
-	{
-		private static PlayerMeleeAttackPool instance;
+    class MeleeAttackPool : ObjectPool
+    {
+		private static MeleeAttackPool instance;
 
-		public static PlayerMeleeAttackPool Instance
+		public static MeleeAttackPool Instance
 		{
 			get
 			{
 				if (instance == null)
 				{
-					instance = new PlayerMeleeAttackPool();
+					instance = new MeleeAttackPool();
 				}
 
 				return instance;
 			}
 		}
-
 		protected override void CleanUp(GameObject gameObject)
 		{
 			// Tilføj cleanup kode her
@@ -30,7 +29,8 @@ namespace ExamProjectFirstYear.ObjectPools
 
 		protected override GameObject Create(Tag sender)
 		{
-			return ProjectileFactory.Instance.Create(Tag.PLAYERMELEEATTACK, sender);
+			return ProjectileFactory.Instance.Create(Tag.MELEEATTACK, sender);
 		}
 	}
 }
+
