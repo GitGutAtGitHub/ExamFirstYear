@@ -46,7 +46,7 @@ namespace ExamProjectFirstYear
                 timeUp = true;
                 timer = 0.5f;
             }
-            if (GameObject.Tag == Tag.PLAYERMELEEATTACK && timeUp)
+            if ((GameObject.Tag == Tag.PLAYERMELEEATTACK || GameObject.Tag == Tag.ENEMYMELEEATTACK) && timeUp)
             {
                 GameObject.Destroy();
                 timeUp = false;
@@ -70,6 +70,9 @@ namespace ExamProjectFirstYear
                     break;
                 case Tag.ENEMYPROJECTILE:
                     EnemyProjectilePool.Instance.ReleaseObject(GameObject);
+                    break;
+                case Tag.MELEEATTACK:
+                    MeleeAttackPool.Instance.ReleaseObject(GameObject);
                     break;
             }
             GameWorld.Instance.Colliders.Remove((Collider)GameObject.GetComponent(Tag.COLLIDER));

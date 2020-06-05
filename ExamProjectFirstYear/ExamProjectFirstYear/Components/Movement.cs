@@ -126,7 +126,7 @@ namespace ExamProjectFirstYear.Components
                     if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
                     {
                         //Following ensures that player can jump again when landing on top of a platform.
-                        Grounded = true;
+                        //Grounded = true;
                     }
 
                     //Bottom platform.

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExamProjectFirstYear.ObjectPools;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -45,20 +46,20 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
             // Mana needs to be higher than 0 or the player can't fire a ranged attack.
             if (CanShoot == true && rangedAttackTimer >= breakForRangedAttack && player.Mana > 0)
             {
-                GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject();
+                GameObject tmpProjectileObject = PlayerProjectilePool.Instance.GetObject(Tag.PLAYERPROJECTILE);
                 Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
 
                 tmpProjectileObject.Transform.Position = player.GameObject.Transform.Position;
 
                 Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
 
-                tmpMovement.Velocity = player.Direction;
+                tmpMovement.Velocity = player.Velocity;
 
-                if (player.Direction.X < 0)
+                if (player.Velocity.X < 0)
                 {
                     ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).spriteEffect = SpriteEffects.None;
                 }
-                if (player.Direction.X > 0)
+                if (player.Velocity.X > 0)
                 {
                     ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).spriteEffect = SpriteEffects.FlipHorizontally;
                 }
@@ -71,6 +72,66 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
                 CanShoot = false;
                 // Makes sure the timer in the Player-class is resat. This is for mana regeneration purposes.
                 player.CanRegenerateMana = false;
+                // Resets the timer so the attack can't be used again, until the timer reaches x-amount of seconds again.
+                rangedAttackTimer = 0;
+            }
+        }
+
+        public void RangedAttackMethod(Component component, Vector2 velocity)
+        {
+            Tag tmpTag = Tag.PLAYERMELEEATTACK;
+
+            switch (component.ToEnum())
+            {
+                case Tag.PLAYER:
+                    tmpTag = Tag.PLAYERPROJECTILE;
+                    break;
+                case Tag.RANGEDENEMY:
+                    tmpTag = Tag.ENEMYPROJECTILE;
+                    break;
+
+            }
+
+            // CANSHOOT SKAL MÅSKE SLETTES. TROR IKKE DEN ER NØDVENDIG MERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // rangedAttackTimer makes sure the ranged attack can only be used once every x-amount of seconds.
+            // Mana needs to be higher than 0 or the player can't fire a ranged attack.
+            if ((/*CanShoot == true &&*/ rangedAttackTimer >= breakForRangedAttack && tmpTag == Tag.ENEMYPROJECTILE) || (CanShoot == true && rangedAttackTimer >= breakForRangedAttack && ((Player)component).Mana > 0))
+            {
+                
+                GameObject tmpProjectileObject = ProjectilePool.Instance.GetObject(tmpTag);
+                Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
+
+                tmpProjectileObject.Transform.Position = component.GameObject.Transform.Position;
+
+                Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
+
+                tmpMovement.Velocity = velocity;
+
+                if (velocity.X < 0)
+                {
+                    ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).spriteEffect = SpriteEffects.None;
+                }
+                if (velocity.X > 0)
+                {
+                    ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).spriteEffect = SpriteEffects.FlipHorizontally;
+                }
+                //tmpMovement.Speed = 1000f;
+                GameWorld.Instance.Colliders.Add(tmpProjectileCollider);
+                GameWorld.Instance.GameObjects.Add(tmpProjectileObject);
+
+                if (tmpTag == Tag.PLAYERPROJECTILE)
+                {
+                    ((Player)component).Mana--;
+                    CanShoot = false;
+                    // Makes sure the timer in the Player-class is resat. This is for mana regeneration purposes.
+                    ((Player)component).CanRegenerateMana = false;
+                    // Resets the timer so the attack can't be used again, until the timer reaches x-amount of seconds again.
+                }
+
+
+                CanShoot = false;
+                // Makes sure the timer in the Player-class is resat. This is for mana regeneration purposes.
+            
                 // Resets the timer so the attack can't be used again, until the timer reaches x-amount of seconds again.
                 rangedAttackTimer = 0;
             }

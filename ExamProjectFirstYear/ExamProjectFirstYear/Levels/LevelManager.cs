@@ -218,16 +218,20 @@ namespace ExamProjectFirstYear
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
                 //spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, -spriteRenderer.Sprite.Height);
                 collider = new Collider(spriteRenderer, (MeleeEnemy)createdObject.GetComponent(Tag.MEELEEENEMY)) { CheckCollisionEvents = true };
+                createdObject.AddComponent(new AttackMelee());
             }
 
             else if (tag == Tag.FLYINGENEMY)
             {
                 collider = new Collider(spriteRenderer, (FlyingEnemy)createdObject.GetComponent(Tag.FLYINGENEMY)) { CheckCollisionEvents = true };
+
+               
             }
 
             else if (tag == Tag.RANGEDENEMY)
             {
                 collider = new Collider(spriteRenderer, (RangedEnemy)createdObject.GetComponent(Tag.RANGEDENEMY)) { CheckCollisionEvents = true };
+                createdObject.AddComponent(new RangedAttack());
             }
 
             //else if (tag != Tag.PLATFORM)

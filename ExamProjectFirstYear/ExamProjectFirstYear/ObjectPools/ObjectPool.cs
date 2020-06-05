@@ -9,13 +9,13 @@ namespace ExamProjectFirstYear
 	abstract class ObjectPool
 	{
 		#region FIELDS
-		protected List<GameObject> activeGameObjects = new List<GameObject>();
-		protected Stack<GameObject> inactiveGameObjects = new Stack<GameObject>();
+		protected List<GameObject> activeGameObjects = new List<GameObject>(10);
+		protected Stack<GameObject> inactiveGameObjects = new Stack<GameObject>(10);
 
 		#endregion
 
 		#region METHODS
-		public GameObject GetObject()
+		public GameObject GetObject(Tag sender)
 		{
 			GameObject gameObject;
 
@@ -26,7 +26,7 @@ namespace ExamProjectFirstYear
 
 			else
 			{
-				gameObject = Create();
+				gameObject = Create(sender);
 			}
 
 			activeGameObjects.Add(gameObject);
@@ -50,7 +50,7 @@ namespace ExamProjectFirstYear
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected abstract GameObject Create();
+		protected abstract GameObject Create(Tag sender);
 
 		protected abstract void CleanUp(GameObject gameObject);
 		#endregion

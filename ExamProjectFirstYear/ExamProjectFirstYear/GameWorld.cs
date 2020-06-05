@@ -62,6 +62,7 @@ namespace ExamProjectFirstYear
 		public List<LightSource> LightSources { get; set; } = new List<LightSource>();
 		public float DeltaTime { get; set; }
 		public float TimeElapsed { get; set; }
+		public TimeSpan ElapsedGameTime { get; set; }
 		public TwoDimensionalSize ScreenSize { get; private set; }
 		public bool GameIsRunning { get => gameIsRunning; set => gameIsRunning = value; }
 		public SpriteBatch SpriteBatch { get; set; }
@@ -428,6 +429,8 @@ namespace ExamProjectFirstYear
 			DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			TimeElapsed += DeltaTime;
+
+			ElapsedGameTime = gameTime.ElapsedGameTime;
 		}
 
 		/// <summary>

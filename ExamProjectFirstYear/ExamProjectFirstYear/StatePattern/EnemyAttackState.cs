@@ -1,8 +1,10 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.PlayerComponents;
 using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +16,8 @@ namespace ExamProjectFirstYear.StatePattern
         private Enemy enemy;
         private float dstX;
         private float dstY;
+
+        TimeSpan cooldownTimer = new TimeSpan(0,0,0,0,500);
 
         public void Enter(IEntity enemy)
         {
@@ -81,7 +85,30 @@ namespace ExamProjectFirstYear.StatePattern
 
         public void MeleeEnemyAttack()
         {
-            
+
+       
+            if (enemy.Path.Count <= 2)
+            {
+                if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack == true)
+                {
+                    ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).MeleeAttack(enemy, enemy.Velocity);
+                     cooldownTimer = new TimeSpan(0, 0, 0, 0, 500);
+                }
+
+                if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack == false)
+                {
+                    cooldownTimer -= GameWorld.Instance.ElapsedGameTime;
+
+                    if (cooldownTimer <= TimeSpan.Zero)
+                    {
+                        ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack = true;
+                    }
+                }
+               
+             
+
+
+            }
 
             enemy.GeneratePath();
             enemy.FollowPath(false);
@@ -90,10 +117,18 @@ namespace ExamProjectFirstYear.StatePattern
 
         public void RangedEnemyAttack()
         {
+            float vectorX;
+            float vectorY;
+
             enemy.Velocity = Vector2.Zero;
             enemy.Path.Clear();
 
-            Console.WriteLine("BOOOM");
+            vectorX = (enemy.Target.Transform.Position.X) - (enemy.GameObject.Transform.Position.X);
+            vectorY = (enemy.Target.Transform.Position.Y) - (enemy.GameObject.Transform.Position.Y);
+
+            ((RangedAttack)enemy.GameObject.GetComponent(Tag.RANGEDATTACK)).RangedAttackMethod(enemy, new Vector2(vectorX, vectorY));
+           
+
         }
 
         public void Exit()

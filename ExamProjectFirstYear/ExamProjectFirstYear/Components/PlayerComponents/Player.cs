@@ -48,7 +48,7 @@ namespace ExamProjectFirstYear
         public float PositionX { get; set; }
         public float PositionY { get; set; }
         public bool CanRegenerateMana { get; set; }
-        public Vector2 Direction { get; set; } = new Vector2(1, 0);
+        public Vector2 Velocity { get; set; } = new Vector2(1, 0);
         public Movement Movement { get; private set; }
         public TmpJournal TmpJournal { get; private set; }
 
@@ -136,7 +136,9 @@ namespace ExamProjectFirstYear
             // Player looses health when colliding with an enemy.
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.FLYINGENEMY ||
                 gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MEELEEENEMY ||
-                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.RANGEDENEMY)
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.RANGEDENEMY ||
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.ENEMYPROJECTILE ||
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.ENEMYMELEEATTACK)
             {
                 TakeDamage();
             }
