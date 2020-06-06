@@ -162,7 +162,7 @@ namespace ExamProjectFirstYear
         public void Notify(GameEvent gameEvent, Component component)
         {
             //Players collect materials when they collide with them.
-            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MATERIAL)
+            if (gameEvent.Title == "Colliding" && (component.GameObject.Tag == Tag.SPIDERFILAMENT || component.GameObject.Tag == Tag.MOTHWING || component.GameObject.Tag == Tag.MATCHHEAD))
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
                 component.GameObject.Destroy();

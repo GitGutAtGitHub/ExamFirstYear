@@ -7,31 +7,32 @@
 #define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
-sampler s0;
-texture2D lightMask;
-sampler lightSampler : register(s1) = sampler_state {
-	Texture = <lightMask>;
+texture2D lightMaskTexture;
+sampler sampler0;
+sampler lightSampler : register(s1) = sampler_state 
+{
+	Texture = <lightMaskTexture>;
 	AddressU = Clamp;
 	AddressV = Clamp;
 };
 
 struct VSOutput
 {
-	float4 position		: SV_Position;
-	float4 color		: COLOR0;
-	float2 texCoord		: TEXCOORD0;
+	float4 position				: SV_Position;
+	float4 color				: COLOR0;
+	float2 textureCoordinate	: TEXCOORD0;
 };
 
 float4 PixelShaderFunction(VSOutput input) : SV_TARGET0
 {
-	float4 color = tex2D(s0, input.texCoord);
-	float4 lightColor = tex2D(lightSampler, input.texCoord);
-	return color * lightColor;
+	float4 color = tex2D(sampler0, input.textureCoordinate);
+	float4 colorOfLight = tex2D(lightSampler, input.textureCoordinate);
+	return color * colorOfLight;
 }
 
-technique Technique1
+technique LightTechnique
 {
-	pass Pass1
+	pass LightPass
 	{
 		PixelShader = compile ps_4_0_level_9_1 PixelShaderFunction();
 	}

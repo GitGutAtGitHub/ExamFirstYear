@@ -291,7 +291,7 @@ namespace ExamProjectFirstYear
 			GraphicsDevice.SetRenderTarget(null);
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			
-			lightEffect.Parameters["lightMask"].SetValue(lightTarget);
+			lightEffect.Parameters["lightMaskTexture"].SetValue(lightTarget);
 			lightEffect.CurrentTechnique.Passes[0].Apply();
 			spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
 			
