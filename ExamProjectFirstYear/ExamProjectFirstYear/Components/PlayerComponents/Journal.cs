@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
@@ -80,8 +79,10 @@ namespace ExamProjectFirstYear.Components
 
         public override void Start()
         {
-            SQLiteHandler.Instance.AddRecordedBP(1, JournalID);
-            SQLiteHandler.Instance.AddRecordedCreature(1, JournalID);
+            if (!RecordedBlueprintIDs.Contains(1))
+            {
+                GameWorld.Instance.sQLiteHandler.AddRecordedBP(1, JournalID);
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -98,7 +99,7 @@ namespace ExamProjectFirstYear.Components
             {
                 journalRenderer.SetSprite("OpenJournal");
                 spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
-                
+
                 //If the page is 1, draws the text field for RecordedBP.
                 if (page == 1)
                 {
@@ -197,7 +198,7 @@ namespace ExamProjectFirstYear.Components
         private void DrawRecordedBlueprintStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(journalHeading, "Recorded Blueprints", new Vector2(playerPositionX - 800, playerPositionY - 450),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
 
             TmpBlueprint tmpBlueprint;
             TmpRequiredMaterial tmpRequiredMaterial;
@@ -209,14 +210,14 @@ namespace ExamProjectFirstYear.Components
             //Create a text field for every RecordedBP in the ID list.
             foreach (int blueprintID in RecordedBlueprintIDs)
             {
-                tmpBlueprint = SQLiteHandler.Instance.GetBlueprint(blueprintID);
-                tmpRequiredMaterial = SQLiteHandler.Instance.GetRequiredMaterial(blueprintID);
-                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(tmpRequiredMaterial.TmpMaterialTypeID);
+                tmpBlueprint = GameWorld.Instance.sQLiteHandler.GetBlueprint(blueprintID);
+                tmpRequiredMaterial = GameWorld.Instance.sQLiteHandler.GetRequiredMaterial(blueprintID);
+                tmpMaterialType = GameWorld.Instance.sQLiteHandler.GetMaterialType(tmpRequiredMaterial.TmpMaterialTypeID);
 
                 spriteBatch.DrawString(journalText, $"Name: {tmpBlueprint.TmpName} \nDescription: {tmpBlueprint.TmpDescription}" +
                                        $"\nMaterials: {tmpMaterialType.TmpName} ({tmpRequiredMaterial.TmpAmount})",
                                        new Vector2(positionX, positionY),
-                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
 
                 positionY += 150;
             }
@@ -228,7 +229,7 @@ namespace ExamProjectFirstYear.Components
         private void DrawRecordedCreatureStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(journalHeading, "Recorded Creatures", new Vector2(playerPositionX - 800, playerPositionY - 450),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
 
             TmpCreature tmpCreature;
             TmpMaterialType tmpMaterialType;
@@ -239,14 +240,14 @@ namespace ExamProjectFirstYear.Components
             //Create a text field for every RecordedCreature in the ID list.
             foreach (int creatureID in RecordedCreatureIDs)
             {
-                tmpCreature = SQLiteHandler.Instance.GetCreature(creatureID);
-                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(tmpCreature.TmpMaterialTypeID);
+                tmpCreature = GameWorld.Instance.sQLiteHandler.GetCreature(creatureID);
+                tmpMaterialType = GameWorld.Instance.sQLiteHandler.GetMaterialType(tmpCreature.TmpMaterialTypeID);
 
                 spriteBatch.DrawString(journalText, $"Name: {tmpCreature.TmpName} ({tmpCreature.TmpType})" +
                                         $"\nDescription: {tmpCreature.TmpDescription} " +
                                         $"\nDrops: {tmpMaterialType.TmpName}\nLocation: {tmpCreature.TmpLocation}",
                                         new Vector2(positionX, positionY),
-                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
 
                 positionY += 190;
             }
