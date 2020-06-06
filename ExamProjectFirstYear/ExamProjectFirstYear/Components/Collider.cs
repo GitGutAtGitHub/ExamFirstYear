@@ -78,12 +78,25 @@ namespace ExamProjectFirstYear
 			collisionTexture = GameWorld.Instance.Content.Load<Texture2D>("CollisionBox");
 			origin = spriteRenderer.Origin;
 			size = new Vector2(spriteRenderer.Sprite.Width, spriteRenderer.Sprite.Height);
+
 		}
 
 		#endregion
 
 
 		#region Override methods
+
+		//public override void Awake()
+		//{
+		//	collisionTexture = GameWorld.Instance.Content.Load<Texture2D>("CollisionBox");
+		//}
+
+		//public override void Start()
+		//{
+		//	SpriteRenderer spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+		//	origin = spriteRenderer.Origin;
+		//	size = new Vector2(spriteRenderer.Sprite.Width, spriteRenderer.Sprite.Height);
+		//}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
@@ -146,6 +159,11 @@ namespace ExamProjectFirstYear
 					noLongerCollidingEvent.Notify(other);
 				}
 			}
+		}
+
+		public override void Destroy()
+		{
+			GameWorld.Instance.Colliders.Remove(this);
 		}
 
 		#endregion

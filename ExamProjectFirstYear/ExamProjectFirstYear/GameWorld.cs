@@ -269,6 +269,9 @@ namespace ExamProjectFirstYear
 			base.Update(gameTime);
 		}
 
+		#endregion
+
+		#region DRAW
 		/// <summary>
 		/// This is called when the game should draw itself.
 		/// </summary>

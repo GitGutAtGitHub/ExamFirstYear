@@ -88,13 +88,11 @@ namespace ExamProjectFirstYear.StatePattern
 
         public void MeleeEnemyAttack()
         {
-
-       
             if (enemy.Path.Count <= 2)
             {
                 if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack == true)
                 {
-                    ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).MeleeAttack(enemy, enemy.Velocity);
+                    ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).MeleeAttack(enemy.GameObject, Tag.ENEMYMELEEATTACK, enemy.Velocity);
                      cooldownTimer = new TimeSpan(0, 0, 0, 0, 500);
                 }
 
@@ -107,10 +105,6 @@ namespace ExamProjectFirstYear.StatePattern
                         ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack = true;
                     }
                 }
-               
-             
-
-
             }
 
             enemy.GeneratePath();
@@ -130,9 +124,7 @@ namespace ExamProjectFirstYear.StatePattern
             vectorX = (enemy.Target.Transform.Position.X) - (enemy.GameObject.Transform.Position.X);
             vectorY = (enemy.Target.Transform.Position.Y) - (enemy.GameObject.Transform.Position.Y);
 
-            ((RangedAttack)enemy.GameObject.GetComponent(Tag.RANGEDATTACK)).RangedAttackMethod(enemy, new Vector2(vectorX, vectorY));
-           
-
+            ((RangedAttack)enemy.GameObject.GetComponent(Tag.RANGEDATTACK)).RangedAttackMethod(enemy.GameObject, Tag.ENEMYPROJECTILE, new Vector2(vectorX, vectorY));
         }
 
         public void Exit()
@@ -140,12 +132,10 @@ namespace ExamProjectFirstYear.StatePattern
 
         }
 
-
         public Tag ToTag()
         {
             return Tag.ENEMYATTACKSTATE;
         }
-
 
     }
 

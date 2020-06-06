@@ -33,46 +33,31 @@ namespace ExamProjectFirstYear.Components
             canAttack = true;
         }
 
-        public void MeleeAttack(Component component, Vector2 velocity)
+        public void MeleeAttack(GameObject sender, Tag meleeAttackType, Vector2 velocity)
         {
-            Tag tmpTag = Tag.PLAYERMELEEATTACK;
-
-            switch (component.ToEnum())
-            {
-
-                case Tag.PLAYER:
-                    tmpTag = Tag.PLAYERMELEEATTACK;
-                    break;
-                case Tag.MEELEEENEMY:
-                    tmpTag = Tag.ENEMYMELEEATTACK;
-                    break;
-
-            }
-
             if (canAttack)
             {
-                GameObject tmpMeleeObject = MeleeAttackPool.Instance.GetObject(tmpTag);
-
+                GameObject tmpMeleeObject = ProjectileFactory.Instance.Create(meleeAttackType);
                 SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
                 Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
 
                 //Makes sure the attack appears on the right side of the player.
                 if (velocity.X > 0)
                 {
-                    attackDirection = new Vector2(component.GameObject.Transform.Position.X +
-                                                                (((SpriteRenderer)component.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Width / attackRange),
-                                                                component.GameObject.Transform.Position.Y -
-                                                                (((SpriteRenderer)component.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
+                    attackDirection = new Vector2(sender.Transform.Position.X +
+                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width / attackRange),
+                                                                sender.Transform.Position.Y -
+                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
 
                     tmpMeleeRenderer.spriteEffect = SpriteEffects.None;
                 }
                 // Makes sure the attack appears on the left side of the player.
                 if (velocity.X < 0)
                 {
-                    attackDirection = new Vector2(component.GameObject.Transform.Position.X -
-                                                                (((SpriteRenderer)component.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange),
-                                                                component.GameObject.Transform.Position.Y -
-                                                                (((SpriteRenderer)component.GameObject.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
+                    attackDirection = new Vector2(sender.Transform.Position.X -
+                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange),
+                                                                sender.Transform.Position.Y -
+                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
 
                     tmpMeleeRenderer.spriteEffect = SpriteEffects.FlipHorizontally;
                 }

@@ -29,7 +29,7 @@ namespace ExamProjectFirstYear
 
 		protected override GameObject Create(Tag sender)
 		{
-			return ProjectileFactory.Instance.Create(Tag.ENEMYPROJECTILE, sender);
+			return ProjectileFactory.Instance.Create(Tag.ENEMYPROJECTILE);
 		}
 	}
 }

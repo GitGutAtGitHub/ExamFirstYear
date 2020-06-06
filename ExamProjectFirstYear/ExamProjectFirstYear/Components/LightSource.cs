@@ -31,24 +31,27 @@ namespace ExamProjectFirstYear.Components
 		{
 			this.LightRadiusScale = lightRadiusScale;
 			this.LightOn = lightOn;
+			lightMaskTexture = GameWorld.Instance.Content.Load<Texture2D>("Lightmask");
+			lightOrigin = new Vector2(lightMaskTexture.Width / 2, lightMaskTexture.Height / 2);
+			GameWorld.Instance.LightSources.Add(this);
 		}
 
 		/// <summary>
 		/// Sets the lightMaskTexture and lightOrigin point.
 		/// </summary>
-		public override void Awake()
-		{
-			lightMaskTexture = GameWorld.Instance.Content.Load<Texture2D>("Lightmask");
-			lightOrigin = new Vector2(lightMaskTexture.Width / 2, lightMaskTexture.Height / 2);
-		}
+		//public override void Awake()
+		//{
+		//	lightMaskTexture = GameWorld.Instance.Content.Load<Texture2D>("Lightmask");
+		//	lightOrigin = new Vector2(lightMaskTexture.Width / 2, lightMaskTexture.Height / 2);
+		//}
 
 		/// <summary>
 		/// Adds this lightsource to the list of lightsources nin GameWorld.
 		/// </summary>
-		public override void Start()
-		{
-			GameWorld.Instance.LightSources.Add(this);
-		}
+		//public override void Start()
+		//{
+		//	GameWorld.Instance.LightSources.Add(this);
+		//}
 
 		public override void Update(GameTime gameTime)
 		{
@@ -66,6 +69,11 @@ namespace ExamProjectFirstYear.Components
 				spriteBatch.Draw(lightMaskTexture, GameObject.Transform.Position, null, Color.White, 0, lightOrigin, LightRadiusScale, SpriteEffects.None, 1f);
 
 			}
+		}
+
+		public override void Destroy()
+		{
+			GameWorld.Instance.LightSources.Remove(this);
 		}
 
 		public override Tag ToEnum()

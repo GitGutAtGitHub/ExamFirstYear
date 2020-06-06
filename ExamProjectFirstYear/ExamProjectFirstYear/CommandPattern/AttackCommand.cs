@@ -39,18 +39,7 @@ namespace ExamProjectFirstYear.CommandPattern
 
         public void Execute(Player player)
         {
-            switch (attackNumber)
-            {
-                case 1:
-                    AttackMelee playerAttackMelee = (AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE);
-                    playerAttackMelee.MeleeAttack(player, player.Velocity);
-                    break;
-
-                case 2:
-                    RangedAttack rangedAttack = (RangedAttack)player.GameObject.GetComponent(Tag.RANGEDATTACK);
-                    rangedAttack.RangedAttackMethod(player,player.Velocity);
-                    break;
-            }
+            player.Attack(attackNumber);
         }
 
         public CommandTag GetCommandTag()
