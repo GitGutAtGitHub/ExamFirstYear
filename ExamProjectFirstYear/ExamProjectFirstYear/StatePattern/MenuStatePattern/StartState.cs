@@ -94,6 +94,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
             if (currentKeyBoardState.IsKeyUp(Keys.E) && previousKeyBoardState.IsKeyDown(Keys.E))
             {
+                GameWorld.Instance.GameIsRunning = false;
                 GameWorld.Instance.Exit();
             }
         }

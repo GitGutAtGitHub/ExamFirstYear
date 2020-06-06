@@ -68,15 +68,13 @@ namespace ExamProjectFirstYear.Components
 
             inventoryRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
 
-            MaterialTypeIDs.Add(1);
-
             inventoryHeading = GameWorld.Instance.Content.Load<SpriteFont>("JournalHeading");
             inventoryText = GameWorld.Instance.Content.Load<SpriteFont>("JournalText");
         }
 
         public override void Start()
-        {
-            GameObject.Transform.Translate(new Vector2(30, 180));
+        { 
+            
         }
         public override void Update(GameTime gameTime)
         {

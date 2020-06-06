@@ -62,10 +62,10 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>5DEE852D58576672B97C63F4D1632B23C0A10F69</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E27BAFB9F0BBE5AB9B177861E4F0617BD1F662FB</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ExamProjectFirstYear_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ExamProjectFirstYear_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -90,7 +90,7 @@
     <Compile Include="Components\Jump.cs" />
     <Compile Include="Components\LightSource.cs" />
     <Compile Include="Components\PlayerComponents\PlayerHealthUI.cs" />
-    <Compile Include="Components\MenuHandler.cs" />
+    <Compile Include="MenuHandler.cs" />
     <Compile Include="StatePattern\MenuStatePattern\IMenuHandlerState.cs" />
     <Compile Include="StatePattern\MenuStatePattern\LoadingState.cs" />
     <Compile Include="StatePattern\MenuStatePattern\PausedState.cs" />
@@ -173,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
+    <None Include="ExamProjectFirstYear_1_TemporaryKey.pfx" />
     <None Include="ExamProjectFirstYear_TemporaryKey.pfx" />
     <None Include="SQLite\App.config" />
     <None Include="app.manifest" />

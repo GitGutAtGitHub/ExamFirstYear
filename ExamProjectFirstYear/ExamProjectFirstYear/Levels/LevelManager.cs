@@ -69,8 +69,8 @@ namespace ExamProjectFirstYear
         public void InitializeLevel()
         {
             LoadBitmap();
-            //PopulateLevel(PlatformSection);
-            PopulateLevel(TestLevel);
+            PopulateLevel(PlatformSection);
+            //PopulateLevel(TestLevel);
 
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
@@ -152,7 +152,7 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(GameWorld.Instance.player);
                     //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 900));
-                    createdObject.AddComponent(new LightSource(6f, true));
+                    createdObject.AddComponent(new LightSource(2.75f, true));
                     createdObject.AddComponent(new Jump(35));
                     createdObject.AddComponent(new RangedAttack());
                     break;

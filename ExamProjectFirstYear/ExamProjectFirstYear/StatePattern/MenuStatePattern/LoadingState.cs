@@ -67,7 +67,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
         public void Execute()
         {
-            HandleInput();
+
         }
 
         public void Exit()
@@ -97,17 +97,6 @@ namespace ExamProjectFirstYear.MenuStatePattern
                                    Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
 
             spriteBatch.End();
-        }
-
-        private void HandleInput()
-        {
-            previousKeyBoardState = currentKeyBoardState;
-            currentKeyBoardState = Keyboard.GetState();
-
-            if (currentKeyBoardState.IsKeyUp(Keys.S) && previousKeyBoardState.IsKeyDown(Keys.S))
-            {
-                LoadGame();
-            }
         }
 
         #endregion

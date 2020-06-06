@@ -86,12 +86,15 @@ namespace ExamProjectFirstYear
 
         public override void Start()
         {
-            saveLoaded = true;
+            Health = 5;
+            Mana = 5;
+
+            saveLoaded = false;
+            LoadSave();
         }
 
         public override void Update(GameTime gameTime)
         {
-            LoadSave();
             TestMethod();
             RegenerateMana();
         }
@@ -180,16 +183,19 @@ namespace ExamProjectFirstYear
 
         private void LoadSave()
         {
-            if (saveLoaded == true)
+            if (saveLoaded == false)
             {
                 //GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX - spriteRenderer.Sprite.Width * 3, TmpJournal.TmpPositionY - spriteRenderer.Sprite.Height));
                 InventoryID = TmpJournal.TmpInventoryID;
                 Health = TmpJournal.TmpHealth;
                 OpenDoor = TmpJournal.TmpOpenDoor;
                 Mana = TmpJournal.TmpMana;
+
+                GameWorld.Instance.sQLiteHandler.ClearTable("StoredMaterial");
+                GameWorld.Instance.sQLiteHandler.ClearTable("RecordedCreature");
             }
 
-            saveLoaded = false;
+            saveLoaded = true;
         }
 
         /// <summary>
