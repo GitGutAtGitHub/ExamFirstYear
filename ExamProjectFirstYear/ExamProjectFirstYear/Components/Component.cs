@@ -47,17 +47,17 @@ namespace ExamProjectFirstYear
         /// <param name="spriteBatch"></param>
         public virtual void Draw(SpriteBatch spriteBatch) { }
 
-        /// <summary>
-        /// Destroy for the component. Removes the Component from the Game. 
-        /// </summary>
-        //public virtual void Destroy() { }
+		/// <summary>
+		/// Destroy for the component. Removes the Component from the Game. 
+		/// </summary>
+		public virtual void Destroy() { }
 
-        /// <summary>
-        /// Returns the components Tag. Is used to tell Components apart. 
-        /// Mainly used by the GetComponent method defined by the GameObject class.
-        /// </summary>
-        /// <returns></returns>
-        public abstract Tag ToEnum();
+		/// <summary>
+		/// Returns the components Tag. Is used to tell Components apart. 
+		/// Mainly used by the GetComponent method defined by the GameObject class.
+		/// </summary>
+		/// <returns></returns>
+		public abstract Tag ToEnum();
 
         #endregion
     }

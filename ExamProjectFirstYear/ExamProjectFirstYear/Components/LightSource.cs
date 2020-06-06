@@ -73,6 +73,11 @@ namespace ExamProjectFirstYear.Components
 			}
 		}
 
+		public override void Destroy()
+		{
+			GameWorld.Instance.LightSources.Remove(this);
+		}
+
 		public override Tag ToEnum()
 		{
 			return Tag.LIGHTSOURCE;

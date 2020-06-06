@@ -36,6 +36,28 @@ namespace ExamProjectFirstYear
 
         #region Override methods
 
+        public override void Awake()
+        {
+            switch (GameObject.Tag)
+            {
+                case Tag.BOSSPROJECTILE:
+                    GameObject.SpriteName = "smol";
+                    break;
+                case Tag.PLAYERMELEEATTACK:
+                    GameObject.SpriteName = "MeleeObject2";
+                    break;
+                case Tag.PLAYERPROJECTILE:
+                    GameObject.SpriteName = "OopPlayerSprite2";
+                    break;
+                case Tag.ENEMYPROJECTILE:
+                    GameObject.SpriteName = "smol";
+                    break;
+                case Tag.ENEMYMELEEATTACK:
+                    GameObject.SpriteName = "MeleeObject2";
+                    break;
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             // The following deletes a meleeattack when a selected timaspan is up
