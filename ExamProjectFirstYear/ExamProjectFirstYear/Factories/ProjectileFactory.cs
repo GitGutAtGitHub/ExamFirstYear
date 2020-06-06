@@ -9,102 +9,111 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-    class ProjectileFactory : IFactory
-    {
-        private Projectile bossProjectile;
-        private SpriteRenderer bossProjectileRenderer;
+	class ProjectileFactory : IFactory
+	{
+		private Projectile bossProjectile;
+		private SpriteRenderer bossProjectileRenderer;
 
-        private Projectile playerMeleeObject;
-        private SpriteRenderer playerMeleeObjectRenderer;
+		private Projectile playerMeleeObject;
+		private SpriteRenderer playerMeleeObjectRenderer;
 
-        private Projectile meleeObject;
-        private SpriteRenderer meleeObjectRenderer;
+		private Projectile enemyMeleeObject;
+		private SpriteRenderer enemyMeleeObjectRenderer;
 
-        private Projectile playerProjectile;
-        private SpriteRenderer playerProjectileRenderer;
+		private Projectile playerProjectile;
+		private SpriteRenderer playerProjectileRenderer;
 
-        private Projectile enemyProjectile;
-        private SpriteRenderer enemyProjectileRenderer;
+		private Projectile enemyProjectile;
+		private SpriteRenderer enemyProjectileRenderer;
 
-        private Projectile projectile;
-        private SpriteRenderer projectileRenderer;
+		//private Projectile projectile;
+		//private SpriteRenderer projectileRenderer;
 
-        private static ProjectileFactory instance;
+		//private Projectile meleeObject;
+		//private SpriteRenderer meleeObjectRenderer;
 
-        public static ProjectileFactory Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ProjectileFactory();
-                }
+		private static ProjectileFactory instance;
 
-                return instance;
-            }
-        }
+		public static ProjectileFactory Instance
+		{
+			get
+			{
+				if (instance == null)
+				{
+					instance = new ProjectileFactory();
+				}
 
-        private ProjectileFactory()
-        {
-            CreateProjectilePrototype(ref bossProjectile, ref bossProjectileRenderer, "OopPlayerSprite2");
-            CreateProjectilePrototype(ref playerProjectile, ref playerProjectileRenderer, "FlyingEnemy");
-            CreateProjectilePrototype(ref playerMeleeObject, ref playerMeleeObjectRenderer, "MeleeObject2");
-            CreateProjectilePrototype(ref meleeObject, ref meleeObjectRenderer, "MeleeObject2");
-            CreateProjectilePrototype(ref projectile, ref enemyProjectileRenderer, "OopPlayerSprite2");
-            CreateProjectilePrototype(ref projectile, ref projectileRenderer, "OopPlayerSprite2");
-            CreateProjectilePrototype(ref enemyProjectile, ref enemyProjectileRenderer, "OopPlayerSprite2");
-        }
+				return instance;
+			}
+		}
 
-        private void CreateProjectilePrototype(ref Projectile projectile, ref SpriteRenderer renderer, string spriteName)
-        {
-            projectile = new Projectile();
-            renderer = new SpriteRenderer(spriteName);
-        }
+		private ProjectileFactory()
+		{
+			CreateProjectilePrototype(ref bossProjectile, ref bossProjectileRenderer, "OopPlayerSprite2");
+			CreateProjectilePrototype(ref playerProjectile, ref playerProjectileRenderer, "FlyingEnemy");
+			CreateProjectilePrototype(ref playerMeleeObject, ref playerMeleeObjectRenderer, "MeleeObject2");
+			CreateProjectilePrototype(ref enemyProjectile, ref enemyProjectileRenderer, "OopPlayerSprite2");
+			CreateProjectilePrototype(ref enemyMeleeObject, ref enemyMeleeObjectRenderer, "OopPlayerSprite2");
+			//CreateProjectilePrototype(ref meleeObject, ref meleeObjectRenderer);
+			//CreateProjectilePrototype(ref projectile, ref projectileRenderer);
+		}
 
-        public GameObject Create(Tag type, Tag sender)
-        {
-            GameObject gameObject = new GameObject();
-            gameObject.Tag = sender;
+		private void CreateProjectilePrototype(ref Projectile projectile, ref SpriteRenderer renderer, string spriteName)
+		{
+			projectile = new Projectile();
+			renderer = new SpriteRenderer(spriteName);
+		}
 
-            switch (type)
-            {
-                case Tag.BOSSPROJECTILE:
-                    gameObject.AddComponent(bossProjectile.Clone());
-                    gameObject.AddComponent(bossProjectileRenderer.Clone());
-                    gameObject.AddComponent(new Collider(bossProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
-                    break;
-                case Tag.PLAYERPROJECTILE:
-                    gameObject.AddComponent(playerProjectile.Clone());
-                    gameObject.AddComponent(playerProjectileRenderer.Clone());
-                    gameObject.AddComponent(new Collider(playerProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
-                    gameObject.AddComponent(new Movement(false, 1000));
-                    break;
-                case Tag.PLAYERMELEEATTACK:
-                    gameObject.AddComponent(playerMeleeObject.Clone());
-                    gameObject.AddComponent(playerMeleeObjectRenderer.Clone());
-                    gameObject.AddComponent(new Collider(playerMeleeObjectRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
-                    //gameObject.AddComponent(new Movement(false, 0, 0));
-                    break;
-                case Tag.MELEEATTACK:
-                    gameObject.AddComponent(meleeObject.Clone());
-                    gameObject.AddComponent(meleeObjectRenderer.Clone());
-                    gameObject.AddComponent(new Collider(meleeObjectRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
-                    //gameObject.AddComponent(new Movement(false, 0, 0));
-                    break;
-                case Tag.PROJECTILE:
-                    gameObject.AddComponent(projectile.Clone());
-                    gameObject.AddComponent(projectileRenderer.Clone());
-                    gameObject.AddComponent(new Collider(projectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
-                    gameObject.AddComponent(new Movement(false, 1000));
-                    break;
-                case Tag.ENEMYPROJECTILE:
-                    gameObject.AddComponent(enemyProjectile.Clone());
-                    gameObject.AddComponent(enemyProjectileRenderer.Clone());
-                    gameObject.AddComponent(new Collider(enemyProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
-                    break;
-            }
+		public GameObject Create(Tag type)
+		{
+			GameObject gameObject = new GameObject();
+			gameObject.Tag = type;
 
-            return gameObject;
-        }
-    }
+			switch (type)
+			{
+				case Tag.BOSSPROJECTILE:
+					gameObject.AddComponent(bossProjectile.Clone());
+					gameObject.AddComponent(bossProjectileRenderer.Clone());
+					gameObject.AddComponent(new Collider(bossProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
+					gameObject.AddComponent(new Movement(false, 1000));
+					break;
+				case Tag.PLAYERPROJECTILE:
+					gameObject.AddComponent(playerProjectile.Clone());
+					gameObject.AddComponent(playerProjectileRenderer.Clone());
+					gameObject.AddComponent(new Collider(playerProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
+					gameObject.AddComponent(new Movement(false, 1000));
+					gameObject.AddComponent(new LightSource(0.25f, true));
+					break;
+				case Tag.PLAYERMELEEATTACK:
+					gameObject.AddComponent(playerMeleeObject.Clone());
+					gameObject.AddComponent(playerMeleeObjectRenderer.Clone());
+					gameObject.AddComponent(new Collider(playerMeleeObjectRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
+					break;
+				case Tag.ENEMYPROJECTILE:
+					gameObject.AddComponent(enemyProjectile.Clone());
+					gameObject.AddComponent(enemyProjectileRenderer.Clone());
+					gameObject.AddComponent(new Collider(enemyProjectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
+					gameObject.AddComponent(new Movement(false, 1000));
+					break;
+				case Tag.ENEMYMELEEATTACK:
+					gameObject.AddComponent(enemyMeleeObject.Clone());
+					gameObject.AddComponent(enemyMeleeObjectRenderer.Clone());
+					gameObject.AddComponent(new Collider(enemyMeleeObjectRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
+					break;
+					//case Tag.MELEEATTACK:
+					//                gameObject.AddComponent(meleeObject.Clone());
+					//                gameObject.AddComponent(meleeObjectRenderer.Clone());
+					//	gameObject.AddComponent(new Collider(meleeObjectRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
+					//                break;
+					//            case Tag.PROJECTILE:
+					//                gameObject.AddComponent(projectile.Clone());
+					//                gameObject.AddComponent(projectileRenderer.Clone());
+					//	gameObject.AddComponent(new Collider(projectileRenderer, (Projectile)gameObject.GetComponent(Tag.PROJECTILE)));
+					//                gameObject.AddComponent(new Movement(false, 1000));
+					//	break;
+			}
+
+			return gameObject;
+		}
+	}
 }

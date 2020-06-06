@@ -150,11 +150,11 @@ namespace ExamProjectFirstYear
             {
                 case Tag.PLAYER:
                     createdObject.AddComponent(GameWorld.Instance.player);
-                    //use this if tall jump
                     createdObject.AddComponent(new Movement(true, 900));
                     createdObject.AddComponent(new LightSource(2.75f, true));
                     createdObject.AddComponent(new Jump(35));
                     createdObject.AddComponent(new RangedAttack());
+                    createdObject.AddComponent(new AttackMelee());
                     break;
 
                 case Tag.PLATFORM:
@@ -165,17 +165,15 @@ namespace ExamProjectFirstYear
                 case Tag.FLYINGENEMY:
                     createdObject.Tag = Tag.FLYINGENEMY;
                     createdObject.AddComponent(new FlyingEnemy());
-                    createdObject.AddComponent(new LightSource(1f, true));
+                    createdObject.AddComponent(new LightSource(0.5f, true));
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((FlyingEnemy)(createdObject.GetComponent(Tag.FLYINGENEMY))).AddTarget;
                     break;
 
                 case Tag.MEELEEENEMY:
                     createdObject.AddComponent(new MeleeEnemy());
-                    createdObject.AddComponent(new LightSource(1f, true));
+                    createdObject.AddComponent(new LightSource(0.5f, true));
                     createdObject.AddComponent(new Movement(true, 900));
-
-
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     //createdObject.AddComponent(new Movement(true, 35, 900));
                     LevelInitializationDoneEvent += ((MeleeEnemy)(createdObject.GetComponent(Tag.MEELEEENEMY))).AddTarget;
@@ -183,7 +181,7 @@ namespace ExamProjectFirstYear
 
                 case Tag.RANGEDENEMY:
                     createdObject.AddComponent(new RangedEnemy());
-                    createdObject.AddComponent(new LightSource(1f, true));
+                    createdObject.AddComponent(new LightSource(0.5f, true));
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((RangedEnemy)(createdObject.GetComponent(Tag.RANGEDENEMY))).AddTarget;
                     break;
@@ -216,7 +214,6 @@ namespace ExamProjectFirstYear
                 collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
                 collider.AttachListener((Jump)createdObject.GetComponent(Tag.JUMP));
-                createdObject.AddComponent(new AttackMelee());
             }
 
             else if (tag == Tag.MEELEEENEMY)
@@ -230,12 +227,12 @@ namespace ExamProjectFirstYear
             else if (tag == Tag.FLYINGENEMY)
             {
                 collider = new Collider(spriteRenderer, (FlyingEnemy)createdObject.GetComponent(Tag.FLYINGENEMY)) { CheckCollisionEvents = true };
-
                
             }
 
             else if (tag == Tag.RANGEDENEMY)
             {
+                spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2 - 20);
                 collider = new Collider(spriteRenderer, (RangedEnemy)createdObject.GetComponent(Tag.RANGEDENEMY)) { CheckCollisionEvents = true };
                 createdObject.AddComponent(new RangedAttack());
             }

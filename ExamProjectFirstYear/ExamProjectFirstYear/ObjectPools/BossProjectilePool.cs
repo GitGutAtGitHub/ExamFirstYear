@@ -25,7 +25,7 @@ namespace ExamProjectFirstYear
 
 		protected override GameObject Create(Tag sender)
 		{
-			return ProjectileFactory.Instance.Create(Tag.BOSSPROJECTILE, sender);
+			return ProjectileFactory.Instance.Create(Tag.BOSSPROJECTILE);
 		}
 
 		protected override void CleanUp(GameObject gameObject)

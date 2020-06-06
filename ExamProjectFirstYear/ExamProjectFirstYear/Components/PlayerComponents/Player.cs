@@ -29,11 +29,12 @@ namespace ExamProjectFirstYear
         private float invulnerabilityTimer;
         private float invulnerabilityFrames = 0.8f;
         private byte fullMana = 5;
+        private bool canShoot = true;
 
-        private SpriteRenderer spriteRenderer;
-        private RangedAttack rangedAttack;
-        private Jump jump;
-        private Player player = GameWorld.Instance.player;
+        //private SpriteRenderer spriteRenderer;
+        //private RangedAttack rangedAttack;
+        //private Jump jump;
+        //private Player player = GameWorld.Instance.player; Tror ikke vi behøver denne her
 
         #endregion
 
@@ -103,6 +104,36 @@ namespace ExamProjectFirstYear
 
 
         #region Other methods
+
+        public void Attack(int attackNumber)
+		{
+			if (attackNumber == 1)
+			{
+                AttackMelee playerAttackMelee = (AttackMelee)GameObject.GetComponent(Tag.ATTACKMELEE);
+				playerAttackMelee.MeleeAttack(this.GameObject, Tag.PLAYERMELEEATTACK, Velocity);
+			}
+
+			else if (attackNumber == 2)
+			{
+                if (Mana > 0 && canShoot == true)
+				{
+                    RangedAttack rangedAttack = (RangedAttack)GameObject.GetComponent(Tag.RANGEDATTACK);
+                    rangedAttack.RangedAttackMethod(this.GameObject, Tag.PLAYERPROJECTILE, Velocity);
+                    Mana--;
+                    CanRegenerateMana = false;
+                    ManagePlayerLight(-0.5f);
+                    canShoot = false;
+                }
+			}
+        }
+
+        /// <summary>
+        /// Methods used when the ranged attack button is released. Sets CanShoot to true.
+        /// </summary>
+        public void PlayerReleaseRangedAttack()
+        {
+			canShoot = true;
+		}
 
         /// <summary>
         /// Method used when the player takes damage.
@@ -218,7 +249,7 @@ namespace ExamProjectFirstYear
                 {
                     // Adds one mana.
                     Mana++;
-
+                    ManagePlayerLight(+0.5f);
                     // Resets the timer.
                     manaRegenerateTimer = regenerationTimer;
                 }
@@ -239,6 +270,12 @@ namespace ExamProjectFirstYear
                 // Once mana is full, the timer is resat to 0.
                 manaRegenerateTimer = 0;
             }
+        }
+
+        private void ManagePlayerLight(float value)
+		{
+            LightSource lightSource = (LightSource)GameObject.GetComponent(Tag.LIGHTSOURCE);
+            lightSource.LightRadiusScale += value;
         }
 
         #endregion
