@@ -78,6 +78,7 @@ namespace ExamProjectFirstYear.Components
                 GameObject.Destroy();
                 // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 DropMaterialUponDeath(Tag.SPIDERFILAMENT);
+                GameWorld.Instance.sQLiteHandler.AddRecordedCreature(1, GameWorld.Instance.player.PlayerID);
             }
         }
 
@@ -97,7 +98,7 @@ namespace ExamProjectFirstYear.Components
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
                 component.GameObject.Destroy();
-                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
+                GameWorld.Instance.sQLiteHandler.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
             }
 
             //Players hit platforms when they collide with them.
@@ -139,6 +140,6 @@ namespace ExamProjectFirstYear.Components
                 //}
             }
         }
-        
+
     }
 }

@@ -6,7 +6,6 @@ using System.Configuration;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
@@ -17,15 +16,11 @@ namespace ExamProjectFirstYear
     {
         #region Fields
 
-        private static SQLiteHandler instance;
+        //private static SQLiteHandler instance;
 
         private SQLiteConnection connection;
 
         private SQLiteCommand command;
-
-        private Journal journal;
-
-        private Inventory inventory;
 
         #endregion
 
@@ -35,17 +30,27 @@ namespace ExamProjectFirstYear
         /// <summary>
         /// SQLiteHandler as a Singleton.
         /// </summary>
-        public static SQLiteHandler Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new SQLiteHandler();
-                }
+        //public static SQLiteHandler Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //        {
+        //            instance = new SQLiteHandler();
+        //        }
 
-                return instance;
-            }
+        //        return instance;
+        //    }
+        //}
+
+        #endregion
+
+
+        #region Constructors
+
+        public SQLiteHandler()
+        {
+
         }
 
         #endregion
@@ -57,25 +62,27 @@ namespace ExamProjectFirstYear
         /// Returns connectionsstring for the database.
         /// </summary>
         /// <returns></returns>
-        public static string LoadSQLiteConnectionString()
+        public string LoadSQLiteConnectionString()
         {
-            return ConfigurationManager.ConnectionStrings["ExamProjectFirstYearDB"].ConnectionString;
+            return ConfigurationManager.AppSettings["ExamProjectFirstYearDB"];
         }
 
         /// <summary>
         /// Method for simplifying SQLiteCommands. The commandText is the command to be executed.
         /// </summary>
         /// <param name="commandText"></param>
-        public void ExecuteNonQuerySQLiteCommand(string commandText)
+        public void ExecuteNonQuerySQLiteCommand(SQLiteCommand command, SQLiteConnection connection)
         {
-            connection = new SQLiteConnection(LoadSQLiteConnectionString());
-
             using (connection)
             {
                 connection.Open();
-                command = new SQLiteCommand(commandText, connection);
                 command.ExecuteNonQuery();
             }
+        }
+
+        public void CreateTable(string tableName, string columns)
+        {
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"CREATE TABLE IF NOT EXISTS {tableName} ({columns})", connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
         }
 
         /// <summary>
@@ -84,7 +91,7 @@ namespace ExamProjectFirstYear
         /// <param name="tableName"></param>
         public void ClearTable(string tableName)
         {
-            ExecuteNonQuerySQLiteCommand($"DELETE FROM {tableName};");
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"DELETE FROM {tableName};", connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
         }
 
         /// <summary>
@@ -93,7 +100,7 @@ namespace ExamProjectFirstYear
         /// <param name="tableName"></param>
         public void DeleteFromTable(string tableName, string rowIDName, int ID)
         {
-            ExecuteNonQuerySQLiteCommand($"DELETE FROM {tableName} WHERE {rowIDName}={ID};");
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"DELETE FROM {tableName} WHERE {rowIDName}={ID};", connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
         }
 
         /// <summary>
@@ -103,7 +110,7 @@ namespace ExamProjectFirstYear
         /// <param name="tableValues"></param>
         public void InsertIntoTable(string tableName, string tableValues)
         {
-            ExecuteNonQuerySQLiteCommand($"INSERT INTO {tableName} VALUES ({tableValues});");
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"INSERT OR IGNORE INTO {tableName} VALUES ({tableValues});", connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
         }
 
         /// <summary>
@@ -116,7 +123,7 @@ namespace ExamProjectFirstYear
         /// <param name="compareTo"></param>
         public void InsertIntoTableWhere(string tableName, string tableValues, string definedValues, string whereDefinition)
         {
-            ExecuteNonQuerySQLiteCommand($"INSERT INTO {tableName} VALUES ({tableValues}) {definedValues} WHERE {whereDefinition};");
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"INSERT OR IGNORE INTO {tableName} VALUES ({tableValues}) {definedValues} WHERE {whereDefinition};", connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
         }
 
         /// <summary>
@@ -127,7 +134,7 @@ namespace ExamProjectFirstYear
         /// <param name="whereDefinition"></param>
         public void UpdateTable(string tableName, string updateDefinition, string whereDefinition)
         {
-            ExecuteNonQuerySQLiteCommand($"UPDATE {tableName} SET {updateDefinition} WHERE {whereDefinition};");
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"UPDATE {tableName} SET {updateDefinition} WHERE {whereDefinition};", connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
         }
 
 
@@ -193,7 +200,7 @@ namespace ExamProjectFirstYear
             string value;
 
             connection = new SQLiteConnection(LoadSQLiteConnectionString());
-            
+
             using (connection)
             {
                 connection.Open();
@@ -210,20 +217,84 @@ namespace ExamProjectFirstYear
         /// <param name="selectDefinition"></param>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        public int SelectIntValues(string selectDefinition, string tableName)
+        public int SelectIntValues(string selectDefinition, string tableName, SQLiteConnection connection)
         {
             int value;
 
-            connection = new SQLiteConnection(LoadSQLiteConnectionString());
-            
             using (connection)
             {
                 connection.Open();
+
                 command = new SQLiteCommand($"SELECT {selectDefinition} FROM {tableName}", connection);
                 value = Convert.ToInt32(command.ExecuteScalar());
             }
 
             return value;
+        }
+
+        /// <summary>
+        /// Code used when building the database.
+        /// </summary>
+        public void BuildDatabase()
+        {
+            //CreateTable("Inventory", "ID INTEGER PRIMARY KEY");
+            //CreateTable("Journal", "ID INTEGER PRIMARY KEY, InventoryID INTEGER, Health INTEGER, OpenDoor BOOLEAN, " +
+            //            "PositionX INTEGER, PositionY INTEGER, Mana INTEGER, FOREIGN KEY (InventoryID) REFERENCES Inventory(ID)");
+
+            //CreateTable("MaterialType", "ID INTEGER PRIMARY KEY, Name STRING");
+            //CreateTable("RequiredMaterial", "MaterialTypeID INTEGER, BlueprintID INTEGER, Amount INTEGER, " +
+            //            "FOREIGN KEY (MaterialTypeID) REFERENCES MaterialType(ID), FOREIGN KEY (BlueprintID) REFERENCES Blueprint(ID)");
+            //CreateTable("StoredMaterial", "MaterialTypeID INTEGER, InventoryID INTEGER, Amount INTEGER, Slot INTEGER UNIQUE, " +
+            //            "FOREIGN KEY (MaterialTypeID) REFERENCES MaterialType(ID), FOREIGN KEY (InventoryID) REFERENCES Inventory(ID), " +
+            //            "UNIQUE (MaterialTypeID, InventoryID))");
+
+            //CreateTable("Creature", "ID INTEGER PRIMARY KEY, MaterialTypeID INTEGER, Name STRING, Type STRING, " +
+            //            "Description STRING, Location STRING, FOREIGN KEY(MaterialTypeID) REFERENCES MaterialType(ID)");
+            //CreateTable("RecordedCreature", "CreatureID INTEGER, JournalID INTEGER, " +
+            //            "FOREIGN KEY (CreatureID) REFERENCES Creature(ID), FOREIGN KEY (JournalID) REFERENCES Journal(ID)," +
+            //            "UNIQUE (CreatureID, JournalID))");
+
+            //CreateTable("Blueprint", "ID INTEGER PRIMARY KEY, Name STRING, Description STRING");
+            //CreateTable("RecordedBP", "BlueprintID INTEGER, JournalID INTEGER, " +
+            //            "FOREIGN KEY (BlueprintID) REFERENCES Blueprint(ID), FOREIGN KEY (JournalID) REFERENCES Journal(ID)," +
+            //            "UNIQUE (BlueprintID, JournalID))");
+
+
+            //ExecuteNonQuerySQLiteCommand(new SQLiteCommand("INSERT OR IGNORE INTO Inventory VALUES (NULL)", 
+            //                                                connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
+            //ExecuteNonQuerySQLiteCommand(new SQLiteCommand("INSERT OR IGNORE INTO Journal (ID, InventoryID, Health, OpenDoor, PositionX, PositionY, Mana) " +
+            //    "                                           SELECT NULL, Inventory.ID, 5, 0, 50, 50, 5 FROM Inventory WHERE Inventory.ID=ID",
+            //                                                connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
+
+            //ExecuteNonQuerySQLiteCommand(new SQLiteCommand("INSERT OR IGNORE INTO Blueprint VALUES (NULL, 'Door opening device', 'Somehow, this is supposed to open the door?')",
+            //                                                connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
+            //ExecuteNonQuerySQLiteCommand(new SQLiteCommand("INSERT OR IGNORE INTO RecordedBP VALUES(1, 1)",
+            //                                                connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
+
+            //ExecuteNonQuerySQLiteCommand(new SQLiteCommand("INSERT OR IGNORE INTO Creature VALUES(NULL, 1, 'Spider Bulb', 'Melee', 'A glowing light bulb spider', 'Dark caves')",
+            //                                                connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
+            //ExecuteNonQuerySQLiteCommand(new SQLiteCommand("INSERT OR IGNORE INTO RecordedCreature VALUES(1, 1)",
+            //                                                connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
+
+            //ExecuteNonQuerySQLiteCommand(new SQLiteCommand("INSERT OR IGNORE INTO MaterialType VALUES(NULL, 'Light bulb')",
+            //                                                connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
+            //ExecuteNonQuerySQLiteCommand(new SQLiteCommand("INSERT OR IGNORE INTO RequiredMaterial VALUES(1, 1, 3)",
+            //                                                connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
+            //ExecuteNonQuerySQLiteCommand(new SQLiteCommand("INSERT OR IGNORE INTO StoredMaterial VALUES(1, 1, 0, 1)",
+            //                                                connection = new SQLiteConnection(LoadSQLiteConnectionString())), connection);
+
+
+            //ExecuteNonQuerySQLiteCommand("DELETE FROM RecordedBP");
+
+            //ExecuteNonQuerySQLiteCommand("DELETE FROM RecordedCreature");
+            //ExecuteNonQuerySQLiteCommand("DELETE FROM Creature");
+
+            //ExecuteNonQuerySQLiteCommand("DELETE FROM MaterialType");
+            //ExecuteNonQuerySQLiteCommand("DELETE FROM RequiredMaterial");
+            //ExecuteNonQuerySQLiteCommand("DELETE FROM StoredMaterial");
+
+            //ExecuteNonQuerySQLiteCommand("DELETE FROM Inventory");
+            //ExecuteNonQuerySQLiteCommand("DELETE FROM Journal");
         }
 
         #endregion
@@ -237,8 +308,18 @@ namespace ExamProjectFirstYear
         /// <param name="materialName"></param>
         public void IncreaseAmountStoredMaterial(int materialTypeID)
         {
-            GameWorld.Instance.inventory.MaterialTypeIDs.Add(materialTypeID);
-            UpdateTable("StoredMaterial", "Amount=Amount+1", $"MaterialTypeID={materialTypeID}");
+            TmpStoredMaterial tmpStoredMaterial = GetStoredMaterial(materialTypeID, GameWorld.Instance.inventory.InventoryID);
+
+            if (!GameWorld.Instance.inventory.MaterialTypeIDs.Contains(materialTypeID))
+            {
+                GameWorld.Instance.inventory.MaterialTypeIDs.Add(materialTypeID);
+                InsertIntoTable("StoredMaterial", $"{materialTypeID}, {GameWorld.Instance.inventory.InventoryID}, {tmpStoredMaterial.TmpAmount}, {materialTypeID}");
+            }
+
+            if (GameWorld.Instance.inventory.MaterialTypeIDs.Contains(materialTypeID))
+            {
+                UpdateTable("StoredMaterial", "Amount=Amount+1", $"MaterialTypeID={materialTypeID}");
+            }
         }
 
         /// <summary>
@@ -247,8 +328,18 @@ namespace ExamProjectFirstYear
         /// <param name="materialName"></param>
         public void DecreaseAmountStoredMaterial(int materialTypeID)
         {
-            GameWorld.Instance.inventory.MaterialTypeIDs.Remove(materialTypeID);
-            UpdateTable("StoredMaterial", "Amount=Amount-1", $"MaterialTypeID={materialTypeID}");
+            TmpStoredMaterial tmpStoredMaterial = GetStoredMaterial(materialTypeID, GameWorld.Instance.inventory.InventoryID);
+
+            if (GameWorld.Instance.inventory.MaterialTypeIDs.Contains(materialTypeID) && tmpStoredMaterial.TmpAmount <= 0)
+            {
+                GameWorld.Instance.inventory.MaterialTypeIDs.Remove(materialTypeID);
+                DeleteFromTable("StoredMaterial", "MaterialTypeID", materialTypeID);
+            }
+
+            if (tmpStoredMaterial.TmpAmount > 0)
+            {
+                UpdateTable("StoredMaterial", "Amount=Amount-1", $"MaterialTypeID={materialTypeID}");
+            }
         }
 
         /// <summary>
@@ -257,7 +348,11 @@ namespace ExamProjectFirstYear
         /// <param name="blueprintName"></param>
         public void AddRecordedBP(int blueprintID, int journalID)
         {
-            GameWorld.Instance.journal.RecordedBlueprintIDs.Add(blueprintID);
+            if (!GameWorld.Instance.journal.RecordedBlueprintIDs.Contains(blueprintID))
+            {
+                GameWorld.Instance.journal.RecordedBlueprintIDs.Add(blueprintID);
+            }
+
             InsertIntoTable($"RecordedBP", $"{blueprintID}, {journalID}");
         }
 
@@ -267,7 +362,11 @@ namespace ExamProjectFirstYear
         /// <param name="blueprintName"></param>
         public void AddRecordedCreature(int creatureID, int journalID)
         {
-            GameWorld.Instance.journal.RecordedCreatureIDs.Add(creatureID);
+            if (!GameWorld.Instance.journal.RecordedCreatureIDs.Contains(creatureID))
+            {
+                GameWorld.Instance.journal.RecordedCreatureIDs.Add(creatureID);
+            }
+
             InsertIntoTable($"RecordedCreature", $"{creatureID}, {journalID}");
         }
 

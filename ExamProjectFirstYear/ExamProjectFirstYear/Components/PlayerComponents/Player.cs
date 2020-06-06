@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
@@ -66,11 +65,6 @@ namespace ExamProjectFirstYear
             PlayerID = playerID;
         }
 
-        //empty constructor used for unittesting
-        public Player()
-        {
-          
-        }
         #endregion
 
 
@@ -86,23 +80,22 @@ namespace ExamProjectFirstYear
             GameObject.Tag = Tag.PLAYER;
             GameObject.SpriteName = "OopPlayerSprite2";
 
-            TmpJournal = SQLiteHandler.Instance.GetJournal(PlayerID);
+            TmpJournal = GameWorld.Instance.sQLiteHandler.GetJournal(PlayerID);
 
             saveLoaded = true;
         }
 
         public override void Start()
         {
-            //Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
-            //spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
-            //jump = (Jump)GameObject.GetComponent(Tag.JUMP);
+            Health = 5;
+            Mana = 5;
 
-            saveLoaded = true;
+            saveLoaded = false;
+            LoadSave();
         }
 
         public override void Update(GameTime gameTime)
         {
-            LoadSave();
             TestMethod();
             RegenerateMana();
         }
@@ -166,7 +159,7 @@ namespace ExamProjectFirstYear
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
                 component.GameObject.Destroy();
-                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
+                GameWorld.Instance.sQLiteHandler.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
             }
 
             // Player looses health when colliding with an enemy.
@@ -221,16 +214,19 @@ namespace ExamProjectFirstYear
 
         private void LoadSave()
         {
-            if (saveLoaded == true)
+            if (saveLoaded == false)
             {
                 //GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX - spriteRenderer.Sprite.Width * 3, TmpJournal.TmpPositionY - spriteRenderer.Sprite.Height));
                 InventoryID = TmpJournal.TmpInventoryID;
                 Health = TmpJournal.TmpHealth;
                 OpenDoor = TmpJournal.TmpOpenDoor;
                 Mana = TmpJournal.TmpMana;
+
+                GameWorld.Instance.sQLiteHandler.ClearTable("StoredMaterial");
+                GameWorld.Instance.sQLiteHandler.ClearTable("RecordedCreature");
             }
 
-            saveLoaded = false;
+            saveLoaded = true;
         }
 
         /// <summary>

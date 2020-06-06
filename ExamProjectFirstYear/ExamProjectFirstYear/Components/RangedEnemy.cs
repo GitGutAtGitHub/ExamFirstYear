@@ -49,9 +49,9 @@ namespace ExamProjectFirstYear.Components
             Move();
             EnemyDeath();
         }
-      
 
-    
+
+
 
         protected override void Move()
         {
@@ -72,6 +72,8 @@ namespace ExamProjectFirstYear.Components
                 GameObject.Destroy();
                 // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 DropMaterialUponDeath(Tag.MATCHHEAD);
+
+                //GameWorld.Instance.sQLiteHandler.AddRecordedCreature(2, GameWorld.Instance.player.PlayerID);
             }
         }
 
