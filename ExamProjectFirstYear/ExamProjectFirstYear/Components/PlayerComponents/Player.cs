@@ -69,7 +69,7 @@ namespace ExamProjectFirstYear
             GameObject.Tag = Tag.PLAYER;
             GameObject.SpriteName = "OopPlayerSprite2";
 
-            TmpJournal = SQLiteHandler.Instance.GetJournal(PlayerID);
+            TmpJournal = GameWorld.Instance.sQLiteHandler.GetJournal(PlayerID);
 
             Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
             spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
@@ -101,7 +101,7 @@ namespace ExamProjectFirstYear
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
                 component.GameObject.Destroy();
-                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
+                GameWorld.Instance.sQLiteHandler.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
             }
 
             //Players hit platforms when they collide with them.

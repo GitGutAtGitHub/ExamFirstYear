@@ -77,7 +77,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
         private void LoadGame()
         {
-            Thread.Sleep(20000);
+            Thread.Sleep(10000);
 
             menuHandler.SwitchState(new StartState());
 

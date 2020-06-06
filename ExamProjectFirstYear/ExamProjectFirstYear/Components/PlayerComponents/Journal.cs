@@ -79,8 +79,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void Start()
         {
-            SQLiteHandler.Instance.AddRecordedBP(1, JournalID);
-            SQLiteHandler.Instance.AddRecordedCreature(1, JournalID);
+
         }
 
         public override void Update(GameTime gameTime)
@@ -208,9 +207,9 @@ namespace ExamProjectFirstYear.Components
             //Create a text field for every RecordedBP in the ID list.
             foreach (int blueprintID in RecordedBlueprintIDs)
             {
-                tmpBlueprint = SQLiteHandler.Instance.GetBlueprint(blueprintID);
-                tmpRequiredMaterial = SQLiteHandler.Instance.GetRequiredMaterial(blueprintID);
-                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(tmpRequiredMaterial.TmpMaterialTypeID);
+                tmpBlueprint = GameWorld.Instance.sQLiteHandler.GetBlueprint(blueprintID);
+                tmpRequiredMaterial = GameWorld.Instance.sQLiteHandler.GetRequiredMaterial(blueprintID);
+                tmpMaterialType = GameWorld.Instance.sQLiteHandler.GetMaterialType(tmpRequiredMaterial.TmpMaterialTypeID);
 
                 spriteBatch.DrawString(journalText, $"Name: {tmpBlueprint.TmpName} \nDescription: {tmpBlueprint.TmpDescription}" +
                                        $"\nMaterials: {tmpMaterialType.TmpName} ({tmpRequiredMaterial.TmpAmount})",
@@ -238,8 +237,8 @@ namespace ExamProjectFirstYear.Components
             //Create a text field for every RecordedCreature in the ID list.
             foreach (int creatureID in RecordedCreatureIDs)
             {
-                tmpCreature = SQLiteHandler.Instance.GetCreature(creatureID);
-                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(tmpCreature.TmpMaterialTypeID);
+                tmpCreature = GameWorld.Instance.sQLiteHandler.GetCreature(creatureID);
+                tmpMaterialType = GameWorld.Instance.sQLiteHandler.GetMaterialType(tmpCreature.TmpMaterialTypeID);
 
                 spriteBatch.DrawString(journalText, $"Name: {tmpCreature.TmpName} ({tmpCreature.TmpType})" +
                                         $"\nDescription: {tmpCreature.TmpDescription} " +

@@ -183,9 +183,9 @@ namespace ExamProjectFirstYear.Components
             //Create a text field for every MaterialType in the ID list.
             foreach (int materialTypeID in MaterialTypeIDs)
             {
-                tmpInventory = SQLiteHandler.Instance.GetInventory();
-                tmpStoredMaterial = SQLiteHandler.Instance.GetStoredMaterial(materialTypeID, tmpInventory.TmpID);
-                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(materialTypeID);
+                tmpInventory = GameWorld.Instance.sQLiteHandler.GetInventory();
+                tmpStoredMaterial = GameWorld.Instance.sQLiteHandler.GetStoredMaterial(materialTypeID, tmpInventory.TmpID);
+                tmpMaterialType = GameWorld.Instance.sQLiteHandler.GetMaterialType(materialTypeID);
 
                 spriteBatch.DrawString(inventoryText, $"{tmpMaterialType.TmpName}: {tmpStoredMaterial.TmpAmount}",
                                        new Vector2(positionX, positionY),

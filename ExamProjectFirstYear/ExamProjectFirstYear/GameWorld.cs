@@ -31,6 +31,8 @@ namespace ExamProjectFirstYear
         public Journal journal;
         public Inventory inventory;
 
+        public SQLiteHandler sQLiteHandler;
+
         private Camera camera;
 
         #endregion
@@ -92,8 +94,9 @@ namespace ExamProjectFirstYear
         /// </summary>
         protected override void Initialize()
         {
-            TimeElapsed = 0;
+            //SQLiteHandler.Instance.BuildDatabase();
 
+            sQLiteHandler = new SQLiteHandler();
             //Create instances of Player, Journal and Inventory.
             journal = new Journal(1);
             player = new Player(journal.JournalID);
