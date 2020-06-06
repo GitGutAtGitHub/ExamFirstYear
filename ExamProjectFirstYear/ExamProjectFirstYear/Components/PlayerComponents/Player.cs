@@ -66,6 +66,11 @@ namespace ExamProjectFirstYear
             PlayerID = playerID;
         }
 
+        //empty constructor used for unittesting
+        public Player()
+        {
+          
+        }
         #endregion
 
 
