@@ -8,6 +8,6 @@ namespace ExamProjectFirstYear
 {
 	interface IFactory
 	{
-		GameObject Create(Tag type, Tag sender);
+		GameObject Create(Tag type);
 	}
 }

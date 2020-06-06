@@ -30,7 +30,7 @@ namespace ExamProjectFirstYear.ObjectPools
 
 		protected override GameObject Create(Tag sender)
 		{
-			return ProjectileFactory.Instance.Create(Tag.PLAYERMELEEATTACK, sender);
+			return ProjectileFactory.Instance.Create(Tag.PLAYERMELEEATTACK);
 		}
 	}
 }

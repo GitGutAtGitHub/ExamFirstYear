@@ -112,7 +112,7 @@ namespace ExamProjectFirstYear
 			if (attackNumber == 1)
 			{
                 AttackMelee playerAttackMelee = (AttackMelee)GameObject.GetComponent(Tag.ATTACKMELEE);
-				playerAttackMelee.MeleeAttack(this, Velocity);
+				playerAttackMelee.MeleeAttack(this.GameObject, Tag.PLAYERMELEEATTACK, Velocity);
 			}
 
 			else if (attackNumber == 2)
@@ -120,7 +120,7 @@ namespace ExamProjectFirstYear
                 if (Mana > 0 && canShoot == true)
 				{
                     RangedAttack rangedAttack = (RangedAttack)GameObject.GetComponent(Tag.RANGEDATTACK);
-                    rangedAttack.RangedAttackMethod(this, Velocity);
+                    rangedAttack.RangedAttackMethod(this.GameObject, Tag.PLAYERPROJECTILE, Velocity);
                     Mana--;
                     CanRegenerateMana = false;
                     ManagePlayerLight(-0.5f);

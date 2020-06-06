@@ -20,43 +20,25 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
 
         #endregion
 
-
         public RangedAttack()
         {
 
         }
 
-
         #region METHODS
-        public void RangedAttackMethod(Component component, Vector2 velocity)
-        {
-			Tag tmpTag = Tag.PLAYERMELEEATTACK;
-
-			switch (component.ToEnum())
-			{
-				case Tag.PLAYER:
-					tmpTag = Tag.PLAYERPROJECTILE;
-					break;
-				case Tag.RANGEDENEMY:
-					tmpTag = Tag.ENEMYPROJECTILE;
-					break;
-			}
-
+        public void RangedAttackMethod(GameObject sender, Tag projectileType, Vector2 velocity)
+		{
 			// rangedAttackTimer makes sure the ranged attack can only be used once every x-amount of seconds.
 			// Mana needs to be higher than 0 or the player can't fire a ranged attack.
 			//if ((/*CanShoot == true &&*/ rangedAttackTimer >= breakForRangedAttack && tmpTag == Tag.ENEMYPROJECTILE) || (CanShoot == true && rangedAttackTimer >= breakForRangedAttack && ((Player)component).Mana > 0))
 			if (rangedAttackTimer >= breakForRangedAttack)
             {
                 
-                GameObject tmpProjectileObject = ProjectilePool.Instance.GetObject(tmpTag);
-                tmpProjectileObject.Tag = tmpTag;
-
-                tmpProjectileObject.Awake();
-                tmpProjectileObject.Start();
+                GameObject tmpProjectileObject =ProjectileFactory.Instance.Create(projectileType);
 
                 Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
 
-                tmpProjectileObject.Transform.Position = component.GameObject.Transform.Position;
+                tmpProjectileObject.Transform.Position = sender.Transform.Position;
 
                 Movement tmpMovement = (Movement)tmpProjectileObject.GetComponent(Tag.MOVEMENT);
 
