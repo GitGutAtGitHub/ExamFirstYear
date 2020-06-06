@@ -23,7 +23,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void Start()
         {
-            GameObject.SpriteName = "FlyingEnemy";
+            GameObject.SpriteName = "OopBossProjectileSprite2";
         }
 
         public override void AddTarget()
@@ -49,9 +49,9 @@ namespace ExamProjectFirstYear.Components
             Move();
             EnemyDeath();
         }
+      
 
-
-
+    
 
         protected override void Move()
         {
@@ -71,10 +71,7 @@ namespace ExamProjectFirstYear.Components
             {
                 GameObject.Destroy();
                 // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                //DropMaterialUponDeath(2);
-
-                //GameWorld.Instance.sQLiteHandler.AddRecordedCreature(2, GameWorld.Instance.player.PlayerID);
+                DropMaterialUponDeath(Tag.MATCHHEAD);
             }
         }
 

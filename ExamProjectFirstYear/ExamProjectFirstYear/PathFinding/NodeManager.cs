@@ -133,22 +133,22 @@ namespace ExamProjectFirstYear.PathFinding
         public void Draw(SpriteBatch spriteBatch)
         {
 
-            //foreach (Node node in Nodes)
-            //{
-            //    if (node.Walkable == true)
-            //    {
-            //        spriteBatch.Draw(node.NodeSprite, node.Position, Color.White);
-            //    }
-            //    else
-            //    {
-            //        spriteBatch.Draw(unwalkableSprite, node.Position, Color.White);
-            //    }
+            foreach (Node node in Nodes)
+            {
+                if (node.Walkable == true)
+                {
+                    spriteBatch.Draw(node.NodeSprite, node.Position, Color.White);
+                }
+                else
+                {
+                    spriteBatch.Draw(unwalkableSprite, node.Position, Color.White);
+                }
 
-            //    spriteBatch.DrawString(spriteFont, $"G: {node.GCost}", new Vector2((node.Position.X), (node.Position.Y)), Color.DarkRed, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
-            //    spriteBatch.DrawString(spriteFont, $"H: {node.HCost}", new Vector2((node.Position.X + 60), (node.Position.Y)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
-            //    spriteBatch.DrawString(spriteFont, $"F: {node.FCost}", new Vector2((node.Position.X), (node.Position.Y + 80)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                spriteBatch.DrawString(spriteFont, $"G: {node.GCost}", new Vector2((node.Position.X), (node.Position.Y)), Color.DarkRed, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                spriteBatch.DrawString(spriteFont, $"H: {node.HCost}", new Vector2((node.Position.X + 60), (node.Position.Y)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                spriteBatch.DrawString(spriteFont, $"F: {node.FCost}", new Vector2((node.Position.X), (node.Position.Y + 80)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
 
-            //}
+            }
 
 
 

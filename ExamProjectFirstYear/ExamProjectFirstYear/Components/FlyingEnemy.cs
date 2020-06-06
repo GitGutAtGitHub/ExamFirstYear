@@ -100,10 +100,7 @@ namespace ExamProjectFirstYear.Components
             {
                 GameObject.Destroy();
                 // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                
-                //DropMaterialUponDeath(3);
-
-                //GameWorld.Instance.sQLiteHandler.AddRecordedCreature(3, GameWorld.Instance.player.PlayerID);
+                DropMaterialUponDeath(Tag.MOTHWING);
             }
         }
 

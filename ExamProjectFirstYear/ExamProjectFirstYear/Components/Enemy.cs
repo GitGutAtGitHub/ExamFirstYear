@@ -1,4 +1,5 @@
-﻿using ExamProjectFirstYear.PathFinding;
+﻿using ExamProjectFirstYear.Factories;
+using ExamProjectFirstYear.PathFinding;
 using ExamProjectFirstYear.StatePattern;
 using Microsoft.Xna.Framework;
 using System;
@@ -32,7 +33,6 @@ namespace ExamProjectFirstYear.Components
 
         private IState currentState;
         private GameObject target; 
-       
 
         #endregion
 
@@ -65,30 +65,15 @@ namespace ExamProjectFirstYear.Components
 
         /// <summary>
         /// Used by all enemies that drop materials when they die.
-        /// This methods instantiates whatever material the enemy needs to drop.
+        /// This methods instantiates whatever material the enemy needs to drop through the MaterialFactory.
         /// </summary>
         /// <param name="materialID"></param>
-        public void DropMaterialUponDeath(byte materialID)
+        public void DropMaterialUponDeath(Tag materialType)
         {
-            GameObject droppedMaterial = new GameObject();
-            SpriteRenderer spriteRenderer = new SpriteRenderer();
-            Movement movementEnemy = new Movement(true, 0);
+            GameObject droppedMaterial = MaterialFactory.Instance.Create(materialType);
+			droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
 
-            droppedMaterial.AddComponent(new Material(materialID));
-
-            droppedMaterial.AddComponent(movementEnemy);
-            droppedMaterial.AddComponent(spriteRenderer);
-
-            droppedMaterial.Awake();
-            droppedMaterial.Start();
-
-            droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
-
-            Collider collider = new Collider(spriteRenderer, (Material)droppedMaterial.GetComponent(Tag.MATERIAL)) { CheckCollisionEvents = true };
-
-            droppedMaterial.AddComponent(collider);
-
-            GameWorld.Instance.Colliders.Add(collider);
+			GameWorld.Instance.Colliders.Add((Collider)droppedMaterial.GetComponent(Tag.COLLIDER));
             GameWorld.Instance.GameObjects.Add(droppedMaterial);
         }
 

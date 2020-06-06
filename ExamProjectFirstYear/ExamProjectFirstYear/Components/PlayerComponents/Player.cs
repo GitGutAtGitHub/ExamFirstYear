@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
@@ -65,6 +66,11 @@ namespace ExamProjectFirstYear
             PlayerID = playerID;
         }
 
+        //empty constructor used for unittesting
+        public Player()
+        {
+          
+        }
         #endregion
 
 
@@ -80,22 +86,23 @@ namespace ExamProjectFirstYear
             GameObject.Tag = Tag.PLAYER;
             GameObject.SpriteName = "OopPlayerSprite2";
 
-            TmpJournal = GameWorld.Instance.sQLiteHandler.GetJournal(PlayerID);
+            TmpJournal = SQLiteHandler.Instance.GetJournal(PlayerID);
 
             saveLoaded = true;
         }
 
         public override void Start()
         {
-            Health = 5;
-            Mana = 5;
+            //Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+            //spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+            //jump = (Jump)GameObject.GetComponent(Tag.JUMP);
 
-            saveLoaded = false;
-            LoadSave();
+            saveLoaded = true;
         }
 
         public override void Update(GameTime gameTime)
         {
+            LoadSave();
             TestMethod();
             RegenerateMana();
         }
@@ -155,11 +162,11 @@ namespace ExamProjectFirstYear
         public void Notify(GameEvent gameEvent, Component component)
         {
             //Players collect materials when they collide with them.
-            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MATERIAL)
+            if (gameEvent.Title == "Colliding" && (component.GameObject.Tag == Tag.SPIDERFILAMENT || component.GameObject.Tag == Tag.MOTHWING || component.GameObject.Tag == Tag.MATCHHEAD))
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
                 component.GameObject.Destroy();
-                GameWorld.Instance.sQLiteHandler.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
+                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
             }
 
             // Player looses health when colliding with an enemy.
@@ -214,19 +221,16 @@ namespace ExamProjectFirstYear
 
         private void LoadSave()
         {
-            if (saveLoaded == false)
+            if (saveLoaded == true)
             {
                 //GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX - spriteRenderer.Sprite.Width * 3, TmpJournal.TmpPositionY - spriteRenderer.Sprite.Height));
                 InventoryID = TmpJournal.TmpInventoryID;
                 Health = TmpJournal.TmpHealth;
                 OpenDoor = TmpJournal.TmpOpenDoor;
                 Mana = TmpJournal.TmpMana;
-
-                GameWorld.Instance.sQLiteHandler.ClearTable("StoredMaterial");
-                GameWorld.Instance.sQLiteHandler.ClearTable("RecordedCreature");
             }
 
-            saveLoaded = true;
+            saveLoaded = false;
         }
 
         /// <summary>
