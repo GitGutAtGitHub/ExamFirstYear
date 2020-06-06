@@ -27,9 +27,9 @@ namespace ExamProjectFirstYear
 			// Tilføj cleanup kode her
 		}
 
-		protected override GameObject Create()
+		protected override GameObject Create(Tag sender)
 		{
-			return ProjectileFactory.Instance.Create(Tag.ENEMYPROJECTILE);
+			return ProjectileFactory.Instance.Create(Tag.ENEMYPROJECTILE, sender);
 		}
 	}
 }

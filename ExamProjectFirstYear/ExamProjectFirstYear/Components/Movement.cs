@@ -14,12 +14,10 @@ namespace ExamProjectFirstYear.Components
     {
         #region Fields
 
-        private bool hasJumped = true;
         private bool gravityOn;
         private float force;
         private float speed;
-        private float maxMomentum;
-        private float momentum;
+
 
         #endregion
 
@@ -28,9 +26,6 @@ namespace ExamProjectFirstYear.Components
 
         public Vector2 Velocity { get; set; }
         public bool Grounded { get; set; }
-        public float Momentum { get => momentum; set => momentum = value; }
-        public float MaxMomentum { get => maxMomentum; set => maxMomentum = value; }
-        public bool HasJumped { get => hasJumped; set => hasJumped = value; }
         public float Force { get => force; set => force = value; }
 
         #endregion
@@ -44,10 +39,9 @@ namespace ExamProjectFirstYear.Components
         /// <param name="gravityOn"></param>
         /// <param name="maxMomentum"></param>
         /// <param name="speed"></param>
-        public Movement(bool gravityOn, float maxMomentum, float speed)
+        public Movement(bool gravityOn, float speed)
         {
             this.gravityOn = gravityOn;
-            this.maxMomentum = maxMomentum;
             this.speed = speed;
 
         }
@@ -93,12 +87,12 @@ namespace ExamProjectFirstYear.Components
         /// </summary>
         public void GravityHandling()
         {
-            /// If the players position is above the bottom of the screen and isgrounded is false (if the player is not on a platform) player will be pulled
+            /// If the GameObjects position is above the bottom of the screen and Grounded is false (if the GameObject is not on a platform) it will be pulled
             /// down by the value of force.
-            if (Grounded == false && hasJumped == true)
+            if (Grounded == false)
             {
                 /// As long as force is a higher value than -20 it will be lowered.
-                /// This ensures that force will not become so low that it can pull the player throough a platform in a single frame.
+                /// This ensures that force will not become so low that it can pull the GameObject through a platform in a single frame.
                 if (force >= -20f)
                 {
                     force--;
@@ -112,49 +106,46 @@ namespace ExamProjectFirstYear.Components
         }
 
         /// <summary>
-        /// Relevant for player. Notifies when player collides with a platform. Ensures that Grounded is set to true and hasJumped to false
-        /// When landing on a platform, so that player may jump again.
-        /// Ensures that gravity kicks in and pulls player down if player jumps up and collides with a platform from below.
+        /// Mostly relevant for player. Notifies when the GameObject in question collides with a platform. Ensures that Grounded is set to true
+        /// So that Gravityhandling will set the force to zero, so that when the GameObject (for example player) falls from a platform it isn't
+        /// immediately pulled down with the maxforce of -20. Basically this imitates wind resistance.
         /// </summary>
         /// <param name="gameEvent"></param>
         /// <param name="component"></param>
         public void Notify(GameEvent gameEvent, Component component)
         {
-            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
+            if (gameEvent.Title == "NoLongerColliding")
+            {
+				if (component.GameObject.Tag == Tag.PLATFORM)
+				{
+                    Grounded = false;
+                }
+            }
+
+            if (gameEvent.Title == "Colliding")
             {
                 Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
                                     ((Collider)(GameObject.GetComponent(Tag.COLLIDER))).CollisionBox);
 
-                //Top and bottom platform.
-                if (intersection.Width > intersection.Height)
-                {
-                    //Top platform.
-                    if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
+				if (component.GameObject.Tag == Tag.PLATFORM)
+				{
+                    //Top and bottom platform.
+                    if (intersection.Width > intersection.Height)
                     {
-                        //Following ensures that player can jump again when landing on top of a platform.
-                        Grounded = true;
-                        hasJumped = false;
-                        momentum = 0;
-                    }
-
-                    //Bottom platform.
-                    if (component.GameObject.Transform.Position.Y < GameObject.Transform.Position.Y)
-                    {
-                        //Following ensures that players jump is interrupted if the hit a platform.
-                        hasJumped = true;
-                        momentum = 0;
+                        //Top platform.
+                        if (component.GameObject.Transform.Position.Y > GameObject.Transform.Position.Y)
+                        {
+                            Grounded = true;
+                        }
                     }
                 }
+                // Ensures that GameObjects that aren't platforms can't set the value Grounded to true which would potentially stop the player midair.
+				else
+				{
+					Grounded = false;
+				}
             }
-
-            if (gameEvent.Title == "NoLongerColliding" && component.GameObject.Tag == Tag.PLATFORM)
-            {
-                Grounded = false;
-            }
-
         }
-
-
         #endregion
     }
 }

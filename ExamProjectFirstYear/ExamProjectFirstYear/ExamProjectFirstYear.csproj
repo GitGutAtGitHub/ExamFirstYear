@@ -62,7 +62,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>7C0182E543B91E50766CD4372150B236D9A9D1A3</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>5DEE852D58576672B97C63F4D1632B23C0A10F69</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>ExamProjectFirstYear_TemporaryKey.pfx</ManifestKeyFile>
@@ -80,7 +80,10 @@
     <Compile Include="Camera.cs" />
     <Compile Include="CommandPattern\CommandTag.cs" />
     <Compile Include="CommandPattern\ReleaseCommand.cs" />
+    <Compile Include="Components\AttackMelee.cs" />
     <Compile Include="Components\Door.cs" />
+    <Compile Include="Components\IAttack.cs" />
+    <Compile Include="Components\RangedEnemy.cs" />
     <Compile Include="Components\PlayerComponents\PlayerManaUI.cs" />
     <Compile Include="Components\PlayerComponents\Inventory.cs" />
     <Compile Include="Components\PlayerComponents\Journal.cs" />
@@ -93,6 +96,7 @@
     <Compile Include="StatePattern\MenuStatePattern\PausedState.cs" />
     <Compile Include="StatePattern\MenuStatePattern\PlayingState.cs" />
     <Compile Include="StatePattern\MenuStatePattern\StartState.cs" />
+    <Compile Include="Components\RangedAttack.cs" />
     <Compile Include="ObjectPools\EnemyProjectilePool.cs" />
     <Compile Include="ObjectPools\BossProjectilePool.cs" />
     <Compile Include="CommandPattern\AttackCommand.cs" />
@@ -108,8 +112,10 @@
     <Compile Include="StatePattern\IEntity.cs" />
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="Levels\LevelManager.cs" />
+    <Compile Include="ObjectPools\MeleeAttackPool.cs" />
     <Compile Include="ObjectPools\ObjectPool.cs" />
     <Compile Include="ObjectPools\PlayerMeleeAttackPool.cs" />
+    <Compile Include="ObjectPools\ProjectilePool.cs" />
     <Compile Include="PathFinding\Node.cs" />
     <Compile Include="PathFinding\NodeManager.cs" />
     <Compile Include="PathFinding\PathFinder.cs" />
@@ -129,6 +135,8 @@
     <Compile Include="Components\Projectile.cs" />
     <Compile Include="Factories\ProjectileFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sound\SoundEngine.cs" />
+    <Compile Include="Sound\SoundItem.cs" />
     <Compile Include="SpriteSheetCutter.cs" />
     <Compile Include="StatePattern\EnemyStatePattern\EnemyAttackState.cs" />
     <Compile Include="StatePattern\EnemyStatePattern\EnemyIdleState.cs" />

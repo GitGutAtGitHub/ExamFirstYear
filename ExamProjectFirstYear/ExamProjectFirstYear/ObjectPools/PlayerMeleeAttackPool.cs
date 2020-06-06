@@ -28,9 +28,9 @@ namespace ExamProjectFirstYear.ObjectPools
 			// Tilføj cleanup kode her
 		}
 
-		protected override GameObject Create()
+		protected override GameObject Create(Tag sender)
 		{
-			return ProjectileFactory.Instance.Create(Tag.PLAYERMELEEATTACK);
+			return ProjectileFactory.Instance.Create(Tag.PLAYERMELEEATTACK, sender);
 		}
 	}
 }

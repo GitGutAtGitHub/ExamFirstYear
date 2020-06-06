@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -28,7 +29,7 @@ namespace ExamProjectFirstYear.StatePattern
                 switch (enemy.ToEnum())
                 {
                     case Tag.MEELEEENEMY:
-                        //(enemy as MeleeEnemy).SwitchState(new EnemyAttackState());
+                        (enemy as MeleeEnemy).SwitchState(new EnemyAttackState());
                         break;
 
                     case Tag.FLYINGENEMY:
@@ -36,7 +37,7 @@ namespace ExamProjectFirstYear.StatePattern
                         break;
 
                     case Tag.RANGEDENEMY:
-                        //(enemy as RangedEnemy).SwitchState(new EnemyAttackState());
+                        (enemy as RangedEnemy).SwitchState(new EnemyAttackState());
                         break;
                 }
             }
@@ -66,7 +67,18 @@ namespace ExamProjectFirstYear.StatePattern
         /// </summary>
         public void IdleMeleeEnemy()
         {
+            if (enemy.Path.Count == 0 || enemy.Path == null)
+            {
+                if (!PathFinder.Instance.EnemiesNeedingPath.Contains(enemy))
+                {
+                    // Adds the flying enemy to the list of enemies that need to find a path.
+                    PathFinder.Instance.EnemiesNeedingPath.Enqueue(enemy);
+                }
+            }
 
+            // ((Movement)enemy.GameObject.GetComponent(Tag.MOVEMENT)).Velocity = new Vector2(-1, 0);
+            //enemy.Velocity = new Vector2(-1, 0);
+            enemy.FollowPath(false);
         }
 
         /// <summary>
@@ -85,6 +97,18 @@ namespace ExamProjectFirstYear.StatePattern
         /// </summary>
         public void IdleRangedEnemy()
         {
+            if (enemy.Path.Count == 0 || enemy.Path == null)
+            {
+                if (!PathFinder.Instance.EnemiesNeedingPath.Contains(enemy))
+                {
+                    // Adds the flying enemy to the list of enemies that need to find a path.
+                    PathFinder.Instance.EnemiesNeedingPath.Enqueue(enemy);
+                }
+            }
+
+            // ((Movement)enemy.GameObject.GetComponent(Tag.MOVEMENT)).Velocity = new Vector2(-1, 0);
+            //enemy.Velocity = new Vector2(-1, 0);
+            enemy.FollowPath(false);
 
         }
 
@@ -93,6 +117,9 @@ namespace ExamProjectFirstYear.StatePattern
 
         }
 
-
+        public Tag ToTag()
+        {
+            return Tag.ENEMYIDLESTATE;
+        }
     }
 }

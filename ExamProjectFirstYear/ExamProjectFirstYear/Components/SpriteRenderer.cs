@@ -17,7 +17,9 @@ namespace ExamProjectFirstYear
 
 		public Texture2D Sprite { get; set; }
 		public Vector2 Origin { get; set; }
-		public float SpriteLayer { get; set; }
+		public float SpriteLayer { get; set; } = 0.4f;
+
+		public SpriteEffects spriteEffect = SpriteEffects.None;
 
 		#endregion
 
@@ -60,7 +62,7 @@ namespace ExamProjectFirstYear
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color.White, 0, Origin, 1, SpriteEffects.None, SpriteLayer);
+			spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color.White, 0, Origin, 1, spriteEffect, SpriteLayer);
 		}
 
 		public override Tag ToEnum()

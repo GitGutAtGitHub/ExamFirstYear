@@ -15,7 +15,7 @@ namespace ExamProjectFirstYear
     {
         #region Fields
 
-        private float timer = 0.2f;
+        private float timer = 0.5f;
         private bool timeUp = false;
 
         #endregion
@@ -46,12 +46,12 @@ namespace ExamProjectFirstYear
                 timeUp = true;
                 timer = 0.5f;
             }
-            if (GameObject.Tag == Tag.PLAYERMELEEATTACK && timeUp)
+            if ((GameObject.Tag == Tag.PLAYERMELEEATTACK || GameObject.Tag == Tag.ENEMYMELEEATTACK) && timeUp)
             {
                 GameObject.Destroy();
                 timeUp = false;
             }
-            
+
         }
 
         public void MoveToObjectPool()
@@ -70,6 +70,9 @@ namespace ExamProjectFirstYear
                     break;
                 case Tag.ENEMYPROJECTILE:
                     EnemyProjectilePool.Instance.ReleaseObject(GameObject);
+                    break;
+                case Tag.MELEEATTACK:
+                    MeleeAttackPool.Instance.ReleaseObject(GameObject);
                     break;
             }
             GameWorld.Instance.Colliders.Remove((Collider)GameObject.GetComponent(Tag.COLLIDER));
@@ -96,17 +99,35 @@ namespace ExamProjectFirstYear
 
         public void Notify(GameEvent gameEvent, Component other)
         {
-            if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM)
-            {
-                MoveToObjectPool();
-                GameObject.Destroy();
-                //other.GameObject.Destroy();
-            }
-            if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
-            {
-                MoveToObjectPool();
-                GameObject.Destroy();
-            }
+            //if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLATFORM && this.GameObject.Tag != Tag.ATTACKMELEE)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //    //other.GameObject.Destroy();
+            //}
+            //if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //}
+
+            //if (gameEvent.Title == "Colliding" && this.GameObject.Tag == Tag.PLAYERPROJECTILE && other.GameObject.Tag == Tag.FLYINGENEMY)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //}
+
+            //if (gameEvent.Title == "Colliding" && this.GameObject.Tag == Tag.PLAYERPROJECTILE && other.GameObject.Tag == Tag.MEELEEENEMY)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //}
+
+            //if (gameEvent.Title == "Colliding" && this.GameObject.Tag == Tag.PLAYERPROJECTILE && other.GameObject.Tag == Tag.RANGEDENEMY)
+            //{
+            //    MoveToObjectPool();
+            //    GameObject.Destroy();
+            //}
         }
 
         #endregion

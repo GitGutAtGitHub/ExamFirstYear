@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,17 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.PathFinding
 {
-    class Node
+    /// <summary>
+    /// This class is public to make Unit Testing possible.
+    /// </summary>
+    public class Node
     {
         #region FIELDS
         private Node parent;
 
         private int gCost = 0;
         private int hCost = 0;
-
+        public Texture2D NodeSprite { get; set; }
         private Vector2 position;
 
         private bool walkable;

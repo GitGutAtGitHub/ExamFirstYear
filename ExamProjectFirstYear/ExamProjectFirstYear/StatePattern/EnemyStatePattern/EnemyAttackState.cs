@@ -1,19 +1,26 @@
 ﻿using ExamProjectFirstYear.Components;
+using ExamProjectFirstYear.Components.PlayerComponents;
 using ExamProjectFirstYear.PathFinding;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.StatePattern
 {
-    class EnemyAttackState : IState
+    /// <summary>
+    /// public for unit testing
+    /// </summary>
+    public class EnemyAttackState : IState
     {
         private Enemy enemy;
         private float dstX;
         private float dstY;
+
+        TimeSpan cooldownTimer = new TimeSpan(0,0,0,0,500);
 
         public void Enter(IEntity enemy)
         {
@@ -32,6 +39,7 @@ namespace ExamProjectFirstYear.StatePattern
                 switch (enemy.ToEnum())
                 {
                     case Tag.MEELEEENEMY:
+                        MeleeEnemyAttack();
                         break;
 
                     case Tag.FLYINGENEMY:
@@ -39,6 +47,7 @@ namespace ExamProjectFirstYear.StatePattern
                         break;
 
                     case Tag.RANGEDENEMY:
+                        RangedEnemyAttack();
                         break;
                 }
             }
@@ -49,7 +58,7 @@ namespace ExamProjectFirstYear.StatePattern
                 switch (enemy.ToEnum())
                 {
                     case Tag.MEELEEENEMY:
-
+                        (enemy as MeleeEnemy).SwitchState(new EnemyIdleState());
                         break;
 
                     case Tag.FLYINGENEMY:
@@ -57,6 +66,7 @@ namespace ExamProjectFirstYear.StatePattern
                         break;
 
                     case Tag.RANGEDENEMY:
+                        (enemy as RangedEnemy).SwitchState(new EnemyIdleState());
                         break;
                 }
             }
@@ -67,46 +77,62 @@ namespace ExamProjectFirstYear.StatePattern
         /// </summary>
         public void FlyingEnemyAttack()
         {
-            // Find new path if target (players) position has changed since it last generated a path.
-            if ((enemy as FlyingEnemy).PrevTargetNode !=
-                new Vector2((int)(enemy.Target.Transform.Position.X / NodeManager.Instance.CellSize),
-                            (int)(enemy.Target.Transform.Position.Y / NodeManager.Instance.CellSize)))
+            enemy.GeneratePath();
+            enemy.FollowPath(true);
+
+            if (true)
             {
-             
-                // Adds the flying enemy to the list of enemies that need to find a path.
-                PathFinder.Instance.EnemiesNeedingPath.Enqueue(enemy);
+
             }
+        }
 
-            if ((enemy as FlyingEnemy).FlyingPath != null)
+        public void MeleeEnemyAttack()
+        {
+
+       
+            if (enemy.Path.Count <= 2)
             {
-                // To avoid null exception
-                if ((enemy as FlyingEnemy).FlyingPath.Count > 0)
+                if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack == true)
                 {
-                    (enemy as FlyingEnemy).TargetPosition = new Vector2(((enemy as FlyingEnemy).FlyingPath.Peek().Position.X + NodeManager.Instance.CellSize / 2),
-                                                                        ((enemy as FlyingEnemy).FlyingPath.Peek().Position.Y + NodeManager.Instance.CellSize / 2));
+                    ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).MeleeAttack(enemy, enemy.Velocity);
+                     cooldownTimer = new TimeSpan(0, 0, 0, 0, 500);
+                }
 
-                    //calculating the direction-vector between the enemy and its target position
-                    float vectorX = ((enemy as FlyingEnemy).TargetPosition.X) - (enemy.GameObject.Transform.Position.X);
-                    float vectorY = ((enemy as FlyingEnemy).TargetPosition.Y) - (enemy.GameObject.Transform.Position.Y);
+                if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack == false)
+                {
+                    cooldownTimer -= GameWorld.Instance.ElapsedGameTime;
 
-                    enemy.Velocity = new Vector2(vectorX, vectorY);
-
-                    //checking the distance between the enemy and the targetposition.
-                    dstX = Math.Abs(enemy.GameObject.Transform.Position.X - (enemy as FlyingEnemy).TargetPosition.X);
-                    dstY = Math.Abs(enemy.GameObject.Transform.Position.Y - (enemy as FlyingEnemy).TargetPosition.Y);
-
-                    //it has reached the end of the node, and is ready to get instructions for the next node.
-                    if (dstX < 8 && dstY < 8)
+                    if (cooldownTimer <= TimeSpan.Zero)
                     {
-                        //if there is still path nodes, then pop the current
-                        if ((enemy as FlyingEnemy).FlyingPath.Count > 0)
-                        {
-                            (enemy as FlyingEnemy).FlyingPath.Pop();
-                            enemy.Velocity = new Vector2(0, 0);
-                        }
+                        ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack = true;
                     }
                 }
+               
+             
+
+
             }
+
+            enemy.GeneratePath();
+            enemy.FollowPath(false);
+
+
+        }
+
+        public void RangedEnemyAttack()
+        {
+            float vectorX;
+            float vectorY;
+
+            enemy.Velocity = Vector2.Zero;
+            enemy.Path.Clear();
+
+            vectorX = (enemy.Target.Transform.Position.X) - (enemy.GameObject.Transform.Position.X);
+            vectorY = (enemy.Target.Transform.Position.Y) - (enemy.GameObject.Transform.Position.Y);
+
+            ((RangedAttack)enemy.GameObject.GetComponent(Tag.RANGEDATTACK)).RangedAttackMethod(enemy, new Vector2(vectorX, vectorY));
+           
+
         }
 
         public void Exit()
@@ -115,7 +141,10 @@ namespace ExamProjectFirstYear.StatePattern
         }
 
 
-
+        public Tag ToTag()
+        {
+            return Tag.ENEMYATTACKSTATE;
+        }
 
 
     }

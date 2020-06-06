@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,43 +8,64 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-	/// <summary>
-	/// Class for managing the lightsources.
-	/// </summary>
-	class LightSource : Component
+	public class LightSource : Component
 	{
-		#region Fields
+		#region FIELDS AND PROPERTIES
 
-		private float radius;
-		private int intensity;
-		private bool lightOn;
+		private Texture2D lightMaskTexture;
+		private Vector2 lightOrigin;
+
+		public float LightRadiusScale { get; set; }
+		public bool LightOn { get; set; }
 
 		#endregion
 
-
-		#region Constructors
+		#region METHODS
 
 		/// <summary>
-		/// Constructor for LightSource
+		/// LightSources constructor.
 		/// </summary>
-		public LightSource()
+		/// <param name="lightRadiusScale"></param>
+		/// <param name="lightOn"></param>
+		public LightSource(float lightRadiusScale, bool lightOn)
 		{
-
+			this.LightRadiusScale = lightRadiusScale;
+			this.LightOn = lightOn;
 		}
 
-		#endregion
-
-
-		#region Override methods
-
+		/// <summary>
+		/// Sets the lightMaskTexture and lightOrigin point.
+		/// </summary>
 		public override void Awake()
 		{
-			base.Awake();
+			lightMaskTexture = GameWorld.Instance.Content.Load<Texture2D>("Lightmask");
+			lightOrigin = new Vector2(lightMaskTexture.Width / 2, lightMaskTexture.Height / 2);
+		}
+
+		/// <summary>
+		/// Adds this lightsource to the list of lightsources nin GameWorld.
+		/// </summary>
+		public override void Start()
+		{
+			GameWorld.Instance.LightSources.Add(this);
 		}
 
 		public override void Update(GameTime gameTime)
 		{
-			base.Update(gameTime);
+
+		}
+
+		/// <summary>
+		/// Draws the lightsource component.
+		/// </summary>
+		/// <param name="spriteBatch"></param>
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			if (LightOn == true)
+			{
+				spriteBatch.Draw(lightMaskTexture, GameObject.Transform.Position, null, Color.White, 0, lightOrigin, LightRadiusScale, SpriteEffects.None, 1f);
+
+			}
 		}
 
 		public override Tag ToEnum()
@@ -51,6 +73,6 @@ namespace ExamProjectFirstYear.Components
 			return Tag.LIGHTSOURCE;
 		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

@@ -73,6 +73,12 @@
 /processorParam:TextureFormat=Color
 /build:FlyingEnemy.png
 
+#begin footsteps.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:footsteps.mp3
+
 #begin InventoryClosed.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -111,7 +117,13 @@
 /processorParam:TextureFormat=Compressed
 /build:JournalText.spritefont
 
-#begin MeleeObject.png
+#begin LightEffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:LightEffect.fx
+
+#begin Lightmask.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -121,7 +133,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:MeleeObject.png
+/build:Lightmask.png
+
+#begin MeleeObject2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MeleeObject2.png
 
 #begin NodeGridTexture.png
 /importer:TextureImporter
@@ -219,6 +243,18 @@
 /processorParam:TextureFormat=Color
 /build:Platform.png
 
+#begin searched area.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:searched area.png
+
 #begin smol.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -230,6 +266,14 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:smol.png
+
+
+
+#begin Soundtrack_mixdown2.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Soundtrack_mixdown2.mp3
 
 #begin spriteFont.spritefont
 /importer:FontDescriptionImporter
