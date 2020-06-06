@@ -65,16 +65,15 @@ namespace ExamProjectFirstYear.Components
         {
             GameObject.Tag = Tag.INVENTORY;
             GameObject.SpriteName = "InventoryClosed";
-
             inventoryRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
-
+            MaterialTypeIDs.Add(1);
             inventoryHeading = GameWorld.Instance.Content.Load<SpriteFont>("JournalHeading");
             inventoryText = GameWorld.Instance.Content.Load<SpriteFont>("JournalText");
         }
 
         public override void Start()
-        { 
-            
+        {
+            GameObject.Transform.Translate(new Vector2(30, 180));
         }
         public override void Update(GameTime gameTime)
         {
@@ -169,7 +168,7 @@ namespace ExamProjectFirstYear.Components
         private void DrawStoredMaterialStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(inventoryHeading, "Inventory", new Vector2(playerPositionX - 890, playerPositionY - 300),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.72f);
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.8f);
 
             TmpMaterialType tmpMaterialType;
             TmpStoredMaterial tmpStoredMaterial;
@@ -181,13 +180,13 @@ namespace ExamProjectFirstYear.Components
             //Create a text field for every MaterialType in the ID list.
             foreach (int materialTypeID in MaterialTypeIDs)
             {
-                tmpInventory = GameWorld.Instance.sQLiteHandler.GetInventory();
-                tmpStoredMaterial = GameWorld.Instance.sQLiteHandler.GetStoredMaterial(materialTypeID, tmpInventory.TmpID);
-                tmpMaterialType = GameWorld.Instance.sQLiteHandler.GetMaterialType(materialTypeID);
+                tmpInventory = SQLiteHandler.Instance.GetInventory();
+                tmpStoredMaterial = SQLiteHandler.Instance.GetStoredMaterial(materialTypeID, tmpInventory.TmpID);
+                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(materialTypeID);
 
                 spriteBatch.DrawString(inventoryText, $"{tmpMaterialType.TmpName}: {tmpStoredMaterial.TmpAmount}",
                                        new Vector2(positionX, positionY),
-                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.72f);
+                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.8f);
 
                 positionY += 60;
             }   

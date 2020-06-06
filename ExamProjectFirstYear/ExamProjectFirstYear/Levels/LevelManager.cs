@@ -69,8 +69,8 @@ namespace ExamProjectFirstYear
         public void InitializeLevel()
         {
             LoadBitmap();
-            PopulateLevel(PlatformSection);
-            //PopulateLevel(TestLevel);
+            //PopulateLevel(PlatformSection);
+            PopulateLevel(TestLevel);
 
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
