@@ -19,10 +19,10 @@ namespace ExamProjectFirstYear
 		////The following to fields are used to notify objects that has collided when they are no longer colliding with eachother.
 		private GameEvent noLongerCollidingEvent = new GameEvent("NoLongerColliding");
 
-
 		private Collider currentCollisionCollider;
 
 		private Vector2 size;
+
 		private Vector2 origin;
 
 		private Texture2D collisionTexture;
