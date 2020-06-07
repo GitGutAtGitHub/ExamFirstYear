@@ -109,6 +109,7 @@ namespace ExamProjectFirstYear
 			LoadSave();
 			TestMethod();
 			RegenerateMana();
+			Console.WriteLine(PlayerCollidingWithDoor);
 		}
 
 		#endregion
