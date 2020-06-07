@@ -42,6 +42,8 @@ namespace ExamProjectFirstYear.Components
             speed = 200f;
             GameObject.Tag = Tag.MEELEEENEMY;
             SwitchState(new EnemyIdleState());
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("MothDeath", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("MothMove", true);
         }
 
         public override void Start()
@@ -98,6 +100,8 @@ namespace ExamProjectFirstYear.Components
         {
             if (health <= 0)
             {
+                ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundEffect("MothDeath");
+
                 GameObject.Destroy();
                 // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 DropMaterialUponDeath(1);

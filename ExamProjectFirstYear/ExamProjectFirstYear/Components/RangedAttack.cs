@@ -58,6 +58,8 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
 
                 // Resets the timer so the attack can't be used again, until the timer reaches x-amount of seconds again.
                 rangedAttackTimer = 0;
+                ((SoundComponent)sender.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundInstance("RangedAttack3");
+
             }
         }
 

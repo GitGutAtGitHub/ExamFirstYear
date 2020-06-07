@@ -84,6 +84,12 @@ namespace ExamProjectFirstYear
         public override void Awake()
         {
             GameObject.Tag = Tag.PLAYER;
+
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("footstepsLouder", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Whoosh m. reverb", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Jump_04", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("RangedAttack3", false);
+
             GameObject.SpriteName = "OopPlayerSprite2";
 
             TmpJournal = SQLiteHandler.Instance.GetJournal(PlayerID);
@@ -98,6 +104,7 @@ namespace ExamProjectFirstYear
             //jump = (Jump)GameObject.GetComponent(Tag.JUMP);
 
             saveLoaded = true;
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).Volume = 1;
         }
 
         public override void Update(GameTime gameTime)
@@ -105,6 +112,9 @@ namespace ExamProjectFirstYear
             LoadSave();
             TestMethod();
             RegenerateMana();
+            //Console.WriteLine(Velocity);
+
+           
         }
 
         #endregion

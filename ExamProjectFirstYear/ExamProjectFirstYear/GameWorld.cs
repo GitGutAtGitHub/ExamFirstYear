@@ -9,6 +9,7 @@ using System.Dynamic;
 using System.Threading;
 using ExamProjectFirstYear.Components;
 using ExamProjectFirstYear.Components.PlayerComponents;
+using Microsoft.Xna.Framework.Media;
 
 namespace ExamProjectFirstYear
 {
@@ -32,6 +33,7 @@ namespace ExamProjectFirstYear
 		public Journal journal;
 		public Inventory inventory;
 		private Camera camera;
+		private Song bgAmbience;
 
 		//Following used for the lighteffects.
 		private Effect lightEffect;
@@ -111,7 +113,8 @@ namespace ExamProjectFirstYear
 			//graphics.ApplyChanges();
 			IsMouseVisible = true;
 
-			camera = new Camera();
+	
+			//camera = new Camera();
 
 			base.Initialize();
 		}
@@ -125,8 +128,9 @@ namespace ExamProjectFirstYear
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			SoundEngine.Instance.LoadContent(Content);
-			SoundEngine.Instance.PlayAmbience();
+			bgAmbience = Content.Load<Song>("Soundtrack_mixdown2");
+			MediaPlayer.Play(bgAmbience);
+
 			//startButton = Content.Load<Texture2D>("OopPlayerSprite2");
 			//exitButton = Content.Load<Texture2D>("OopPlayerSprite2");
 
@@ -185,7 +189,6 @@ namespace ExamProjectFirstYear
 				Exit();
 			}
 
-			SoundEngine.Instance.PlaySoundEffects();
 
 			//previousKeyState = currentKeyState;
 			//currentKeyState = Keyboard.GetState();
@@ -264,7 +267,7 @@ namespace ExamProjectFirstYear
 				}
 			}
 
-			camera.FollowPlayer(player.GameObject);
+			Camera.Instance.FollowPlayer(player.GameObject);
 
 			base.Update(gameTime);
 		}
@@ -336,7 +339,7 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		private void DrawUIObjects()
 		{
-			spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: camera.TransformCamera);
+			spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: Camera.Instance.TransformCamera);
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
 				//VI BØR MÅSKE LAVE EN LISTE AF UI OBJECTS I STEDET FOR AT HAVE DENNE LANGE IF SÆTNING
@@ -355,7 +358,7 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		private void DrawLightSourcesWithCameraCulling()
 		{
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: camera.TransformCamera);
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: Camera.Instance.TransformCamera);
 
 			for (int i = 0; i < LightSources.Count; i++)
 			{
@@ -376,8 +379,8 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		private void DrawGameObjectsWithCameraCulling()
 		{
-			spriteBatch.Begin(transformMatrix: camera.TransformCamera);
-			NodeManager.Instance.Draw(spriteBatch);
+			spriteBatch.Begin(transformMatrix: Camera.Instance.TransformCamera);
+			//NodeManager.Instance.Draw(spriteBatch);
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{

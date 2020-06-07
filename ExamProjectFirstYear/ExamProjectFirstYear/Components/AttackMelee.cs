@@ -41,6 +41,8 @@ namespace ExamProjectFirstYear.Components
                 SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
                 Collider tmpMeleeCollider = (Collider)tmpMeleeObject.GetComponent(Tag.COLLIDER);
 
+                ((SoundComponent)sender.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundEffect("Whoosh m. reverb");
+
                 //Makes sure the attack appears on the right side of the player.
                 if (velocity.X > 0)
                 {

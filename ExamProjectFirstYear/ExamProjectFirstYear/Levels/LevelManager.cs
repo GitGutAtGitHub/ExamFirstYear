@@ -56,6 +56,7 @@ namespace ExamProjectFirstYear
 
         //public for unit testing
         public Bitmap TestLevel;
+        public Bitmap BigTestLevel;
 
         Bitmap PlatformSection;
 
@@ -63,14 +64,15 @@ namespace ExamProjectFirstYear
         public void LoadBitmap()
         {
             TestLevel = (Bitmap)Image.FromFile(GetPath("TestLevel"));
+            BigTestLevel = (Bitmap)Image.FromFile(GetPath("BigTestLevel"));
             PlatformSection = (Bitmap)Image.FromFile(GetPath("PlatformSection"));
         }
 
         public void InitializeLevel()
         {
             LoadBitmap();
-            //PopulateLevel(PlatformSection);
-            PopulateLevel(TestLevel);
+            PopulateLevel(PlatformSection);
+            //PopulateLevel(TestLevel);
 
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
@@ -99,6 +101,13 @@ namespace ExamProjectFirstYear
                         CreateObject(Tag.PLATFORM, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
 
+                    //if the pixel is black - Place platform
+                    if (input.R == 156 && input.G == 156 && input.B == 156 && SpotOccupied[x, y] == false)
+                    {
+                        //add a platform
+                        CreateObject(Tag.WALL, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
+
                     //if the pixel is Red
                     if (input.R == 255 && input.G == 0 && input.B == 0)
                     {
@@ -121,7 +130,7 @@ namespace ExamProjectFirstYear
                     }
 
                     //if the pixel is slightly red
-                    if (input.R == 255 && input.G == 100 && input.B == 100)
+                    if (input.R == 255 && input.G == 99 && input.B == 99)
                     {
                         //add a flying
                         CreateObject(Tag.RANGEDENEMY, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
@@ -155,6 +164,7 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(new Jump(35));
                     createdObject.AddComponent(new RangedAttack());
                     createdObject.AddComponent(new AttackMelee());
+                    createdObject.AddComponent(new SoundComponent());
                     break;
 
                 case Tag.PLATFORM:
@@ -162,10 +172,16 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(new Platform());
                     break;
 
+                case Tag.WALL:
+                    //spriteRenderer.Origin = new Vector2(createdObject.Transform.Position.X, createdObject.Transform.Position.Y);
+                    createdObject.AddComponent(new Wall());
+                    break;
+
                 case Tag.FLYINGENEMY:
                     createdObject.Tag = Tag.FLYINGENEMY;
                     createdObject.AddComponent(new FlyingEnemy());
                     createdObject.AddComponent(new LightSource(0.5f, true));
+                    createdObject.AddComponent(new SoundComponent());
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((FlyingEnemy)(createdObject.GetComponent(Tag.FLYINGENEMY))).AddTarget;
                     break;
@@ -174,6 +190,7 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(new MeleeEnemy());
                     createdObject.AddComponent(new LightSource(0.5f, true));
                     createdObject.AddComponent(new Movement(true, 900));
+                    createdObject.AddComponent(new SoundComponent());
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     //createdObject.AddComponent(new Movement(true, 35, 900));
                     LevelInitializationDoneEvent += ((MeleeEnemy)(createdObject.GetComponent(Tag.MEELEEENEMY))).AddTarget;
@@ -182,6 +199,7 @@ namespace ExamProjectFirstYear
                 case Tag.RANGEDENEMY:
                     createdObject.AddComponent(new RangedEnemy());
                     createdObject.AddComponent(new LightSource(0.5f, true));
+                    createdObject.AddComponent(new SoundComponent());
                     // Subscribes each flying enemy to an event, that calls the method AddTarget once the event is raised.
                     LevelInitializationDoneEvent += ((RangedEnemy)(createdObject.GetComponent(Tag.RANGEDENEMY))).AddTarget;
                     break;
@@ -257,10 +275,12 @@ namespace ExamProjectFirstYear
             //Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.
             for (int x = 0; x < (int)Math.Round(createdObject.GetObjectWidthInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); x++)
             {
-                for (int y = 0; y <= (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
-                {
-                    SpotOccupied[forLoopX + x, forLoopY + y] = true;
-                }
+                SpotOccupied[forLoopX + x, forLoopY] = true;
+
+                //for (int y = 0; y <= (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
+                //{
+                //    SpotOccupied[forLoopX + x, forLoopY + y] = true;
+                //}
             }
         }
     }

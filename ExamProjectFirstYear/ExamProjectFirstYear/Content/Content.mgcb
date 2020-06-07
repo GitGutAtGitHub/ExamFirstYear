@@ -79,6 +79,12 @@
 /processorParam:Quality=Best
 /build:footsteps.mp3
 
+#begin footstepsLouder.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:footstepsLouder.mp3
+
 #begin InventoryClosed.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -117,6 +123,36 @@
 /processorParam:TextureFormat=Compressed
 /build:JournalText.spritefont
 
+#begin Jump.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Jump.mp3
+
+#begin Jump_01.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Jump_01.mp3
+
+#begin Jump_02.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Jump_02.mp3
+
+#begin Jump_03.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Jump_03.mp3
+
+#begin Jump_04.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Jump_04.mp3
+
 #begin LightEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -146,6 +182,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:MeleeObject2.png
+
+#begin MothDeath.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:MothDeath.mp3
+
+#begin MothMove.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:MothMove.mp3
 
 #begin NodeGridTexture.png
 /importer:TextureImporter
@@ -243,6 +291,24 @@
 /processorParam:TextureFormat=Color
 /build:Platform.png
 
+#begin RangedAttack.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:RangedAttack.mp3
+
+#begin RangedAttack2.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:RangedAttack2.mp3
+
+#begin RangedAttack3.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:RangedAttack3.mp3
+
 #begin searched area.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -267,13 +333,29 @@
 /processorParam:TextureFormat=Color
 /build:smol.png
 
-
-
 #begin Soundtrack_mixdown2.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Soundtrack_mixdown2.mp3
+
+#begin SpiderDeath.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SpiderDeath.mp3
+
+#begin SpiderFootsteps.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SpiderFootsteps.mp3
+
+#begin SpiderFootsteps_01.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SpiderFootsteps_01.mp3
 
 #begin spriteFont.spritefont
 /importer:FontDescriptionImporter
@@ -293,4 +375,34 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UnWalkableNode.png
+
+#begin WallSprite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:WallSprite.png
+
+#begin WaterOnStove.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:WaterOnStove.mp3
+
+#begin Whoosh m. reverb.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Whoosh m. reverb.mp3
+
+#begin Whoosh sound effect.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Whoosh sound effect.mp3
 

@@ -45,6 +45,9 @@ namespace ExamProjectFirstYear.CommandPattern
 			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
 			player.Velocity = velocity;
 			playerMovement.Move(velocity);
+
+		
+			//((SoundComponent)player.GameObject.GetComponent(Tag.SOUNDCOMPONENT)).ChangeRepeat("footstepsLouder", true);
 			//SoundEngine.Instance.AddSoundEffect(SoundEngine.Instance.Footsteps);
 
 		}

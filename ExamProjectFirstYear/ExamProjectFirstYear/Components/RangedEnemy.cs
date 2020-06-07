@@ -19,6 +19,9 @@ namespace ExamProjectFirstYear.Components
             health = 1;
             GameObject.Tag = Tag.RANGEDENEMY;
             SwitchState(new EnemyIdleState());
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("footstepsLouder", true);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("RangedAttack3", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("WaterOnStove", false);
         }
 
         public override void Start()
@@ -69,6 +72,7 @@ namespace ExamProjectFirstYear.Components
         {
             if (health <= 0)
             {
+                ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundEffect("WaterOnStove");
                 GameObject.Destroy();
                 // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 DropMaterialUponDeath(1);
