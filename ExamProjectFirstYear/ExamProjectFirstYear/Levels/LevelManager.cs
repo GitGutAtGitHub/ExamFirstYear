@@ -18,6 +18,8 @@ namespace ExamProjectFirstYear
         //Used for setting the enemies target, and making sure the player is intantiated when the target filed is set.
         public delegate void LevelInitializationDoneHandler();
         public event LevelInitializationDoneHandler LevelInitializationDoneEvent;
+        
+        public Door Door { get; private set; }
 
 
         protected virtual void OnLevelInitializationDoneEvent()
@@ -126,6 +128,12 @@ namespace ExamProjectFirstYear
                         //add a flying
                         CreateObject(Tag.RANGEDENEMY, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
+
+                    //if the pixel is purple-blue
+                    if (input.R == 100 && input.G == 100 && input.B == 255)
+                    {
+                        CreateObject(Tag.DOOR, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
                 }
             }
             // The event is raised. It calls the method AddTarget,
@@ -160,6 +168,10 @@ namespace ExamProjectFirstYear
                 case Tag.PLATFORM:
                     //spriteRenderer.Origin = new Vector2(createdObject.Transform.Position.X, createdObject.Transform.Position.Y);
                     createdObject.AddComponent(new Platform());
+                    break;
+
+                case Tag.DOOR:
+                    createdObject.AddComponent(Door = new Door());
                     break;
 
                 case Tag.FLYINGENEMY:
@@ -242,6 +254,11 @@ namespace ExamProjectFirstYear
             //    spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
             //    collider = new Collider(spriteRenderer);
             //}
+
+            else if (tag == Tag.DOOR)
+            {
+                collider = new Collider(spriteRenderer, (Door)createdObject.GetComponent(Tag.DOOR)) { CheckCollisionEvents = true };
+            }
 
 
             else

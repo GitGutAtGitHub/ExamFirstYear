@@ -9,8 +9,9 @@ namespace ExamProjectFirstYear.Components
 {
 	/// <summary>
 	/// Door component class.
+	/// Made public so we can access this class from other classes.
 	/// </summary>
-	class Door : Component
+	public class Door : Component, IGameListener
 	{
 		#region Fields
 
@@ -36,12 +37,13 @@ namespace ExamProjectFirstYear.Components
 
 		public override void Awake()
 		{
-			base.Awake();
+			GameObject.Tag = Tag.DOOR;
+			GameObject.SpriteName = "UnWalkableNode";
 		}
 
 		public override void Start()
 		{
-			base.Start();
+			isLocked = true;
 		}
 
 		public override Tag ToEnum()
@@ -61,6 +63,11 @@ namespace ExamProjectFirstYear.Components
 		{
 			isLocked = false;
 		}
+
+        public void Notify(GameEvent gameEvent, Component component)
+        {
+
+        }
 
         #endregion
     }

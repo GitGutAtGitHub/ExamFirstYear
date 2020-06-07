@@ -19,6 +19,7 @@ namespace ExamProjectFirstYear
 		////The following to fields are used to notify objects that has collided when they are no longer colliding with eachother.
 		private GameEvent noLongerCollidingEvent = new GameEvent("NoLongerColliding");
 
+		private List<Collider> listOfCurrentColliders = new List<Collider>();
 
 		private Collider currentCollisionCollider;
 
@@ -133,8 +134,7 @@ namespace ExamProjectFirstYear
 				{
 					if (CollisionBox.Intersects(other.CollisionBox))
 					{
-						//currentCollider is set to other so that we can ask it later if we are currently colliding with this specific collider
-						currentCollisionCollider = other;
+						listOfCurrentColliders.Add(other);
 						collidingEvent.Notify(other);
 					}
 				}
@@ -147,16 +147,16 @@ namespace ExamProjectFirstYear
 		/// <param name="other"></param>
 		public void OnNoLongerColliding(Collider other)
 		{
-			// If the currentCollider is not null but we no longer intersect with it, then it is reset as null and 
+			// If the currentCollider is not null but we no longer intersect with it, then it is reset as null and
 			// we notify the listener that the event onNoLongerCollidingEvent titled "NoLongerColliding" has occured.
 			// This is to tell the "other" that hey you used to collide with this object but you no longer do
-			// so that other can run any necessary code in this event. 
-			if (currentCollisionCollider != null)
+			// so that other can run any necessary code in this event.
+			if (listOfCurrentColliders.Contains(other) && currentCollisionCollider!= null)
 			{
-				if (!CollisionBox.Intersects(other.CollisionBox) && other == currentCollisionCollider)
+				if (!CollisionBox.Intersects(other.CollisionBox))
 				{
-					currentCollisionCollider = null;
 					noLongerCollidingEvent.Notify(other);
+					listOfCurrentColliders.Remove(other);
 				}
 			}
 		}
