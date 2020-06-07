@@ -45,7 +45,9 @@ namespace ExamProjectFirstYear.Components
                 if (velocity.X > 0)
                 {
                     attackDirection = new Vector2(sender.Transform.Position.X +
-                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange), sender.Transform.Position.Y);
+                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width / attackRange),
+                                                                sender.Transform.Position.Y -
+                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
 
                     tmpMeleeRenderer.spriteEffect = SpriteEffects.None;
                 }
@@ -53,7 +55,9 @@ namespace ExamProjectFirstYear.Components
                 if (velocity.X < 0)
                 {
                     attackDirection = new Vector2(sender.Transform.Position.X -
-                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange), sender.Transform.Position.Y);
+                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange),
+                                                                sender.Transform.Position.Y -
+                                                                (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Height / 2));
 
                     tmpMeleeRenderer.spriteEffect = SpriteEffects.FlipHorizontally;
                 }

@@ -19,11 +19,12 @@ namespace ExamProjectFirstYear.Components
             health = 1;
             GameObject.Tag = Tag.RANGEDENEMY;
             SwitchState(new EnemyIdleState());
+            enemyID = 2;
         }
 
         public override void Start()
         {
-            GameObject.SpriteName = "OopBossProjectileSprite2";
+            GameObject.SpriteName = "FlyingEnemy";
         }
 
         public override void AddTarget()
@@ -49,9 +50,6 @@ namespace ExamProjectFirstYear.Components
             Move();
             EnemyDeath();
         }
-      
-
-    
 
         protected override void Move()
         {
@@ -70,8 +68,10 @@ namespace ExamProjectFirstYear.Components
             if (health <= 0)
             {
                 GameObject.Destroy();
-                // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                DropMaterialUponDeath(Tag.MATCHHEAD);
+
+                DropMaterialUponDeath(enemyID);
+
+                GameWorld.Instance.sQLiteHandler.AddRecordedCreature(enemyID, GameWorld.Instance.player.PlayerID);
             }
         }
 
