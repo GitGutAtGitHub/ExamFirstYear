@@ -108,6 +108,14 @@ namespace ExamProjectFirstYear
                         CreateObject(Tag.WALL, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
 
+                    //if the pixel is black - Place platform
+                    if (input.R == 99 && input.G == 99 && input.B == 99 && SpotOccupied[x, y] == false)
+                    {
+                        //add a platform
+                        CreateDecoration(Tag.WALL, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
+
+
                     //if the pixel is Red
                     if (input.R == 255 && input.G == 0 && input.B == 0)
                     {
@@ -270,6 +278,45 @@ namespace ExamProjectFirstYear
             createdObject.AddComponent(collider);
 
             GameWorld.Instance.Colliders.Add(collider);
+            GameWorld.Instance.GameObjects.Add(createdObject);
+
+            //Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.
+            for (int x = 0; x < (int)Math.Round(createdObject.GetObjectWidthInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); x++)
+            {
+                SpotOccupied[forLoopX + x, forLoopY] = true;
+
+                //for (int y = 0; y <= (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
+                //{
+                //    SpotOccupied[forLoopX + x, forLoopY + y] = true;
+                //}
+            }
+        }
+
+        public void CreateDecoration(Tag tag, int posX, int posY, int forLoopX, int forLoopY)
+        {
+            GameObject createdObject = new GameObject();
+            SpriteRenderer spriteRenderer = new SpriteRenderer();
+           
+
+            switch (tag)
+            {
+                
+
+                case Tag.WALL:
+                    //spriteRenderer.Origin = new Vector2(createdObject.Transform.Position.X, createdObject.Transform.Position.Y);
+                    createdObject.AddComponent(new Wall());
+                    break;
+
+                
+            }
+
+            createdObject.AddComponent(spriteRenderer);
+            createdObject.Awake();
+            createdObject.Start();
+
+            createdObject.Transform.Position = new Vector2(posX, posY);
+
+            
             GameWorld.Instance.GameObjects.Add(createdObject);
 
             //Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.
