@@ -125,10 +125,11 @@ namespace ExamProjectFirstYear
 
         }
 
+        #endregion
 
-		#region Other methods
+        #region Other methods
 
-		public void CallMeleeAttack()
+        public void CallMeleeAttack()
 		{
 			AttackMelee playerAttackMelee = (AttackMelee)GameObject.GetComponent(Tag.ATTACKMELEE);
 			playerAttackMelee.MeleeAttack(this.GameObject, Tag.PLAYERMELEEATTACK, Velocity);

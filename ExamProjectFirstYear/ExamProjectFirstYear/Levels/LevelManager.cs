@@ -190,6 +190,7 @@ namespace ExamProjectFirstYear
                 case Tag.WALL:
                     //spriteRenderer.Origin = new Vector2(createdObject.Transform.Position.X, createdObject.Transform.Position.Y);
                     createdObject.AddComponent(new Wall());
+                    break;
                 case Tag.DOOR:
                     createdObject.AddComponent(Door = new Door());
                     break;
