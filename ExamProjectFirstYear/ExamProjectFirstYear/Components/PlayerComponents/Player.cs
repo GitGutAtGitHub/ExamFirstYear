@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -34,16 +35,19 @@ namespace ExamProjectFirstYear
         private byte fullMana = 5;
         private bool canShoot = true;
 
-        //private SpriteRenderer spriteRenderer;
-        //private RangedAttack rangedAttack;
-        //private Jump jump;
-        //private Player player = GameWorld.Instance.player; Tror ikke vi behøver denne her
+		private SQLiteHandler sQLiteHandler = GameWorld.Instance.SQLiteHandler;
+		private Journal journal = GameWorld.Instance.Journal;
 
-        #endregion
+		//private SpriteRenderer spriteRenderer;
+		//private RangedAttack rangedAttack;
+		//private Jump jump;
+		//private Player player = GameWorld.Instance.player; Tror ikke vi behøver denne her
+
+		#endregion
 
 
-        #region Properties
-        public int PlayerID { get; set; }
+		#region Properties
+		public int PlayerID { get; set; }
         public int InventoryID { get; set; }
         public int Health { get; set; }
         public int Mana { get; set; }
@@ -55,7 +59,6 @@ namespace ExamProjectFirstYear
         public bool PlayerCollidingWithDoor { get => playerCollidingWithDoor; set => playerCollidingWithDoor = value; }
         public Vector2 Velocity { get; set; } = new Vector2(1, 0);
         public Movement Movement { get; private set; }
-        public TmpJournal TmpJournal { get; private set; }
 
         #endregion
 
@@ -90,9 +93,7 @@ namespace ExamProjectFirstYear
 			GameObject.Tag = Tag.PLAYER;
 			GameObject.SpriteName = "OopPlayerSprite2";
 
-			TmpJournal = SQLiteHandler.Instance.GetJournal(PlayerID);
-
-			saveLoaded = true;
+			saveLoaded = false;
 		}
 
 		public override void Start()
@@ -101,7 +102,7 @@ namespace ExamProjectFirstYear
 			//spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
 			//jump = (Jump)GameObject.GetComponent(Tag.JUMP);
 
-			saveLoaded = true;
+			LoadSave();
 		}
 
 		public override void Update(GameTime gameTime)
@@ -171,7 +172,7 @@ namespace ExamProjectFirstYear
 			{
 				Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
 				component.GameObject.Destroy();
-				SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
+				sQLiteHandler.IncreaseAmountStoredMaterial(componentMaterial.MaterialID, GameWorld.Instance.Inventory.InventoryID);
 			}
 
 			// Player looses health when colliding with an enemy.
@@ -226,16 +227,22 @@ namespace ExamProjectFirstYear
 
 		private void LoadSave()
 		{
-			if (saveLoaded == true)
+			if (saveLoaded == false)
 			{
-				//GameObject.Transform.Translate(new Vector2(TmpJournal.TmpPositionX - spriteRenderer.Sprite.Width * 3, TmpJournal.TmpPositionY - spriteRenderer.Sprite.Height));
-				InventoryID = TmpJournal.TmpInventoryID;
-				Health = TmpJournal.TmpHealth;
-				OpenDoor = TmpJournal.TmpOpenDoor;
-				Mana = TmpJournal.TmpMana;
+				InventoryID = sQLiteHandler.SelectIntValuesWhere("InventoryID", "Journal",
+							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+				Health		= sQLiteHandler.SelectIntValuesWhere("Health", "Journal",
+							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+				OpenDoor	= sQLiteHandler.SelectIntValuesWhere("OpenDoor", "Journal",
+							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+				Mana		= sQLiteHandler.SelectIntValuesWhere("Mana", "Journal",
+							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+
+				sQLiteHandler.ClearTable("StoredMaterial", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+				sQLiteHandler.ClearTable("RecordedCreature", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
 			}
 
-			saveLoaded = false;
+			saveLoaded = true;
 		}
 
 		/// <summary>

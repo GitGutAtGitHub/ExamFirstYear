@@ -42,6 +42,7 @@ namespace ExamProjectFirstYear.Components
             speed = 200f;
             GameObject.Tag = Tag.MEELEEENEMY;
             SwitchState(new EnemyIdleState());
+            enemyID = 3;
         }
 
         public override void Start()
@@ -87,7 +88,7 @@ namespace ExamProjectFirstYear.Components
         /// </summary>
         public override void AddTarget()
         {
-            Target = GameWorld.Instance.player.GameObject;
+            Target = GameWorld.Instance.Player.GameObject;
         }
 
         /// <summary>
@@ -99,8 +100,10 @@ namespace ExamProjectFirstYear.Components
             if (health <= 0)
             {
                 GameObject.Destroy();
-                // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                
                 DropMaterialUponDeath(Tag.MOTHWING);
+
+                GameWorld.Instance.SQLiteHandler.AddRecordedCreature(enemyID, GameWorld.Instance.Journal.JournalID);
             }
         }
 

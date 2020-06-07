@@ -16,7 +16,7 @@ namespace ExamProjectFirstYear.Components
 		#region Fields
 
 		private bool isLocked = true;
-		private Player player = GameWorld.Instance.player;
+		private Player player = GameWorld.Instance.Player;
 
 		#endregion
 

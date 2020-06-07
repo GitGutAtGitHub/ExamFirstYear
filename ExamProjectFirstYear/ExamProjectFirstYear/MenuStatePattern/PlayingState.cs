@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.StatePattern;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,26 +8,56 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.MenuStatePattern
 {
-    class PlayingState : IState
+    /// <summary>
+    /// The state that determines what happens when the game is playing.
+    /// </summary>
+    public class PlayingState : IMenuState
     {
+        #region Fields
+
+        private KeyboardState currentKeyBoardState;
+        private KeyboardState previousKeyBoardState;
+
+        private MenuHandler menuHandler;
+
+        #endregion
+
+
+        #region Methods
+
         public void Enter(IEntity entity)
         {
-            
+            MenuHandler.Instance.GameState = GameState.PlayingState;
+
+            menuHandler = entity as MenuHandler;
         }
 
         public void Execute()
         {
-            
+            HandleInput();
         }
 
         public void Exit()
         {
-            
+
         }
 
-        public Tag ToTag()
+        private void HandleInput()
         {
-            return Tag.ENEMYIDLESTATE;
+            previousKeyBoardState = currentKeyBoardState;
+            currentKeyBoardState = Keyboard.GetState();
+
+            if (currentKeyBoardState.IsKeyUp(Keys.P) && previousKeyBoardState.IsKeyDown(Keys.P))
+            {
+                menuHandler.SwitchState(new PausedState());
+            }
+
+            if (currentKeyBoardState.IsKeyUp(Keys.E) && previousKeyBoardState.IsKeyDown(Keys.E))
+            {
+                GameWorld.Instance.Exit();
+            }
         }
+
+        #endregion
     }
 }

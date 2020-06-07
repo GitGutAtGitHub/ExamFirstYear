@@ -70,8 +70,8 @@ namespace ExamProjectFirstYear
         public void InitializeLevel()
         {
             LoadBitmap();
-            //PopulateLevel(PlatformSection);
-            PopulateLevel(TestLevel);
+            PopulateLevel(PlatformSection);
+            //PopulateLevel(TestLevel);
 
 
             NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
@@ -156,7 +156,7 @@ namespace ExamProjectFirstYear
             switch (tag)
             {
                 case Tag.PLAYER:
-                    createdObject.AddComponent(GameWorld.Instance.player);
+                    createdObject.AddComponent(GameWorld.Instance.Player);
                     createdObject.AddComponent(new Movement(true, 900));
                     createdObject.AddComponent(new LightSource(2.75f, true));
                     createdObject.AddComponent(new Jump(35));
@@ -222,7 +222,7 @@ namespace ExamProjectFirstYear
             if (tag == Tag.PLAYER)
             {
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
-                collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
+                collider = new Collider(spriteRenderer, GameWorld.Instance.Player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
                 collider.AttachListener((Jump)createdObject.GetComponent(Tag.JUMP));
             }

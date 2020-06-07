@@ -60,7 +60,7 @@ namespace ExamProjectFirstYear
 
         private bool OutOfBounds()
 		{
-            Vector2 playerPosition = GameWorld.Instance.player.GameObject.Transform.Position;
+            Vector2 playerPosition = GameWorld.Instance.Player.GameObject.Transform.Position;
             Vector2 position = GameObject.Transform.Position;
 
             if ((position.X - playerPosition.X < GameWorld.Instance.ScreenSize.width/2) &&

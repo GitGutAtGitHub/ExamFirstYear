@@ -51,6 +51,7 @@ namespace ExamProjectFirstYear.Factories
 		public GameObject Create(Tag type)
 		{
 			GameObject gameObject = new GameObject();
+			Collider collider;
 			gameObject.Tag = type;
 
 			switch (type)
@@ -58,23 +59,25 @@ namespace ExamProjectFirstYear.Factories
 				case Tag.SPIDERFILAMENT:
 					gameObject.AddComponent(spiderFilament.Clone());
 					gameObject.AddComponent(spiderFilamentRenderer.Clone());
-					gameObject.AddComponent(new Collider(spiderFilamentRenderer, (Material)gameObject.GetComponent(Tag.MATERIAL)));
+					collider = new Collider(spiderFilamentRenderer, (Material)gameObject.GetComponent(Tag.MATERIAL)) { CheckCollisionEvents = true};
+                    gameObject.AddComponent(collider);
 					gameObject.AddComponent(new Movement(true, 0));
 					break;
 				case Tag.MATCHHEAD:
 					gameObject.AddComponent(matchHead.Clone());
 					gameObject.AddComponent(matchHeadRenderer.Clone());
-					gameObject.AddComponent(new Collider(matchHeadRenderer, (Material)gameObject.GetComponent(Tag.MATERIAL)));
-					gameObject.AddComponent(new Movement(true, 0));
+					collider = new Collider(matchHeadRenderer, (Material)gameObject.GetComponent(Tag.MATERIAL)) { CheckCollisionEvents = true};
+                    gameObject.AddComponent(collider);
+                    gameObject.AddComponent(new Movement(true, 0));
 					break;
 				case Tag.MOTHWING:
 					gameObject.AddComponent(mothWing.Clone());
 					gameObject.AddComponent(mothWingRenderer.Clone());
-					gameObject.AddComponent(new Collider(mothWingRenderer, (Material)gameObject.GetComponent(Tag.MATERIAL)));
+					collider = new Collider(mothWingRenderer, (Material)gameObject.GetComponent(Tag.MATERIAL)) { CheckCollisionEvents = true };
+					gameObject.AddComponent(collider);
 					gameObject.AddComponent(new Movement(true, 0));
 					break;
 			}
-
 			return gameObject;
 		}
 	}

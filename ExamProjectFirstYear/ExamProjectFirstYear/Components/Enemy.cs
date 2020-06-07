@@ -32,7 +32,8 @@ namespace ExamProjectFirstYear.Components
         private Stack<Node> path = new Stack<Node>();
 
         private IState currentState;
-        private GameObject target; 
+        private GameObject target;
+        protected int enemyID;
 
         #endregion
 
