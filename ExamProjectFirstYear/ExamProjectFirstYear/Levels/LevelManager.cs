@@ -19,6 +19,7 @@ namespace ExamProjectFirstYear
         public delegate void LevelInitializationDoneHandler();
         public event LevelInitializationDoneHandler LevelInitializationDoneEvent;
 
+        public Door Door { get; private set; }
 
         protected virtual void OnLevelInitializationDoneEvent()
         {
@@ -143,6 +144,12 @@ namespace ExamProjectFirstYear
                         //add a flying
                         CreateObject(Tag.RANGEDENEMY, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
+
+                    //if the pixel is purple-blue
+                    if (input.R == 100 && input.G == 100 && input.B == 255)
+                    {
+                        CreateObject(Tag.DOOR, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
+                    }
                 }
             }
             // The event is raised. It calls the method AddTarget,
@@ -166,11 +173,11 @@ namespace ExamProjectFirstYear
             switch (tag)
             {
                 case Tag.PLAYER:
-                    createdObject.AddComponent(GameWorld.Instance.player);
+                    createdObject.AddComponent(GameWorld.Instance.Player);
                     createdObject.AddComponent(new Movement(true, 900));
                     createdObject.AddComponent(new LightSource(2.75f, true));
                     createdObject.AddComponent(new Jump(35));
-                    createdObject.AddComponent(new RangedAttack());
+                    createdObject.AddComponent(new RangedAttack(0.3f));
                     createdObject.AddComponent(new AttackMelee());
                     createdObject.AddComponent(new SoundComponent());
                     break;
@@ -183,6 +190,8 @@ namespace ExamProjectFirstYear
                 case Tag.WALL:
                     //spriteRenderer.Origin = new Vector2(createdObject.Transform.Position.X, createdObject.Transform.Position.Y);
                     createdObject.AddComponent(new Wall());
+                case Tag.DOOR:
+                    createdObject.AddComponent(Door = new Door());
                     break;
 
                 case Tag.FLYINGENEMY:
@@ -237,7 +246,7 @@ namespace ExamProjectFirstYear
             if (tag == Tag.PLAYER)
             {
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2);
-                collider = new Collider(spriteRenderer, GameWorld.Instance.player) { CheckCollisionEvents = true };
+                collider = new Collider(spriteRenderer, GameWorld.Instance.Player) { CheckCollisionEvents = true };
                 collider.AttachListener((Movement)createdObject.GetComponent(Tag.MOVEMENT));
                 collider.AttachListener((Jump)createdObject.GetComponent(Tag.JUMP));
             }
@@ -253,14 +262,21 @@ namespace ExamProjectFirstYear
             else if (tag == Tag.FLYINGENEMY)
             {
                 collider = new Collider(spriteRenderer, (FlyingEnemy)createdObject.GetComponent(Tag.FLYINGENEMY)) { CheckCollisionEvents = true };
-               
+
             }
 
             else if (tag == Tag.RANGEDENEMY)
             {
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2 - 20);
                 collider = new Collider(spriteRenderer, (RangedEnemy)createdObject.GetComponent(Tag.RANGEDENEMY)) { CheckCollisionEvents = true };
-                createdObject.AddComponent(new RangedAttack());
+                createdObject.AddComponent(new RangedAttack(0.6f));
+            }
+
+            else if (tag == Tag.DOOR)
+            {
+                collider = new Collider(spriteRenderer, (Door)createdObject.GetComponent(Tag.DOOR)) { CheckCollisionEvents = true };
+                collider.AttachListener((Door)createdObject.GetComponent(Tag.DOOR));
+
             }
 
             //else if (tag != Tag.PLATFORM)
@@ -296,18 +312,18 @@ namespace ExamProjectFirstYear
         {
             GameObject createdObject = new GameObject();
             SpriteRenderer spriteRenderer = new SpriteRenderer();
-           
+
 
             switch (tag)
             {
-                
+
 
                 case Tag.WALL:
                     //spriteRenderer.Origin = new Vector2(createdObject.Transform.Position.X, createdObject.Transform.Position.Y);
                     createdObject.AddComponent(new Wall());
                     break;
 
-                
+
             }
 
             createdObject.AddComponent(spriteRenderer);
@@ -316,7 +332,7 @@ namespace ExamProjectFirstYear
 
             createdObject.Transform.Position = new Vector2(posX, posY);
 
-            
+
             GameWorld.Instance.GameObjects.Add(createdObject);
 
             //Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.

@@ -26,6 +26,7 @@ namespace ExamProjectFirstYear.Components
             ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("SpiderFootsteps_01", true);
             ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Whoosh m. reverb", false);
             ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("SpiderDeath", false);
+            enemyID = 1;
         }
 
         public override void Start()
@@ -36,7 +37,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void AddTarget()
         {
-            Target = GameWorld.Instance.player.GameObject;
+            Target = GameWorld.Instance.Player.GameObject;
         }
 
 
@@ -62,7 +63,7 @@ namespace ExamProjectFirstYear.Components
 
         protected override void Move()
         {
-            
+
             if (Velocity != Vector2.Zero)
             {
                 Velocity.Normalize();
@@ -84,8 +85,10 @@ namespace ExamProjectFirstYear.Components
             {
                 ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundEffect("SpiderDeath");
                 GameObject.Destroy();
-                // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                DropMaterialUponDeath(1);
+
+                DropMaterialUponDeath(Tag.SPIDERFILAMENT);
+
+                GameWorld.Instance.SQLiteHandler.AddRecordedCreature(enemyID, GameWorld.Instance.Journal.JournalID);
             }
         }
 
@@ -98,14 +101,6 @@ namespace ExamProjectFirstYear.Components
             {
                 component.GameObject.Destroy();
                 health--;
-            }
-
-            //Players collect materials when they collide with them.
-            else if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MATERIAL)
-            {
-                Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
-                component.GameObject.Destroy();
-                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
             }
 
             //Players hit platforms when they collide with them.
@@ -147,6 +142,6 @@ namespace ExamProjectFirstYear.Components
                 //}
             }
         }
-        
+
     }
 }

@@ -60,7 +60,7 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
         {
             float positionX = playerPositionX + 750;
 
-            for (int i = 0; i < GameWorld.Instance.player.Health; i++)
+            for (int i = 0; i < GameWorld.Instance.Player.Health; i++)
             {
                 spriteBatch.Draw(playerHealthUIRenderer.Sprite, new Vector2(positionX, playerPositionY - 500), null, 
                                  Color.White, 0, playerHealthUIRenderer.Origin, 1, SpriteEffects.None, playerHealthUIRenderer.SpriteLayer);
@@ -79,8 +79,8 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
         /// </summary>
         private void HandlePosition()
         {
-            playerPositionX = GameWorld.Instance.player.GameObject.Transform.Position.X;
-            playerPositionY = GameWorld.Instance.player.GameObject.Transform.Position.Y;
+            playerPositionX = GameWorld.Instance.Player.GameObject.Transform.Position.X;
+            playerPositionY = GameWorld.Instance.Player.GameObject.Transform.Position.Y;
         }
 
         #endregion

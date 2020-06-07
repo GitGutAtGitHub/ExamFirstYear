@@ -22,16 +22,17 @@ namespace ExamProjectFirstYear.Components
             ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("footstepsLouder", true);
             ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("RangedAttack3", false);
             ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("WaterOnStove", false);
+            enemyID = 2;
         }
 
         public override void Start()
         {
-            GameObject.SpriteName = "FlyingEnemy";
+            GameObject.SpriteName = "OopBossProjectileSprite2";
         }
 
         public override void AddTarget()
         {
-            Target = GameWorld.Instance.player.GameObject;
+            Target = GameWorld.Instance.Player.GameObject;
         }
 
         public override void SwitchState(IState newState)
@@ -52,9 +53,6 @@ namespace ExamProjectFirstYear.Components
             Move();
             EnemyDeath();
         }
-      
-
-    
 
         protected override void Move()
         {
@@ -74,8 +72,10 @@ namespace ExamProjectFirstYear.Components
             {
                 ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundEffect("WaterOnStove");
                 GameObject.Destroy();
-                // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                DropMaterialUponDeath(1);
+
+                DropMaterialUponDeath(Tag.MATCHHEAD);
+
+                GameWorld.Instance.SQLiteHandler.AddRecordedCreature(enemyID, GameWorld.Instance.Journal.JournalID);
             }
         }
 

@@ -10,11 +10,10 @@ using System.Threading;
 using ExamProjectFirstYear.Components;
 using ExamProjectFirstYear.Components.PlayerComponents;
 using Microsoft.Xna.Framework.Media;
+using ExamProjectFirstYear.MenuStatePattern;
 
 namespace ExamProjectFirstYear
 {
-	enum GameState { StartMenu, Loading, Playing, Paused }
-
 	/// <summary>
 	/// This is the main type for your game.
 	/// </summary>
@@ -29,9 +28,9 @@ namespace ExamProjectFirstYear
 
 		GraphicsDeviceManager graphics;
 
-		public Player player;
-		public Journal journal;
-		public Inventory inventory;
+		public Player Player;
+		public Journal Journal;
+		public Inventory Inventory;
 		private Camera camera;
 		private Song bgAmbience;
 
@@ -68,6 +67,7 @@ namespace ExamProjectFirstYear
 		public TwoDimensionalSize ScreenSize { get; private set; }
 		public bool GameIsRunning { get => gameIsRunning; set => gameIsRunning = value; }
 		public SpriteBatch SpriteBatch { get; set; }
+		public SQLiteHandler SQLiteHandler { get; set; }
 
 
 		#endregion
@@ -101,19 +101,25 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		protected override void Initialize()
 		{
+			SQLiteHandler = new SQLiteHandler();
+
+			SQLiteHandler.BuildDatabase();
+
+			MenuHandler.Instance.SwitchState(new LoadingState());
+
 			TimeElapsed = 0;
 
 			//Create instances of Player, Journal and Inventory.
-			journal = new Journal(1);
-			player = new Player(journal.JournalID);
-			inventory = new Inventory(player.PlayerID);
+			Journal = new Journal(1);
+			Player = new Player(Journal.JournalID);
+			Inventory = new Inventory(Player.PlayerID);
 
 			//graphics.PreferredBackBufferWidth = 1920;
 			//graphics.PreferredBackBufferHeight = 1080;
 			//graphics.ApplyChanges();
 			IsMouseVisible = true;
 
-	
+
 			//camera = new Camera();
 
 			base.Initialize();
@@ -189,83 +195,54 @@ namespace ExamProjectFirstYear
 				Exit();
 			}
 
+			MenuHandler.Instance.CurrentState.Execute();
 
-			//previousKeyState = currentKeyState;
-			//currentKeyState = Keyboard.GetState();
-
-			//if (gameState == GameState.StartMenu)
-			//{
-			//    Console.WriteLine("Start menu state.");
-			//    if (currentKeyState.IsKeyUp(Keys.S) && previousKeyState.IsKeyDown(Keys.S))
-			//    {
-			//        gameState = GameState.Playing;
-
-			//        LoadGame();
-			//    }
-
-			//    if (currentKeyState.IsKeyUp(Keys.E) && previousKeyState.IsKeyDown(Keys.E))
-			//    {
-			//        Exit();
-			//    }
-			//}
-
-			//if (gameState == GameState.Playing && isLoading == true)
-			//{
-			//    LoadGame();
-
-			//    isLoading = false;
-			//}
-
-			//if (gameState == GameState.Loading && !isLoading)
-			//{
-			//    backgroundThread = new Thread(LoadGame);
-
-			//    isLoading = true;
-
-			//    backgroundThread.Start();
-			//}
-
-			TimeHandler(gameTime);
-
-			InputHandler.Instance.Execute(player);
-
-			for (int i = 0; i < GameObjects.Count; i++)
+			if (MenuHandler.Instance.GameState == GameState.PlayingState && MenuHandler.Instance.GameState != GameState.PausedState)
 			{
-				if (GameObjects[i].Components.ContainsKey(Tag.PLAYER) || GameObjects[i].Components.ContainsKey(Tag.JOURNAL)
-					|| GameObjects[i].Components.ContainsKey(Tag.INVENTORY) || GameObjects[i].Components.ContainsKey(Tag.PLAYERHEALTHUI)
-					|| GameObjects[i].Components.ContainsKey(Tag.PLAYERMANAUI))
+
+				SoundEngine.Instance.PlaySoundEffects();
+
+				TimeHandler(gameTime);
+
+				InputHandler.Instance.Execute(Player);
+
+				for (int i = 0; i < GameObjects.Count; i++)
 				{
-					GameObjects[i].Update(gameTime);
+					if (GameObjects[i].Components.ContainsKey(Tag.PLAYER) || GameObjects[i].Components.ContainsKey(Tag.JOURNAL)
+						|| GameObjects[i].Components.ContainsKey(Tag.INVENTORY) || GameObjects[i].Components.ContainsKey(Tag.PLAYERHEALTHUI)
+						|| GameObjects[i].Components.ContainsKey(Tag.PLAYERMANAUI))
+					{
+						GameObjects[i].Update(gameTime);
+					}
+
+
+					else if ((GameObjects[i].Transform.Position.X - Player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
+						(Player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
+						(GameObjects[i].Transform.Position.Y - Player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
+						(Player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.height))
+					{
+						GameObjects[i].Update(gameTime);
+					}
+
 				}
 
+				//Makes a copy of the collider list, to avoid any exception when removing from the collider list.
+				//OnColliding and OnNoLongerColliding is run from here rather than an Update method in Colliders, as they need a parameter
+				//for other Collider.
 
-				else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
-					(player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
-					(GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
-					(player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.height))
+
+				// NOTE!!!!!!!! MÅSKE SKAL VI PRØVE AT SE OM VI KAN FÅ DET TIL AT KØRE I COLLIDERS UPDATE MED EN CHECKCOLLISION METODE KIG EVT.
+				//PÅ DET SENERE - EMMA
+				Collider[] tmpColliders = Colliders.ToArray();
+
+				for (int i = 0; i < tmpColliders.Length; i++)
 				{
-					GameObjects[i].Update(gameTime);
+					for (int j = 0; j < tmpColliders.Length; j++)
+					{
+						tmpColliders[i].OnColliding(tmpColliders[j]);
+						tmpColliders[i].OnNoLongerColliding(tmpColliders[j]);
+					}
 				}
-
-			}
-
-			//Makes a copy of the collider list, to avoid any exception when removing from the collider list.
-			//OnColliding and OnNoLongerColliding is run from here rather than an Update method in Colliders, as they need a parameter
-			//for other Collider.
-
-
-			// NOTE!!!!!!!! MÅSKE SKAL VI PRØVE AT SE OM VI KAN FÅ DET TIL AT KØRE I COLLIDERS UPDATE MED EN CHECKCOLLISION METODE KIG EVT.
-			//PÅ DET SENERE - EMMA
-			Collider[] tmpColliders = Colliders.ToArray();
-
-			for (int i = 0; i < tmpColliders.Length; i++)
-			{
-				for (int j = 0; j < tmpColliders.Length; j++)
-				{
-					tmpColliders[i].OnColliding(tmpColliders[j]);
-					tmpColliders[i].OnNoLongerColliding(tmpColliders[j]);
-				}
-			}
 
 			Camera.Instance.FollowPlayer(player.GameObject);
 
@@ -281,57 +258,31 @@ namespace ExamProjectFirstYear
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.Black);
-			GraphicsDevice.SetRenderTarget(lightTarget);
+			if (MenuHandler.Instance.GameState == GameState.PlayingState && MenuHandler.Instance.GameState != GameState.PausedState)
+			{
+				GraphicsDevice.Clear(Color.Black);
+				GraphicsDevice.SetRenderTarget(lightTarget);
 
-			DrawLightSourcesWithCameraCulling();
+				DrawLightSourcesWithCameraCulling();
 
-			GraphicsDevice.SetRenderTarget(mainTarget);
-			GraphicsDevice.Clear(Color.BlanchedAlmond);
+				GraphicsDevice.SetRenderTarget(mainTarget);
+				GraphicsDevice.Clear(Color.BlanchedAlmond);
 
-			DrawGameObjectsWithCameraCulling();
-			
-			GraphicsDevice.SetRenderTarget(null);
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			
-			lightEffect.Parameters["lightMask"].SetValue(lightTarget);
-			lightEffect.CurrentTechnique.Passes[0].Apply();
-			spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
-			
-			spriteBatch.End();
+				DrawGameObjectsWithCameraCulling();
 
-			DrawUIObjects();
+				GraphicsDevice.SetRenderTarget(null);
+				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-			base.Draw(gameTime);
+				lightEffect.Parameters["lightMaskTexture"].SetValue(lightTarget);
+				lightEffect.CurrentTechnique.Passes[0].Apply();
+				spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
 
-			//spriteBatch.Begin();
+				spriteBatch.End();
 
-			//if (gameState == GameState.StartMenu)
-			//{
-			//    spriteBatch.Draw(startButton, startButtonPosition, Color.White);
-			//    spriteBatch.Draw(exitButton, exitButtonPosition, Color.White);
-			//}
+				DrawUIObjects();
 
-			//if (gameState == GameState.Playing)
-			//{
-			//    Console.WriteLine("Game is playing.");
-			//}
-
-			//if (gameState == GameState.Loading)
-			//{
-			//    spriteBatch.Draw(loadingScreen, new Vector2((GraphicsDevice.Viewport.Width / 2) -
-			//                    (loadingScreen.Width / 2), (GraphicsDevice.Viewport.Height / 2) -
-			//                    (loadingScreen.Height / 2)), Color.YellowGreen);
-			//}
-
-			//spriteBatch.End();
-			//}
-
-			//NodeManager.Instance.Draw(spriteBatch);
-
-			//spriteBatch.End();
-
-			//base.Draw(gameTime);
+				base.Draw(gameTime);
+			}
 		}
 
 		/// <summary>
@@ -362,10 +313,10 @@ namespace ExamProjectFirstYear
 
 			for (int i = 0; i < LightSources.Count; i++)
 			{
-				if ((LightSources[i].GameObject.Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
-							(player.GameObject.Transform.Position.X - LightSources[i].GameObject.Transform.Position.X) < (ScreenSize.width) &&
-							(LightSources[i].GameObject.Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
-							(player.GameObject.Transform.Position.Y - LightSources[i].GameObject.Transform.Position.Y) < (ScreenSize.height))
+				if ((LightSources[i].GameObject.Transform.Position.X - Player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
+							(Player.GameObject.Transform.Position.X - LightSources[i].GameObject.Transform.Position.X) < (ScreenSize.width) &&
+							(LightSources[i].GameObject.Transform.Position.Y - Player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
+							(Player.GameObject.Transform.Position.Y - LightSources[i].GameObject.Transform.Position.Y) < (ScreenSize.height))
 				{
 
 					LightSources[i].Draw(spriteBatch);
@@ -392,10 +343,10 @@ namespace ExamProjectFirstYear
 				}
 
 				// If the GameObject is not player it will only be drawn when it is within a certain distance of player.
-				else if ((GameObjects[i].Transform.Position.X - player.GameObject.Transform.Position.X) < (ScreenSize.width/2) &&
-								(player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
-								(GameObjects[i].Transform.Position.Y - player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
-								(player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.height))
+				else if ((GameObjects[i].Transform.Position.X - Player.GameObject.Transform.Position.X) < (ScreenSize.width/2) &&
+								(Player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
+								(GameObjects[i].Transform.Position.Y - Player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
+								(Player.GameObject.Transform.Position.Y - GameObjects[i].Transform.Position.Y) < (ScreenSize.height))
 				{
 					GameObjects[i].Draw(spriteBatch);
 				}
@@ -464,14 +415,13 @@ namespace ExamProjectFirstYear
 			switch (tag)
 			{
 				case Tag.JOURNAL:
-					createdObject.AddComponent(journal);
-
+					createdObject.AddComponent(Journal);
 					//SpriteLayer ensures that the text can later be drawn on top of the Journal sprite.
 					spriteRenderer.SpriteLayer = 0.9f;
 					break;
 
 				case Tag.INVENTORY:
-					createdObject.AddComponent(inventory);
+					createdObject.AddComponent(Inventory);
 					spriteRenderer.SpriteLayer = 0.7f;
 					break;
 

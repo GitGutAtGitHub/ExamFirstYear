@@ -44,6 +44,7 @@ namespace ExamProjectFirstYear.Components
             SwitchState(new EnemyIdleState());
             ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("MothDeath", false);
             ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("MothMove", true);
+            enemyID = 3;
         }
 
         public override void Start()
@@ -89,7 +90,7 @@ namespace ExamProjectFirstYear.Components
         /// </summary>
         public override void AddTarget()
         {
-            Target = GameWorld.Instance.player.GameObject;
+            Target = GameWorld.Instance.Player.GameObject;
         }
 
         /// <summary>
@@ -103,8 +104,10 @@ namespace ExamProjectFirstYear.Components
                 ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundEffect("MothDeath");
 
                 GameObject.Destroy();
-                // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                DropMaterialUponDeath(1);
+
+                DropMaterialUponDeath(Tag.MOTHWING);
+
+                GameWorld.Instance.SQLiteHandler.AddRecordedCreature(enemyID, GameWorld.Instance.Journal.JournalID);
             }
         }
 

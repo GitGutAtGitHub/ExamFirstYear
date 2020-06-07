@@ -194,6 +194,19 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:MothMove.mp3
+#begin MenuHandlerHeading.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:MenuHandlerHeading.spritefont
+
+#begin MenuHandlerText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:MenuHandlerText.spritefont
 
 #begin NodeGridTexture.png
 /importer:TextureImporter
@@ -405,4 +418,3 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Whoosh sound effect.mp3
-

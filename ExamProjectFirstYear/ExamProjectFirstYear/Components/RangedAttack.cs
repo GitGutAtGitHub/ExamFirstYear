@@ -16,24 +16,25 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
         // Used to make sure the player can only shoot once every X-amount of seconds.
         private float rangedAttackTimer;
         // Used in RangedAttack method to set the break time between ranged attacks.
-        private float breakForRangedAttack = 0.7f;
+        private float breakForRangedAttack;
+
+        public bool HasShot { get; private set; }
 
         #endregion
 
-        public RangedAttack()
+        public RangedAttack(float breakForRangedAttack)
         {
-
+            this.breakForRangedAttack = breakForRangedAttack;
         }
 
         #region METHODS
         public void RangedAttackMethod(GameObject sender, Tag projectileType, Vector2 velocity)
 		{
-			// rangedAttackTimer makes sure the ranged attack can only be used once every x-amount of seconds.
-			// Mana needs to be higher than 0 or the player can't fire a ranged attack.
-			//if ((/*CanShoot == true &&*/ rangedAttackTimer >= breakForRangedAttack && tmpTag == Tag.ENEMYPROJECTILE) || (CanShoot == true && rangedAttackTimer >= breakForRangedAttack && ((Player)component).Mana > 0))
-			if (rangedAttackTimer >= breakForRangedAttack)
+            // rangedAttackTimer makes sure the ranged attack can only be used once every x-amount of seconds.
+            // Mana needs to be higher than 0 or the player can't fire a ranged attack.
+            //if ((/*CanShoot == true &&*/ rangedAttackTimer >= breakForRangedAttack && tmpTag == Tag.ENEMYPROJECTILE) || (CanShoot == true && rangedAttackTimer >= breakForRangedAttack && ((Player)component).Mana > 0))
+            if (rangedAttackTimer >= breakForRangedAttack)
             {
-                
                 GameObject tmpProjectileObject =ProjectileFactory.Instance.Create(projectileType);
 
                 Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
@@ -60,7 +61,13 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
                 rangedAttackTimer = 0;
                 ((SoundComponent)sender.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundInstance("RangedAttack3");
 
+
+                HasShot = true;
             }
+			else
+			{
+                HasShot = false;
+			}
         }
 
         public override void Update(GameTime gameTime)
