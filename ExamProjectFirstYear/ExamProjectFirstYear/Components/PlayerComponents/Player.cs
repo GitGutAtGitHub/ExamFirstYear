@@ -12,57 +12,60 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-	/// <summary>
-	/// The Player Character class.
-	/// </summary>
-	public class Player : Component, IGameListener
-	{
-		#region Fields
+    /// <summary>
+    /// The Player Character class.
+    /// </summary>
+    public class Player : Component, IGameListener
+    {
+        #region Fields
 
-		private MouseState previousMouseState;
-		private MouseState currentMouseState;
+        private MouseState previousMouseState;
+        private MouseState currentMouseState;
 
-		private bool saveLoaded;
-		private float manaRegenerateTimer;
-		// First wait is sat high, as to ensure the mana doesn't regenerate until after a short while from when the last time they used mana.
-		private float initialRegenerationTimer = 2.5f;
-		// After the first wait, the timer is not sat to 0, so it takes less time for mana to regenerate once the regeneration has begun.
-		private float regenerationTimer = 1.5f;
-		private float invulnerabilityTimer;
-		private float invulnerabilityFrames = 0.8f;
-		private byte fullMana = 5;
-		private bool canShoot = true;
+        private bool saveLoaded;
+        private float manaRegenerateTimer;
+        private bool playerCollidingWithDoor = false;
+        // First wait is sat high, as to ensure the mana doesn't regenerate until after a short while from when the last time they used mana.
+        private float initialRegenerationTimer = 2.5f;
+        // After the first wait, the timer is not sat to 0, so it takes less time for mana to regenerate once the regeneration has begun.
+        private float regenerationTimer = 1.5f;
+        private float invulnerabilityTimer;
+        private float invulnerabilityFrames = 0.8f;
+        private byte fullMana = 5;
+        private bool canShoot = true;
 
-		//private SpriteRenderer spriteRenderer;
-		//private RangedAttack rangedAttack;
-		//private Jump jump;
-		//private Player player = GameWorld.Instance.player; Tror ikke vi behøver denne her
+        //private SpriteRenderer spriteRenderer;
+        //private RangedAttack rangedAttack;
+        //private Jump jump;
+        //private Player player = GameWorld.Instance.player; Tror ikke vi behøver denne her
 
-		#endregion
-
-
-		#region Properties
-		public int PlayerID { get; set; }
-		public int InventoryID { get; set; }
-		public int Health { get; set; }
-		public int Mana { get; set; }
-		public int OpenDoor { get; set; }
-		public float PositionX { get; set; }
-		public float PositionY { get; set; }
-		public bool CanRegenerateMana { get; set; }
-		public Vector2 Velocity { get; set; } = new Vector2(1, 0);
-		public Movement Movement { get; private set; }
-		public TmpJournal TmpJournal { get; private set; }
-
-		#endregion
+        #endregion
 
 
-		#region Constructors
+        #region Properties
+        public int PlayerID { get; set; }
+        public int InventoryID { get; set; }
+        public int Health { get; set; }
+        public int Mana { get; set; }
+        public int OpenDoor { get; set; }
+        public float PositionX { get; set; }
+        public float PositionY { get; set; }
+        public bool CanRegenerateMana { get; set; }
+        public bool AllMaterialsCollected { get; set; }
+        public bool PlayerCollidingWithDoor { get => playerCollidingWithDoor; set => playerCollidingWithDoor = value; }
+        public Vector2 Velocity { get; set; } = new Vector2(1, 0);
+        public Movement Movement { get; private set; }
+        public TmpJournal TmpJournal { get; private set; }
 
-		/// <summary>
-		/// Constructor for the Player Character component.
-		/// </summary>
-		public Player(int playerID)
+        #endregion
+
+
+        #region Constructors
+
+        /// <summary>
+        /// Constructor for the Player Character component.
+        /// </summary>
+        public Player(int playerID)
 		{
 			PlayerID = playerID;
 		}
@@ -106,6 +109,7 @@ namespace ExamProjectFirstYear
 			LoadSave();
 			TestMethod();
 			RegenerateMana();
+			Console.WriteLine(PlayerCollidingWithDoor);
 		}
 
 		#endregion

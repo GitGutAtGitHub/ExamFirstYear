@@ -377,7 +377,7 @@ namespace ExamProjectFirstYear
 		private void DrawGameObjectsWithCameraCulling()
 		{
 			spriteBatch.Begin(transformMatrix: camera.TransformCamera);
-			NodeManager.Instance.Draw(spriteBatch);
+			//NodeManager.Instance.Draw(spriteBatch);
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
