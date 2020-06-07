@@ -30,6 +30,7 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		public void Execute(Player player)
 		{
+			((SoundComponent)player.GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundInstance("Jump_04");
 			Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
 			playerJump.PlayerJump((Movement)player.GameObject.GetComponent(Tag.MOVEMENT));
 		}

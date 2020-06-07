@@ -61,12 +61,17 @@ namespace ExamProjectFirstYear
 			// Player interacts when pressing a.
 			keyBinds.Add(Keys.A, new InteractCommand());
 
+
+
 			// Player releases the meleeattack
 			releaseKeyBinds.Add(Keys.X, new ReleaseCommand(1));
 			// Player releases the rangedattack
 			releaseKeyBinds.Add(Keys.Z, new ReleaseCommand(2));
 
 			releaseKeyBinds.Add(Keys.Space, new ReleaseCommand(3));
+
+			releaseKeyBinds.Add(Keys.Right, new ReleaseCommand(4));
+			releaseKeyBinds.Add(Keys.Left, new ReleaseCommand(5));
 		}
 
         #endregion

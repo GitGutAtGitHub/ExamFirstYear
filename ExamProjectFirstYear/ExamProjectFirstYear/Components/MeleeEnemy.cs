@@ -21,12 +21,18 @@ namespace ExamProjectFirstYear.Components
             speed = 200f;
             GameObject.Tag = Tag.MEELEEENEMY;
             SwitchState(new EnemyIdleState());
+            //((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("footstepsLouder");
+
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("SpiderFootsteps_01", true);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Whoosh m. reverb", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("SpiderDeath", false);
             enemyID = 1;
         }
 
         public override void Start()
         {
             GameObject.SpriteName = "FlyingEnemy";
+            //((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSound("footstepsLouder");
         }
 
         public override void AddTarget()
@@ -57,6 +63,7 @@ namespace ExamProjectFirstYear.Components
 
         protected override void Move()
         {
+
             if (Velocity != Vector2.Zero)
             {
                 Velocity.Normalize();
@@ -76,8 +83,9 @@ namespace ExamProjectFirstYear.Components
         {
             if (health <= 0)
             {
+                ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundEffect("SpiderDeath");
                 GameObject.Destroy();
-                
+
                 DropMaterialUponDeath(Tag.SPIDERFILAMENT);
 
                 GameWorld.Instance.SQLiteHandler.AddRecordedCreature(enemyID, GameWorld.Instance.Journal.JournalID);
@@ -134,6 +142,6 @@ namespace ExamProjectFirstYear.Components
                 //}
             }
         }
-        
+
     }
 }

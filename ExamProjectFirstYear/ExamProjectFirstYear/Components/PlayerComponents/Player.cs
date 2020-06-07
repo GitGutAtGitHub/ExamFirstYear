@@ -88,10 +88,16 @@ namespace ExamProjectFirstYear
 			return Tag.PLAYER;
 		}
 
-		public override void Awake()
-		{
-			GameObject.Tag = Tag.PLAYER;
-			GameObject.SpriteName = "OopPlayerSprite2";
+        public override void Awake()
+        {
+            GameObject.Tag = Tag.PLAYER;
+
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("footstepsLouder", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Whoosh m. reverb", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Jump_04", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("RangedAttack3", false);
+
+            GameObject.SpriteName = "OopPlayerSprite2";
 
 			saveLoaded = false;
 		}
@@ -101,24 +107,29 @@ namespace ExamProjectFirstYear
 			//Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
 			//spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
 			//jump = (Jump)GameObject.GetComponent(Tag.JUMP);
-
+    ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).Volume = 1;
 			LoadSave();
 		}
 
-		public override void Update(GameTime gameTime)
-		{
-			LoadSave();
-			TestMethod();
-			RegenerateMana();
-			Console.WriteLine(PlayerCollidingWithDoor);
-		}
-
-		#endregion
 
 
-		#region Other methods
 
-		public void CallMeleeAttack()
+
+        public override void Update(GameTime gameTime)
+        {
+            LoadSave();
+            TestMethod();
+            RegenerateMana();
+            //Console.WriteLine(Velocity);
+
+
+        }
+
+        #endregion
+
+        #region Other methods
+
+        public void CallMeleeAttack()
 		{
 			AttackMelee playerAttackMelee = (AttackMelee)GameObject.GetComponent(Tag.ATTACKMELEE);
 			playerAttackMelee.MeleeAttack(this.GameObject, Tag.PLAYERMELEEATTACK, Velocity);

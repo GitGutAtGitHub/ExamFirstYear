@@ -87,7 +87,7 @@ namespace ExamProjectFirstYear.StatePattern
         /// </summary>
         public void IdleFlyingEnemy()
         {
-
+            ((SoundComponent)enemy.GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StopPlayingSound("MothMove");
             enemy.Velocity = new Vector2(0, 0);
 
         }

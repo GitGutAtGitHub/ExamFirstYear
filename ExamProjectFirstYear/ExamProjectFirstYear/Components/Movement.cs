@@ -75,6 +75,7 @@ namespace ExamProjectFirstYear.Components
             if (velocity != Vector2.Zero)
             {
                 velocity.Normalize();
+
             }
 
             velocity *= speed;

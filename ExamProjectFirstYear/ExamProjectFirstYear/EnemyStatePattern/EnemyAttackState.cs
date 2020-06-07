@@ -79,11 +79,6 @@ namespace ExamProjectFirstYear.StatePattern
         {
             enemy.GeneratePath();
             enemy.FollowPath(true);
-
-            if (true)
-            {
-
-            }
         }
 
         public void MeleeEnemyAttack()
@@ -92,8 +87,10 @@ namespace ExamProjectFirstYear.StatePattern
             {
                 if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack == true)
                 {
+
                     ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).MeleeAttack(enemy.GameObject, Tag.ENEMYMELEEATTACK, enemy.Velocity);
-                     cooldownTimer = new TimeSpan(0, 0, 0, 0, 500);
+            
+                    cooldownTimer = new TimeSpan(0, 0, 0, 0, 500);
                 }
 
                 if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack == false)
@@ -120,6 +117,8 @@ namespace ExamProjectFirstYear.StatePattern
 
             enemy.Velocity = Vector2.Zero;
             enemy.Path.Clear();
+
+            ((SoundComponent)enemy.GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StopPlayingSound("footstepsLouder");
 
             vectorX = (enemy.Target.Transform.Position.X) - (enemy.GameObject.Transform.Position.X);
             vectorY = (enemy.Target.Transform.Position.Y) - (enemy.GameObject.Transform.Position.Y);

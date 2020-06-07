@@ -34,7 +34,7 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
             // Mana needs to be higher than 0 or the player can't fire a ranged attack.
             //if ((/*CanShoot == true &&*/ rangedAttackTimer >= breakForRangedAttack && tmpTag == Tag.ENEMYPROJECTILE) || (CanShoot == true && rangedAttackTimer >= breakForRangedAttack && ((Player)component).Mana > 0))
             if (rangedAttackTimer >= breakForRangedAttack)
-            { 
+            {
                 GameObject tmpProjectileObject =ProjectileFactory.Instance.Create(projectileType);
 
                 Collider tmpProjectileCollider = (Collider)tmpProjectileObject.GetComponent(Tag.COLLIDER);
@@ -59,6 +59,8 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
 
                 // Resets the timer so the attack can't be used again, until the timer reaches x-amount of seconds again.
                 rangedAttackTimer = 0;
+                ((SoundComponent)sender.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundInstance("RangedAttack3");
+
 
                 HasShot = true;
             }

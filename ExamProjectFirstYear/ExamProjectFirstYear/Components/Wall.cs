@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,17 +6,11 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    /// <summary>
-    /// Component for game platforms.
-    /// </summary>
-    class Platform : Component
+    class Wall : Component
     {
-        #region Methods
-
-
         public override Tag ToEnum()
         {
-            return Tag.PLATFORM;
+            return Tag.WALL;
         }
 
         public override void Awake()
@@ -25,11 +18,9 @@ namespace ExamProjectFirstYear.Components
             GameObject.Tag = Tag.PLATFORM;
         }
 
-		public override void Start()
-		{
-			GameObject.SpriteName = "Platform";
-		}
-
-        #endregion
+        public override void Start()
+        {
+            GameObject.SpriteName = "WallSprite";
+        }
     }
 }

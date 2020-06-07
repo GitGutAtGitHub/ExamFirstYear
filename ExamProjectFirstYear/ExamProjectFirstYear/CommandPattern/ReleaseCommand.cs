@@ -1,5 +1,6 @@
 ﻿using ExamProjectFirstYear.Components;
 using ExamProjectFirstYear.Components.PlayerComponents;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,8 @@ namespace ExamProjectFirstYear.CommandPattern
 				Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
 				playerJump.ReleaseJump();
 			}
-		}
+
+        }
 
 		public CommandTag GetCommandTag()
 		{
