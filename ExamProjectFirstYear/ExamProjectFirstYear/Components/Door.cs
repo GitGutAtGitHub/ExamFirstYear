@@ -7,60 +7,62 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-	/// <summary>
-	/// Door component class.
-	/// </summary>
-	class Door : Component
-	{
-		#region Fields
+    /// <summary>
+    /// Door component class.
+    /// Made public so we can access this class from GameWorld.
+    /// </summary>
+    public class Door : Component
+    {
+        #region Fields
 
-		private bool isLocked = true;
+        private bool isLocked;
 
-		#endregion
-
-
-		#region Constructors
-
-		/// <summary>
-		/// Constructor for Door.
-		/// </summary>
-		public Door()
-		{
-
-		}
-
-		#endregion
+        #endregion
 
 
-		#region Override methods
+        #region Constructors
 
-		public override void Awake()
-		{
-			base.Awake();
-		}
+        /// <summary>
+        /// Constructor for Door.
+        /// </summary>
+        public Door()
+        {
 
-		public override void Start()
-		{
-			base.Start();
-		}
+        }
 
-		public override Tag ToEnum()
-		{
-			return Tag.DOOR;
-		}
-
-		#endregion
+        #endregion
 
 
-		#region Other methods
+        #region Override methods
 
-		/// <summary>
-		/// Method for setting a door to unlocked after opening it.
-		/// </summary>
-		public void OpenDoor()
-		{
-			isLocked = false;
-		}
+        public override void Awake()
+        {
+            GameObject.Tag = Tag.DOOR;
+            GameObject.SpriteName = "UnWalkableNode";
+        }
+
+        public override void Start()
+        {
+            isLocked = true;
+        }
+
+        public override Tag ToEnum()
+        {
+            return Tag.DOOR;
+        }
+
+        #endregion
+
+
+        #region Other methods
+
+        /// <summary>
+        /// Method for setting a door to unlocked after opening it.
+        /// </summary>
+        public void OpenDoor()
+        {
+            isLocked = false;
+        }
 
         #endregion
     }

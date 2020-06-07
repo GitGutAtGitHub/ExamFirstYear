@@ -22,6 +22,7 @@ namespace ExamProjectFirstYear
         private MouseState currentMouseState;
 
         private bool saveLoaded;
+        private bool playerCollidingWithDoor = false;
         private float manaRegenerateTimer;
         // First wait is sat high, as to ensure the mana doesn't regenerate until after a short while from when the last time they used mana.
         private float initialRegenerationTimer = 2.5f;
@@ -48,6 +49,8 @@ namespace ExamProjectFirstYear
         public float PositionX { get; set; }
         public float PositionY { get; set; }
         public bool CanRegenerateMana { get; set; }
+        public bool AllMaterialsCollected { get; set; }
+        public bool PlayerCollidingWithDoor { get => playerCollidingWithDoor; set => playerCollidingWithDoor = value; }
         public Vector2 Direction { get; set; } = new Vector2(1, 0);
         public Movement Movement { get; private set; }
         public TmpJournal TmpJournal { get; private set; }
@@ -99,6 +102,7 @@ namespace ExamProjectFirstYear
             LoadSave();
             TestMethod();
             RegenerateMana();
+            Console.WriteLine(PlayerCollidingWithDoor);
         }
 
         #endregion
@@ -173,12 +177,25 @@ namespace ExamProjectFirstYear
                     }
 
                     //Left platform.
-                    if ((component.GameObject.Transform.Position.X > GameObject.Transform.Position.X))
+                    if (component.GameObject.Transform.Position.X > GameObject.Transform.Position.X)
                     {
                         GameObject.Transform.Translate(new Vector2(-intersection.Width, 0));
                     }
                 }
             }
+
+            //When player collides with door, a bool becomes true. When this bool is true,
+            //interaction with the door becomes possible.
+            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.DOOR)
+            {
+                PlayerCollidingWithDoor = true;
+            }
+
+            if (gameEvent.Title == "NoLongerColliding" && component.GameObject.Tag == Tag.DOOR)
+            {
+                PlayerCollidingWithDoor = false;
+            }
+
         }
 
         private void LoadSave()
@@ -215,7 +232,7 @@ namespace ExamProjectFirstYear
                 {
                     // Adds one mana.
                     Mana++;
-                    
+
                     // Resets the timer.
                     manaRegenerateTimer = regenerationTimer;
                 }
