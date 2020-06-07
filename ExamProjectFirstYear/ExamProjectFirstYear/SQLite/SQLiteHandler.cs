@@ -6,7 +6,6 @@ using System.Configuration;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
@@ -15,37 +14,11 @@ namespace ExamProjectFirstYear
     /// </summary>
     public class SQLiteHandler
     {
-        #region Fields
+        #region Constructors
 
-        private static SQLiteHandler instance;
-
-        private SQLiteConnection connection;
-
-        private SQLiteCommand command;
-
-        private Journal journal;
-
-        private Inventory inventory;
-
-        #endregion
-
-
-        #region Properties
-
-        /// <summary>
-        /// SQLiteHandler as a Singleton.
-        /// </summary>
-        public static SQLiteHandler Instance
+        public SQLiteHandler()
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new SQLiteHandler();
-                }
 
-                return instance;
-            }
         }
 
         #endregion
@@ -57,43 +30,94 @@ namespace ExamProjectFirstYear
         /// Returns connectionsstring for the database.
         /// </summary>
         /// <returns></returns>
-        public static string LoadSQLiteConnectionString()
+        public string LoadSQLiteConnectionString()
         {
-            return ConfigurationManager.ConnectionStrings["ExamProjectFirstYearDB"].ConnectionString;
+            return ConfigurationManager.AppSettings["ExamProjectFirstYearDB"];
         }
 
         /// <summary>
-        /// Method for simplifying SQLiteCommands. The commandText is the command to be executed.
+        /// Method for simplifying SQLiteCommands as NonQuery. The commandText is the command to be executed.
         /// </summary>
         /// <param name="commandText"></param>
-        public void ExecuteNonQuerySQLiteCommand(string commandText)
+        public void ExecuteNonQuerySQLiteCommand(SQLiteCommand command, SQLiteConnection connection)
         {
-            connection = new SQLiteConnection(LoadSQLiteConnectionString());
+            using (connection)
+            {
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
+        /// Method for simplifying SQLiteCommands as Scalar. The commandText is the command to be executed.
+        /// </summary>
+        /// <param name="commandText"></param>
+        public int ExecuteScalarInt(SQLiteCommand command, SQLiteConnection connection)
+        {
+            int value;
 
             using (connection)
             {
                 connection.Open();
-                command = new SQLiteCommand(commandText, connection);
-                command.ExecuteNonQuery();
+                value = Convert.ToInt32(command.ExecuteScalar());
             }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Method for simplifying SQLiteCommands as Scalar. The commandText is the command to be executed.
+        /// </summary>
+        /// <param name="commandText"></param>
+        public string ExecuteScalarString(SQLiteCommand command, SQLiteConnection connection)
+        {
+            string value;
+
+            using (connection)
+            {
+                connection.Open();
+                value = Convert.ToString(command.ExecuteScalar());
+            }
+
+            return value;
+        }
+
+        public List<int> ExecuteIntReader(string selectedColumn, string fromTable, string whereDefinition)
+        {
+            List<int> values = new List<int>();
+            SQLiteConnection connection = new SQLiteConnection(LoadSQLiteConnectionString());
+            SQLiteCommand command;
+
+            using (connection)
+            {
+                connection.Open();
+
+                command = new SQLiteCommand($"SELECT {selectedColumn} FROM {fromTable} WHERE {whereDefinition}", connection);
+
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    values.Add(reader.GetInt32(0));
+                }
+            }
+
+            return values;
+        }
+
+        public void CreateTable(string tableName, string columns, SQLiteConnection connection)
+        {
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"CREATE TABLE IF NOT EXISTS {tableName} ({columns})",
+                                         connection), connection);
         }
 
         /// <summary>
         /// Method for clearing a table. Useful for clearing/overwriting old save fales, journals, inventories etc.
         /// </summary>
         /// <param name="tableName"></param>
-        public void ClearTable(string tableName)
+        public void ClearTable(string tableName, SQLiteConnection connection)
         {
-            ExecuteNonQuerySQLiteCommand($"DELETE FROM {tableName};");
-        }
-
-        /// <summary>
-        /// Delete specific row from table. Identified by row name and ID.
-        /// </summary>
-        /// <param name="tableName"></param>
-        public void DeleteFromTable(string tableName, string rowIDName, int ID)
-        {
-            ExecuteNonQuerySQLiteCommand($"DELETE FROM {tableName} WHERE {rowIDName}={ID};");
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"DELETE FROM {tableName};", connection), connection);
         }
 
         /// <summary>
@@ -101,9 +125,10 @@ namespace ExamProjectFirstYear
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="tableValues"></param>
-        public void InsertIntoTable(string tableName, string tableValues)
+        public void InsertIntoTable(string tableName, string tableValues, SQLiteConnection connection)
         {
-            ExecuteNonQuerySQLiteCommand($"INSERT INTO {tableName} VALUES ({tableValues});");
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"INSERT OR IGNORE INTO {tableName} VALUES ({tableValues});",
+                                         connection), connection);
         }
 
         /// <summary>
@@ -114,9 +139,10 @@ namespace ExamProjectFirstYear
         /// <param name="definedValues"></param>
         /// <param name="compareFrom"></param>
         /// <param name="compareTo"></param>
-        public void InsertIntoTableWhere(string tableName, string tableValues, string definedValues, string whereDefinition)
+        public void InsertIntoTableWhere(string tableName, string tableValues, string definedValues, string whereDefinition, SQLiteConnection connection)
         {
-            ExecuteNonQuerySQLiteCommand($"INSERT INTO {tableName} VALUES ({tableValues}) {definedValues} WHERE {whereDefinition};");
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"INSERT OR IGNORE INTO {tableName} ({tableValues}) {definedValues} " +
+                                       $"WHERE {whereDefinition};", connection), connection);
         }
 
         /// <summary>
@@ -125,37 +151,11 @@ namespace ExamProjectFirstYear
         /// <param name="tableName"></param>
         /// <param name="updateDefinition"></param>
         /// <param name="whereDefinition"></param>
-        public void UpdateTable(string tableName, string updateDefinition, string whereDefinition)
+        public void UpdateTableWhere(string tableName, string updateDefinition, string whereDefinition, SQLiteConnection connection)
         {
-            ExecuteNonQuerySQLiteCommand($"UPDATE {tableName} SET {updateDefinition} WHERE {whereDefinition};");
+            ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"UPDATE {tableName} SET {updateDefinition} WHERE " +
+                                      $"{whereDefinition};", connection), connection);
         }
-
-
-
-
-        ///// <summary>
-        ///// Select values from a table. Can be used for displaying tables.
-        ///// </summary>
-        ///// <param name="selectDefinition"></param>
-        ///// <param name="tableName"></param>
-        //public void SelectFromTable(string selectDefinition, string tableName)
-        //{
-        //    ExecuteNonQuerySQLiteCommand($"SELECT {selectDefinition} FROM {tableName};");
-        //}
-
-        ///// <summary>
-        ///// Select values from a table with a specified WHERE. Can be used for displaying tables.
-        ///// </summary>
-        ///// <param name="selectDefinition"></param>
-        ///// <param name="tableName"></param>
-        ///// <param name="whereDefinition"></param>
-        //public void SelectFromTableWhere(string selectDefinition, string tableName, string whereDefinition)
-        //{
-        //    ExecuteNonQuerySQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE {whereDefinition};");
-        //}
-
-
-
 
         /// <summary>
         /// Returns an int value from a specfied table row with a WHERE condition.
@@ -164,21 +164,10 @@ namespace ExamProjectFirstYear
         /// <param name="tableName"></param>
         /// <param name="whereDefinition"></param>
         /// <returns></returns>
-        public int SelectIntValuesWhere(string selectDefinition, string tableName, string whereDefinition)
+        public int SelectIntValuesWhere(string selectDefinition, string tableName, string whereDefinition, SQLiteConnection connection)
         {
-            //return ExecuteNonQuerySQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE {whereDefinition};");
-            int value;
-
-            connection = new SQLiteConnection(LoadSQLiteConnectionString());
-
-            using (connection)
-            {
-                connection.Open();
-                command = new SQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE {whereDefinition};", connection);
-                value = Convert.ToInt32(command.ExecuteScalar());
-            }
-
-            return value;
+            return ExecuteScalarInt(new SQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE " +
+                                              $"{whereDefinition};", connection), connection);
         }
 
         /// <summary>
@@ -188,42 +177,68 @@ namespace ExamProjectFirstYear
         /// <param name="tableName"></param>
         /// <param name="whereDefinition"></param>
         /// <returns></returns>
-        public string SelectStringValuesWhere(string selectDefinition, string tableName, string whereDefinition)
+        public string SelectStringValuesWhere(string selectDefinition, string tableName, string whereDefinition, SQLiteConnection connection)
         {
-            string value;
-
-            connection = new SQLiteConnection(LoadSQLiteConnectionString());
-            
-            using (connection)
-            {
-                connection.Open();
-                command = new SQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE {whereDefinition};", connection);
-                value = Convert.ToString(command.ExecuteScalar());
-            }
-
-            return value;
+            return ExecuteScalarString(new SQLiteCommand($"SELECT {selectDefinition} FROM {tableName} WHERE " +
+                                                 $"{whereDefinition};", connection), connection);
         }
 
         /// <summary>
-        /// Returns an int value from a specfied table row.
+        /// Method used when building the database.
         /// </summary>
-        /// <param name="selectDefinition"></param>
-        /// <param name="tableName"></param>
-        /// <returns></returns>
-        public int SelectIntValues(string selectDefinition, string tableName)
+        public void BuildDatabase()
         {
-            int value;
+            CreateTable("Inventory", "ID INTEGER PRIMARY KEY", new SQLiteConnection(LoadSQLiteConnectionString()));
+            CreateTable("Journal", "ID INTEGER PRIMARY KEY, InventoryID INTEGER, Health INTEGER, OpenDoor BOOLEAN, " +
+                        "PositionX INTEGER, PositionY INTEGER, Mana INTEGER, FOREIGN KEY (InventoryID) REFERENCES Inventory(ID)",
+                         new SQLiteConnection(LoadSQLiteConnectionString()));
 
-            connection = new SQLiteConnection(LoadSQLiteConnectionString());
-            
-            using (connection)
-            {
-                connection.Open();
-                command = new SQLiteCommand($"SELECT {selectDefinition} FROM {tableName}", connection);
-                value = Convert.ToInt32(command.ExecuteScalar());
-            }
+            CreateTable("MaterialType", "ID INTEGER PRIMARY KEY, Name STRING", new SQLiteConnection(LoadSQLiteConnectionString()));
+            CreateTable("RequiredMaterial", "MaterialTypeID INTEGER, BlueprintID INTEGER, Amount INTEGER, " +
+                        "FOREIGN KEY (MaterialTypeID) REFERENCES MaterialType(ID), FOREIGN KEY (BlueprintID) REFERENCES Blueprint(ID)," +
+                        "UNIQUE (MaterialTypeID)", new SQLiteConnection(LoadSQLiteConnectionString()));
+            CreateTable("StoredMaterial", "MaterialTypeID INTEGER, InventoryID INTEGER, Amount INTEGER, Slot INTEGER UNIQUE, " +
+                        "FOREIGN KEY (MaterialTypeID) REFERENCES MaterialType(ID), FOREIGN KEY (InventoryID) REFERENCES Inventory(ID), " +
+                        "UNIQUE (MaterialTypeID, InventoryID)", new SQLiteConnection(LoadSQLiteConnectionString()));
 
-            return value;
+            CreateTable("Creature", "ID INTEGER PRIMARY KEY, MaterialTypeID INTEGER, Name STRING, Type STRING, " +
+                        "Description STRING, Location STRING, FOREIGN KEY(MaterialTypeID) REFERENCES MaterialType(ID)",
+                         new SQLiteConnection(LoadSQLiteConnectionString()));
+            CreateTable("RecordedCreature", "CreatureID INTEGER, JournalID INTEGER, " +
+                        "FOREIGN KEY (CreatureID) REFERENCES Creature(ID), FOREIGN KEY (JournalID) REFERENCES Journal(ID)," +
+                        "UNIQUE (CreatureID, JournalID)", new SQLiteConnection(LoadSQLiteConnectionString()));
+
+            CreateTable("Blueprint", "ID INTEGER PRIMARY KEY, Name STRING, Description STRING",
+                         new SQLiteConnection(LoadSQLiteConnectionString()));
+            CreateTable("RecordedBP", "BlueprintID INTEGER, JournalID INTEGER, " +
+                        "FOREIGN KEY (BlueprintID) REFERENCES Blueprint(ID), FOREIGN KEY (JournalID) REFERENCES Journal(ID)," +
+                        "UNIQUE (BlueprintID, JournalID)", new SQLiteConnection(LoadSQLiteConnectionString()));
+
+
+            InsertIntoTable("Inventory", "1", new SQLiteConnection(LoadSQLiteConnectionString()));
+            InsertIntoTableWhere("Journal", "ID, InventoryID, Health, OpenDoor, PositionX, PositionY, Mana",
+                                 "SELECT 1, Inventory.ID, 5, 0, 50, 50, 5 FROM Inventory", "Inventory.ID=ID",
+                                  new SQLiteConnection(LoadSQLiteConnectionString()));
+
+            InsertIntoTable("Blueprint", "1, 'Door opening device', 'Somehow, this is supposed to open the door?'",
+                             new SQLiteConnection(LoadSQLiteConnectionString()));
+            InsertIntoTable("RecordedBP", "1, 1", new SQLiteConnection(LoadSQLiteConnectionString()));
+
+            InsertIntoTable("Creature", "1, 1, 'Spider Bulb', 'Melee', 'A glowing light bulb spider', 'Dark caves'",
+                             new SQLiteConnection(LoadSQLiteConnectionString()));
+            InsertIntoTable("Creature", "2, 2, 'Match Stick Insect', 'Ranged', 'A stick insect with a sulphur head', 'Dark caves'",
+                             new SQLiteConnection(LoadSQLiteConnectionString()));
+            InsertIntoTable("Creature", "3, 3, 'Mirror Moth', 'Flying', 'A moth with highly reflective wings', 'Dark caves'",
+                             new SQLiteConnection(LoadSQLiteConnectionString()));
+
+            InsertIntoTable("MaterialType", "1, 'Spider filament'", new SQLiteConnection(LoadSQLiteConnectionString()));
+            InsertIntoTable("MaterialType", "2, 'Match head'", new SQLiteConnection(LoadSQLiteConnectionString()));
+            InsertIntoTable("MaterialType", "3, 'Moth wing'", new SQLiteConnection(LoadSQLiteConnectionString()));
+
+
+            InsertIntoTable("RequiredMaterial", "1, 1, 3", new SQLiteConnection(LoadSQLiteConnectionString()));
+            InsertIntoTable("RequiredMaterial", "2, 1, 5", new SQLiteConnection(LoadSQLiteConnectionString()));
+            InsertIntoTable("RequiredMaterial", "3, 1, 2", new SQLiteConnection(LoadSQLiteConnectionString()));
         }
 
         #endregion
@@ -235,20 +250,22 @@ namespace ExamProjectFirstYear
         /// Increase the amount of the given material by 1.
         /// </summary>
         /// <param name="materialName"></param>
-        public void IncreaseAmountStoredMaterial(int materialTypeID)
+        public void IncreaseAmountStoredMaterial(int materialTypeID, int inventoryID)
         {
-            GameWorld.Instance.inventory.MaterialTypeIDs.Add(materialTypeID);
-            UpdateTable("StoredMaterial", "Amount=Amount+1", $"MaterialTypeID={materialTypeID}");
-        }
+            List<int> inventoryIDs = ExecuteIntReader("InventoryID", "StoredMaterial",
+                                   $"MaterialTypeID={materialTypeID}");
 
-        /// <summary>
-        /// Decrease the amount of the given material by 1.
-        /// </summary>
-        /// <param name="materialName"></param>
-        public void DecreaseAmountStoredMaterial(int materialTypeID)
-        {
-            GameWorld.Instance.inventory.MaterialTypeIDs.Remove(materialTypeID);
-            UpdateTable("StoredMaterial", "Amount=Amount-1", $"MaterialTypeID={materialTypeID}");
+            if (!inventoryIDs.Contains(inventoryID))
+            {
+                InsertIntoTable("StoredMaterial", $"{materialTypeID}, {inventoryID}, 1, {materialTypeID}",
+                                 new SQLiteConnection(LoadSQLiteConnectionString()));
+            }
+
+            if (inventoryIDs.Contains(inventoryID))
+            {
+                UpdateTableWhere("StoredMaterial", "Amount=Amount+1", $"MaterialTypeID={materialTypeID} " +
+                                $"AND InventoryID={inventoryID}", new SQLiteConnection(LoadSQLiteConnectionString()));
+            }
         }
 
         /// <summary>
@@ -257,8 +274,8 @@ namespace ExamProjectFirstYear
         /// <param name="blueprintName"></param>
         public void AddRecordedBP(int blueprintID, int journalID)
         {
-            GameWorld.Instance.journal.RecordedBlueprintIDs.Add(blueprintID);
-            InsertIntoTable($"RecordedBP", $"{blueprintID}, {journalID}");
+            InsertIntoTable($"RecordedBP", $"{blueprintID}, {journalID}",
+                              new SQLiteConnection(LoadSQLiteConnectionString()));
         }
 
         /// <summary>
@@ -267,8 +284,13 @@ namespace ExamProjectFirstYear
         /// <param name="blueprintName"></param>
         public void AddRecordedCreature(int creatureID, int journalID)
         {
-            GameWorld.Instance.journal.RecordedCreatureIDs.Add(creatureID);
-            InsertIntoTable($"RecordedCreature", $"{creatureID}, {journalID}");
+            //if (!GameWorld.Instance.journal.RecordedCreatureIDs.Contains(creatureID))
+            //{
+            //    GameWorld.Instance.journal.RecordedCreatureIDs.Add(creatureID);
+            //}
+
+            InsertIntoTable($"RecordedCreature", $"{creatureID}, {journalID}",
+                              new SQLiteConnection(LoadSQLiteConnectionString()));
         }
 
         /// <summary>
@@ -288,122 +310,9 @@ namespace ExamProjectFirstYear
             int positionX = (int)GameWorld.Instance.player.GameObject.Transform.Position.X;
             int positionY = (int)GameWorld.Instance.player.GameObject.Transform.Position.Y;
 
-            UpdateTable("Journal", $"Health={health}, OpenDoor={openDoor}, PositionX={positionX}, PositionY={positionY}, Mana={mana}", $"ID={ID}");
-        }
-
-        #endregion
-
-
-        #region GetTable Methods
-
-        /// <summary>
-        /// Returns a temporary Journal that can be interacted with outside SQLite.
-        /// </summary>
-        /// <param name="journalID"></param>
-        /// <returns></returns>
-        public TmpJournal GetJournal(int journalID)
-        {
-            int inventoryID = SelectIntValuesWhere("InventoryID", "Journal", $"ID = {journalID}");
-            int health = SelectIntValuesWhere("Health", "Journal", $"ID = {journalID}");
-            int openDoor = SelectIntValuesWhere("OpenDoor", "Journal", $"ID = {journalID}");
-            int positionX = SelectIntValuesWhere("PositionX", "Journal", $"ID = {journalID}");
-            int positiony = SelectIntValuesWhere("PositionY", "Journal", $"ID = {journalID}");
-            int mana = SelectIntValuesWhere("Mana", "Journal", $"ID = {journalID}");
-
-            TmpJournal tmpJournal = new TmpJournal(journalID, inventoryID, health, positionX, positiony, openDoor, mana);
-
-            return tmpJournal;
-        }
-
-        /// <summary>
-        /// Returns a temporary Blueprint to get values from the table.
-        /// </summary>
-        /// <param name="blueprintID"></param>
-        /// <returns></returns>
-        public TmpBlueprint GetBlueprint(int blueprintID)
-        {
-            string name = SelectStringValuesWhere("Name", "Blueprint", $"ID = {blueprintID}");
-            string description = SelectStringValuesWhere("Description", "Blueprint", $"ID = {blueprintID}");
-
-            TmpBlueprint tmpBlueprint = new TmpBlueprint(blueprintID, name, description);
-
-            return tmpBlueprint;
-        }
-
-        /// <summary>
-        /// Returns a temporary RequiredMaterial to get values from the table.
-        /// </summary>
-        /// <param name="blueprintID"></param>
-        /// <returns></returns>
-        public TmpRequiredMaterial GetRequiredMaterial(int blueprintID)
-        {
-            int materialTypeID = SelectIntValuesWhere("MaterialTypeID", "RequiredMaterial", $"BlueprintID = {blueprintID}");
-            int amount = SelectIntValuesWhere("Amount", "RequiredMaterial", $"BlueprintID = {blueprintID}");
-
-            TmpRequiredMaterial tmpRequiredMaterial = new TmpRequiredMaterial(materialTypeID, amount);
-
-            return tmpRequiredMaterial;
-        }
-
-        /// <summary>
-        /// Returns a temporary MaterialType to get values from the table.
-        /// </summary>
-        /// <param name="materialTypeID"></param>
-        /// <returns></returns>
-        public TmpMaterialType GetMaterialType(int materialTypeID)
-        {
-            string name = SelectStringValuesWhere("Name", "MaterialType", $"ID = {materialTypeID}");
-
-            TmpMaterialType tmpMaterialType = new TmpMaterialType(name);
-
-            return tmpMaterialType;
-        }
-
-        /// <summary>
-        /// Returns a temporary Creature to get values from the table.
-        /// </summary>
-        /// <param name="creatureID"></param>
-        /// <returns></returns>
-        public TmpCreature GetCreature(int creatureID)
-        {
-            int materialTypeID = SelectIntValuesWhere("MaterialTypeID", "Creature", $"ID = {creatureID}");
-            string name = SelectStringValuesWhere("Name", "Creature", $"ID = {creatureID}");
-            string type = SelectStringValuesWhere("Type", "Creature", $"ID = {creatureID}");
-            string description = SelectStringValuesWhere("Description", "Creature", $"ID = {creatureID}");
-            string location = SelectStringValuesWhere("Location", "Creature", $"ID = {creatureID}");
-
-            TmpCreature tmpCreature = new TmpCreature(materialTypeID, name, type, description, location);
-
-            return tmpCreature;
-        }
-
-        /// <summary>
-        /// Returns a temporary StoredMaterial to get values from the table.
-        /// </summary>
-        /// <param name="creatureID"></param>
-        /// <returns></returns>
-        public TmpStoredMaterial GetStoredMaterial(int materialTypeID, int inventoryID)
-        {
-            int amount = SelectIntValuesWhere("Amount", "StoredMaterial", $"MaterialTypeID = {materialTypeID} AND InventoryID = {inventoryID}");
-            int slot = SelectIntValuesWhere("Slot", "StoredMaterial", $"MaterialTypeID = {materialTypeID} AND InventoryID = {inventoryID}");
-
-            TmpStoredMaterial tmpStoredMaterial = new TmpStoredMaterial(amount, slot);
-
-            return tmpStoredMaterial;
-        }
-
-        /// <summary>
-        /// Returns a temporary Inventory to get values from the table.
-        /// </summary>
-        /// <param name="creatureID"></param>
-        /// <returns></returns>
-        public TmpInventory GetInventory()
-        {
-            int iD = SelectIntValuesWhere("ID", "Inventory", $"ID = {GameWorld.Instance.player.PlayerID}");
-
-            TmpInventory tmpInventory = new TmpInventory(iD);
-
-            return tmpInventory;
+            UpdateTableWhere("Journal", $"Health={health}, OpenDoor={openDoor}, PositionX={positionX}, " +
+                       $"PositionY={positionY}, Mana={mana}", $"ID={ID}",
+                         new SQLiteConnection(LoadSQLiteConnectionString()));
         }
 
         #endregion

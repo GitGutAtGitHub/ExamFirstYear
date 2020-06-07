@@ -28,19 +28,7 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		public void Execute(Player player)
 		{
-			if (player.PlayerCollidingWithDoor == true)
-			{
-				if (player.AllMaterialsCollected == true)
-				{
-					LevelManager.Instance.Door.OpenDoor();
-				}
-
-				// If there is time for a pop-up, this can be added!
-				//else
-				//{
-				//    // Pop-up - door is locked?
-				//}
-			}
+			//TODO : kald på Players interactmetode her
 		}
 
 		public CommandTag GetCommandTag()

@@ -1,5 +1,4 @@
-﻿using ExamProjectFirstYear.Factories;
-using ExamProjectFirstYear.PathFinding;
+﻿using ExamProjectFirstYear.PathFinding;
 using ExamProjectFirstYear.StatePattern;
 using Microsoft.Xna.Framework;
 using System;
@@ -21,9 +20,12 @@ namespace ExamProjectFirstYear.Components
         #region FIELDS
 
         protected float speed;
+
         protected int health;
         private int sightRadius;
+        protected int enemyID;
         //it is a public variable, to be able to edit the specific X and Y values, it has to be a variable.
+
         public Vector2 Velocity;
         private bool hasPath = false;
 
@@ -33,6 +35,7 @@ namespace ExamProjectFirstYear.Components
 
         private IState currentState;
         private GameObject target; 
+       
 
         #endregion
 
@@ -65,15 +68,30 @@ namespace ExamProjectFirstYear.Components
 
         /// <summary>
         /// Used by all enemies that drop materials when they die.
-        /// This methods instantiates whatever material the enemy needs to drop through the MaterialFactory.
+        /// This methods instantiates whatever material the enemy needs to drop.
         /// </summary>
         /// <param name="materialID"></param>
-        public void DropMaterialUponDeath(Tag materialType)
+        public void DropMaterialUponDeath(int materialID)
         {
-            GameObject droppedMaterial = MaterialFactory.Instance.Create(materialType);
-			droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
+            GameObject droppedMaterial = new GameObject();
+            SpriteRenderer spriteRenderer = new SpriteRenderer();
+            Movement movementEnemy = new Movement(true, 0);
 
-			GameWorld.Instance.Colliders.Add((Collider)droppedMaterial.GetComponent(Tag.COLLIDER));
+            droppedMaterial.AddComponent(new Material(materialID));
+
+            droppedMaterial.AddComponent(movementEnemy);
+            droppedMaterial.AddComponent(spriteRenderer);
+
+            droppedMaterial.Awake();
+            droppedMaterial.Start();
+
+            droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
+
+            Collider collider = new Collider(spriteRenderer, (Material)droppedMaterial.GetComponent(Tag.MATERIAL)) { CheckCollisionEvents = true };
+
+            droppedMaterial.AddComponent(collider);
+
+            GameWorld.Instance.Colliders.Add(collider);
             GameWorld.Instance.GameObjects.Add(droppedMaterial);
         }
 

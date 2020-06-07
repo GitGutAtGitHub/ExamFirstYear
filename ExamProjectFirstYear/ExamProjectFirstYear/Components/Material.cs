@@ -47,12 +47,23 @@ namespace ExamProjectFirstYear.Components
             return Tag.MATERIAL;
         }
 
-		#endregion
+        public override void Awake()
+        {
+            GameObject.Tag = Tag.MATERIAL;
+            GameObject.SpriteName = "OopBossProjectileSprite2";
+        }
+
+        public override void Start()
+        {
+            movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+        }
+
+        #endregion
 
 
-		#region Other methods
+        #region Other methods
 
-		public void Notify(GameEvent gameEvent, Component component)
+        public void Notify(GameEvent gameEvent, Component component)
         {
             //Players hit platforms when they collide with them.
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
@@ -92,11 +103,6 @@ namespace ExamProjectFirstYear.Components
                     }
                 }
             }
-        }
-
-        public Material Clone()
-        {
-            return (Material)this.MemberwiseClone();
         }
 
         #endregion

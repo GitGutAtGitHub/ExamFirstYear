@@ -21,6 +21,7 @@ namespace ExamProjectFirstYear.Components
             speed = 200f;
             GameObject.Tag = Tag.MEELEEENEMY;
             SwitchState(new EnemyIdleState());
+            enemyID = 1;
         }
 
         public override void Start()
@@ -76,8 +77,10 @@ namespace ExamProjectFirstYear.Components
             if (health <= 0)
             {
                 GameObject.Destroy();
-                // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                DropMaterialUponDeath(Tag.SPIDERFILAMENT);
+
+                DropMaterialUponDeath(enemyID);
+
+                GameWorld.Instance.sQLiteHandler.AddRecordedCreature(enemyID, GameWorld.Instance.player.PlayerID);
             }
         }
 
@@ -90,14 +93,6 @@ namespace ExamProjectFirstYear.Components
             {
                 component.GameObject.Destroy();
                 health--;
-            }
-
-            //Players collect materials when they collide with them.
-            else if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MATERIAL)
-            {
-                Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
-                component.GameObject.Destroy();
-                SQLiteHandler.Instance.IncreaseAmountStoredMaterial(componentMaterial.MaterialID);
             }
 
             //Players hit platforms when they collide with them.
@@ -139,6 +134,6 @@ namespace ExamProjectFirstYear.Components
                 //}
             }
         }
-        
+
     }
 }

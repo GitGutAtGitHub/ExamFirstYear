@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +36,6 @@ namespace ExamProjectFirstYear.Components
         #region Properties
 
         public int InventoryID { get; set; }
-        public List<int> MaterialTypeIDs { get; set; } = new List<int>();
 
         #endregion
 
@@ -65,15 +65,16 @@ namespace ExamProjectFirstYear.Components
         {
             GameObject.Tag = Tag.INVENTORY;
             GameObject.SpriteName = "InventoryClosed";
+
             inventoryRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
-            MaterialTypeIDs.Add(1);
+
             inventoryHeading = GameWorld.Instance.Content.Load<SpriteFont>("JournalHeading");
             inventoryText = GameWorld.Instance.Content.Load<SpriteFont>("JournalText");
         }
 
         public override void Start()
-        {
-            GameObject.Transform.Translate(new Vector2(30, 180));
+        { 
+            
         }
         public override void Update(GameTime gameTime)
         {
@@ -168,85 +169,30 @@ namespace ExamProjectFirstYear.Components
         private void DrawStoredMaterialStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(inventoryHeading, "Inventory", new Vector2(playerPositionX - 890, playerPositionY - 300),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.8f);
-
-            TmpMaterialType tmpMaterialType;
-            TmpStoredMaterial tmpStoredMaterial;
-            TmpInventory tmpInventory;
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.72f);
 
             float positionX = playerPositionX - 890;
             float positionY = (playerPositionY - 310) + 90;
 
-            //Create a text field for every MaterialType in the ID list.
-            foreach (int materialTypeID in MaterialTypeIDs)
-            {
-                tmpInventory = SQLiteHandler.Instance.GetInventory();
-                tmpStoredMaterial = SQLiteHandler.Instance.GetStoredMaterial(materialTypeID, tmpInventory.TmpID);
-                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(materialTypeID);
+            List<int> materialTypeIDs = GameWorld.Instance.sQLiteHandler.ExecuteIntReader("MaterialTypeID", "StoredMaterial", $"InventoryID={GameWorld.Instance.inventory.InventoryID}");
 
-                spriteBatch.DrawString(inventoryText, $"{tmpMaterialType.TmpName}: {tmpStoredMaterial.TmpAmount}",
+            //Create a text field for every MaterialType in the ID list.
+            foreach (int materialTypeID in materialTypeIDs)
+            {
+                string materialName = GameWorld.Instance.sQLiteHandler.SelectStringValuesWhere("Name", "MaterialType",
+                                    $"ID={materialTypeID}", new SQLiteConnection(GameWorld.Instance.sQLiteHandler.LoadSQLiteConnectionString()));
+                int storedAmount    = GameWorld.Instance.sQLiteHandler.SelectIntValuesWhere("Amount", "StoredMaterial",
+                                    $"MaterialTypeID={materialTypeID}", new SQLiteConnection(GameWorld.Instance.sQLiteHandler.LoadSQLiteConnectionString()));
+
+                spriteBatch.DrawString(inventoryText, 
+                                       $"{materialName}: {storedAmount}",
                                        new Vector2(positionX, positionY),
-                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.8f);
+                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.72f);
 
                 positionY += 60;
             }   
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Used when fetching the MaterialType table from SQLite.
-    /// </summary>
-    public struct TmpMaterialType
-    {
-        public string TmpName { get; set; }
-
-        /// <summary>
-        /// Constructor for the TmpMaterialType struct.
-        /// </summary>
-        /// <param name="tmpName"></param>
-        public TmpMaterialType(string tmpName)
-        {
-            TmpName = tmpName;
-        }
-    }
-
-    /// <summary>
-    /// Used when fetching the StoredMaterial table from SQLite.
-    /// </summary>
-    public struct TmpStoredMaterial
-    {
-        public int TmpAmount { get; set; }
-        public int TmpSlot { get; set; }
-
-
-        /// <summary>
-        /// Constructor for the TmpStoredMaterial struct.
-        /// </summary>
-        /// <param name="tmpName"></param>
-        public TmpStoredMaterial(int tmpAmount, int tmpSlot)
-        {
-            TmpAmount = tmpAmount;
-            TmpSlot = tmpSlot;
-        }
-    }
-
-    /// <summary>
-    /// Used when fetching the Inventory table from SQLite.
-    /// </summary>
-    public struct TmpInventory
-    {
-        public int TmpID { get; set; }
-
-
-        /// <summary>
-        /// Constructor for the TmpInventory struct.
-        /// </summary>
-        /// <param name="tmpName"></param>
-        public TmpInventory(int tmpID)
-        {
-            TmpID = tmpID;
-        }
     }
 }
