@@ -9,12 +9,14 @@ namespace ExamProjectFirstYear.Components
 {
 	/// <summary>
 	/// Door component class.
+	/// Made public so we can access this class from other classes.
 	/// </summary>
-	class Door : Component
+	public class Door : Component, IGameListener
 	{
 		#region Fields
 
 		private bool isLocked = true;
+		private Player player = GameWorld.Instance.player;
 
 		#endregion
 
@@ -36,12 +38,13 @@ namespace ExamProjectFirstYear.Components
 
 		public override void Awake()
 		{
-			base.Awake();
+			GameObject.Tag = Tag.DOOR;
+			GameObject.SpriteName = "UnWalkableNode";
 		}
 
 		public override void Start()
 		{
-			base.Start();
+			isLocked = true;
 		}
 
 		public override Tag ToEnum()
@@ -60,6 +63,20 @@ namespace ExamProjectFirstYear.Components
 		public void OpenDoor()
 		{
 			isLocked = false;
+			Console.WriteLine("It worked hurray");
+		}
+
+        public void Notify(GameEvent gameEvent, Component component)
+        {
+            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLAYER)
+            {
+				player.PlayerCollidingWithDoor = true;
+			}
+			
+			if (gameEvent.Title == "NoLongerColliding" && component.GameObject.Tag == Tag.PLAYER)
+            {
+				player.PlayerCollidingWithDoor = false;
+			}
 		}
 
         #endregion

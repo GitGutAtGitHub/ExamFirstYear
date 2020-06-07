@@ -23,6 +23,7 @@ namespace ExamProjectFirstYear
 
         private bool saveLoaded;
         private float manaRegenerateTimer;
+        private bool playerCollidingWithDoor = false;
         // First wait is sat high, as to ensure the mana doesn't regenerate until after a short while from when the last time they used mana.
         private float initialRegenerationTimer = 2.5f;
         // After the first wait, the timer is not sat to 0, so it takes less time for mana to regenerate once the regeneration has begun.
@@ -49,6 +50,8 @@ namespace ExamProjectFirstYear
         public float PositionX { get; set; }
         public float PositionY { get; set; }
         public bool CanRegenerateMana { get; set; }
+        public bool AllMaterialsCollected { get; set; }
+        public bool PlayerCollidingWithDoor { get => playerCollidingWithDoor; set => playerCollidingWithDoor = value; }
         public Vector2 Velocity { get; set; } = new Vector2(1, 0);
         public Movement Movement { get; private set; }
         public TmpJournal TmpJournal { get; private set; }
@@ -105,6 +108,7 @@ namespace ExamProjectFirstYear
             LoadSave();
             TestMethod();
             RegenerateMana();
+            Console.WriteLine(playerCollidingWithDoor);
         }
 
         #endregion
