@@ -19,6 +19,7 @@ namespace ExamProjectFirstYear.Components
             health = 1;
             GameObject.Tag = Tag.RANGEDENEMY;
             SwitchState(new EnemyIdleState());
+            enemyID = 2;
         }
 
         public override void Start()
@@ -28,7 +29,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void AddTarget()
         {
-            Target = GameWorld.Instance.player.GameObject;
+            Target = GameWorld.Instance.Player.GameObject;
         }
 
         public override void SwitchState(IState newState)
@@ -49,9 +50,6 @@ namespace ExamProjectFirstYear.Components
             Move();
             EnemyDeath();
         }
-      
-
-    
 
         protected override void Move()
         {
@@ -70,8 +68,10 @@ namespace ExamProjectFirstYear.Components
             if (health <= 0)
             {
                 GameObject.Destroy();
-                // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                
                 DropMaterialUponDeath(Tag.MATCHHEAD);
+
+                GameWorld.Instance.SQLiteHandler.AddRecordedCreature(enemyID, GameWorld.Instance.Journal.JournalID);
             }
         }
 

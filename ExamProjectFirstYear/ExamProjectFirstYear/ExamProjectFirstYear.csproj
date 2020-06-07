@@ -62,10 +62,10 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>8C58B10D22C9ABD7B052EEA5773F5A582EDCCF79</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>566A1070A771484B05DFFEAF8C2C9431B2D12C12</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ExamProjectFirstYear_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ExamProjectFirstYear_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -90,7 +90,8 @@
     <Compile Include="Components\Jump.cs" />
     <Compile Include="Components\LightSource.cs" />
     <Compile Include="Components\PlayerComponents\PlayerHealthUI.cs" />
-    <Compile Include="Components\MenuHandler.cs" />
+    <Compile Include="MenuStatePattern\IMenuState.cs" />
+    <Compile Include="MenuStatePattern\MenuHandler.cs" />
     <Compile Include="Components\RangedAttack.cs" />
     <Compile Include="Factories\MaterialFactory.cs" />
     <Compile Include="MenuStatePattern\LoadingState.cs" />
@@ -138,9 +139,9 @@
     <Compile Include="Sound\SoundEngine.cs" />
     <Compile Include="Sound\SoundItem.cs" />
     <Compile Include="SpriteSheetCutter.cs" />
-    <Compile Include="StatePattern\EnemyAttackState.cs" />
-    <Compile Include="StatePattern\EnemyIdleState.cs" />
-    <Compile Include="StatePattern\IState.cs" />
+    <Compile Include="EnemyStatePattern\EnemyAttackState.cs" />
+    <Compile Include="EnemyStatePattern\EnemyIdleState.cs" />
+    <Compile Include="EnemyStatePattern\IState.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="SQLite\SQLiteHandler.cs" />
     <Compile Include="TwoDimensionalSize.cs" />
@@ -170,12 +171,9 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
-    <None Include="ExamProjectFirstYear_TemporaryKey.pfx" />
+    <None Include="ExamProjectFirstYear_1_TemporaryKey.pfx" />
     <None Include="SQLite\App.config" />
     <None Include="app.manifest" />
-    <None Include="SQLite\EksamensprojektDB.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

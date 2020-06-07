@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,17 +32,14 @@ namespace ExamProjectFirstYear.Components
 
         private int page;
 
+        private SQLiteHandler sQLiteHandler = GameWorld.Instance.SQLiteHandler;
+
         #endregion
 
 
         #region Properties
 
         public int JournalID { get; set; }
-
-        public List<int> RecordedBlueprintIDs { get; set; } = new List<int>();
-        public List<int> RecordedCreatureIDs { get; set; } = new List<int>();
-
-        public TmpJournal TmpJournal { get; private set; }
 
         #endregion
 
@@ -80,8 +78,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void Start()
         {
-            SQLiteHandler.Instance.AddRecordedBP(1, JournalID);
-            SQLiteHandler.Instance.AddRecordedCreature(1, JournalID);
+            
         }
 
         public override void Update(GameTime gameTime)
@@ -98,7 +95,7 @@ namespace ExamProjectFirstYear.Components
             {
                 journalRenderer.SetSprite("OpenJournal");
                 spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
-                
+
                 //If the page is 1, draws the text field for RecordedBP.
                 if (page == 1)
                 {
@@ -117,6 +114,13 @@ namespace ExamProjectFirstYear.Components
                 journalRenderer.SetSprite("ClosedJournal");
                 spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
             }
+
+            else if (journalOpen == false)
+            {
+                journalRenderer.SetSprite("ClosedJournal");
+                spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), 
+                            null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
+            }
         }
 
         #endregion
@@ -129,8 +133,8 @@ namespace ExamProjectFirstYear.Components
         /// </summary>
         private void HandlePosition()
         {
-            playerPositionX = GameWorld.Instance.player.GameObject.Transform.Position.X;
-            playerPositionY = GameWorld.Instance.player.GameObject.Transform.Position.Y;
+            playerPositionX = GameWorld.Instance.Player.GameObject.Transform.Position.X;
+            playerPositionY = GameWorld.Instance.Player.GameObject.Transform.Position.Y;
         }
 
         /// <summary>
@@ -197,26 +201,49 @@ namespace ExamProjectFirstYear.Components
         private void DrawRecordedBlueprintStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(journalHeading, "Recorded Blueprints", new Vector2(playerPositionX - 800, playerPositionY - 450),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
-
-            TmpBlueprint tmpBlueprint;
-            TmpRequiredMaterial tmpRequiredMaterial;
-            TmpMaterialType tmpMaterialType;
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
 
             float positionX = playerPositionX - 800;
             float positionY = (playerPositionY - 450) + 100;
 
-            //Create a text field for every RecordedBP in the ID list.
-            foreach (int blueprintID in RecordedBlueprintIDs)
-            {
-                tmpBlueprint = SQLiteHandler.Instance.GetBlueprint(blueprintID);
-                tmpRequiredMaterial = SQLiteHandler.Instance.GetRequiredMaterial(blueprintID);
-                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(tmpRequiredMaterial.TmpMaterialTypeID);
 
-                spriteBatch.DrawString(journalText, $"Name: {tmpBlueprint.TmpName} \nDescription: {tmpBlueprint.TmpDescription}" +
-                                       $"\nMaterials: {tmpMaterialType.TmpName} ({tmpRequiredMaterial.TmpAmount})",
+            List<int> blueprintIDs = sQLiteHandler.ExecuteIntReader("BlueprintID",
+                                    "RecordedBP", $"JournalID={JournalID}");
+
+            //Create a text field for every RecordedBP in the ID list.
+            foreach (int blueprintID in blueprintIDs)
+            {
+                string blueprintName       = sQLiteHandler.SelectStringValuesWhere("Name", "Blueprint",
+                                           $"ID={blueprintID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                string blueprintDesciption = sQLiteHandler.SelectStringValuesWhere("Description",
+                                            "Blueprint", $"ID={blueprintID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+
+                spriteBatch.DrawString(journalText,
+                                       $"Name: {blueprintName} " +
+                                       $"\nDescription: {blueprintDesciption}" +
+                                       $"\nMaterials:",
                                        new Vector2(positionX, positionY),
-                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                positionY += 75;
+                positionX += 150;
+
+
+                List<int> materialTypeIDs = sQLiteHandler.ExecuteIntReader("MaterialTypeID",
+                                           "RequiredMaterial", $"BlueprintID={blueprintID}");
+
+                foreach (int materialTypeID in materialTypeIDs)
+                {
+                    string materialName = sQLiteHandler.SelectStringValuesWhere("Name", "MaterialType", $"ID={materialTypeID}", 
+                                          new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                    int materialAmount  = sQLiteHandler.SelectIntValuesWhere("Amount", "RequiredMaterial", $"MaterialTypeID={materialTypeID} " +
+                                        $"AND BlueprintID={blueprintID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+
+                    spriteBatch.DrawString(journalText, $"{materialName} ({materialAmount})",
+                                           new Vector2(positionX, positionY),
+                                           Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+
+                    positionY += 40;
+                }
 
                 positionY += 150;
             }
@@ -228,138 +255,42 @@ namespace ExamProjectFirstYear.Components
         private void DrawRecordedCreatureStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(journalHeading, "Recorded Creatures", new Vector2(playerPositionX - 800, playerPositionY - 450),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
-
-            TmpCreature tmpCreature;
-            TmpMaterialType tmpMaterialType;
+                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
 
             float positionX = playerPositionX - 800;
             float positionY = (playerPositionY - 450) + 100;
 
-            //Create a text field for every RecordedCreature in the ID list.
-            foreach (int creatureID in RecordedCreatureIDs)
-            {
-                tmpCreature = SQLiteHandler.Instance.GetCreature(creatureID);
-                tmpMaterialType = SQLiteHandler.Instance.GetMaterialType(tmpCreature.TmpMaterialTypeID);
+            List<int> creatureIDs = sQLiteHandler.ExecuteIntReader("CreatureID",
+                                   "RecordedCreature", $"JournalID={JournalID}");
 
-                spriteBatch.DrawString(journalText, $"Name: {tmpCreature.TmpName} ({tmpCreature.TmpType})" +
-                                        $"\nDescription: {tmpCreature.TmpDescription} " +
-                                        $"\nDrops: {tmpMaterialType.TmpName}\nLocation: {tmpCreature.TmpLocation}",
+            //Create a text field for every RecordedCreature in the ID list.
+            foreach (int creatureID in creatureIDs)
+            {
+                string creatureName        = sQLiteHandler.SelectStringValuesWhere("Name", "Creature",
+                                           $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                string creatureType        = sQLiteHandler.SelectStringValuesWhere("Type",
+                                            "Creature", $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                string creatureDescription = sQLiteHandler.SelectStringValuesWhere("Description",
+                                            "Creature", $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                string creatureLocation    = sQLiteHandler.SelectStringValuesWhere("Location",
+                                            "Creature", $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                int materialTypeID         = sQLiteHandler.SelectIntValuesWhere("MaterialTypeID",
+                                            "Creature", $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                string materialName        = sQLiteHandler.SelectStringValuesWhere("Name", "MaterialType",
+                                           $"ID={materialTypeID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+
+                spriteBatch.DrawString(journalText,
+                                        $"Name: {creatureName} ({creatureType})" +
+                                        $"\nDescription: {creatureDescription} " +
+                                        $"\nDrops: {materialName}" +
+                                        $"\nLocation: {creatureLocation}",
                                         new Vector2(positionX, positionY),
-                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
 
                 positionY += 190;
             }
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Used when fetching the Blueprint table from SQLite.
-    /// </summary>
-    public struct TmpBlueprint
-    {
-        public int TmpID { get; set; }
-
-        public string TmpName { get; set; }
-        public string TmpDescription { get; set; }
-
-        /// <summary>
-        /// Constructor for the TmpBlueprint struct.
-        /// </summary>
-        /// <param name="tmpID"></param>
-        /// <param name="tmpName"></param>
-        /// <param name="tmpDescription"></param>
-        public TmpBlueprint(int tmpID, string tmpName, string tmpDescription)
-        {
-            TmpID = tmpID;
-            TmpName = tmpName;
-            TmpDescription = tmpDescription;
-        }
-    }
-
-    /// <summary>
-    /// Used when fetching the RequiredMaterial table from SQLite.
-    /// </summary>
-    public struct TmpRequiredMaterial
-    {
-        public int TmpMaterialTypeID { get; set; }
-        public int TmpAmount { get; set; }
-
-        /// <summary>
-        /// Constructor for the TmpRequiredMaterial struct.
-        /// </summary>
-        /// <param name="tmpMaterialTypeID"></param>
-        /// <param name="tmpAmound"></param>
-        public TmpRequiredMaterial(int tmpMaterialTypeID, int tmpAmound)
-        {
-            TmpMaterialTypeID = tmpMaterialTypeID;
-            TmpAmount = tmpAmound;
-        }
-    }
-
-    /// <summary>
-    /// Used when fetching the Creature table from SQLite.
-    /// </summary>
-    public struct TmpCreature
-    {
-        public int TmpMaterialTypeID { get; set; }
-        public string TmpName { get; set; }
-        public string TmpType { get; set; }
-        public string TmpDescription { get; set; }
-        public string TmpLocation { get; set; }
-
-        /// <summary>
-        /// Constructor for the TmpCreature struct.
-        /// </summary>
-        /// <param name="tmpMaterialTypeID"></param>
-        /// <param name="tmpName"></param>
-        /// <param name="tmpType"></param>
-        /// <param name="tmpDescription"></param>
-        /// <param name="tmpLocation"></param>
-        public TmpCreature(int tmpMaterialTypeID, string tmpName, string tmpType, string tmpDescription, string tmpLocation)
-        {
-            TmpMaterialTypeID = tmpMaterialTypeID;
-            TmpName = tmpName;
-            TmpType = tmpType;
-            TmpDescription = tmpDescription;
-            TmpLocation = tmpLocation;
-        }
-    }
-
-    /// <summary>
-    /// Used when fetching the Journal table from SQLite.
-    /// </summary>
-    public struct TmpJournal
-    {
-        public int TmpJournalID { get; set; }
-        public int TmpInventoryID { get; set; }
-        public int TmpHealth { get; set; }
-        public int TmpOpenDoor { get; set; }
-        public int TmpPositionX { get; set; }
-        public int TmpPositionY { get; set; }
-        public int TmpMana { get; set; }
-
-        /// <summary>
-        /// Constructor for the TmpJournal struct.
-        /// </summary>
-        /// <param name="tmpJournalID"></param>
-        /// <param name="tmpInventoryID"></param>
-        /// <param name="tmpHealth"></param>
-        /// <param name="tmpPositionX"></param>
-        /// <param name="tmpPositionY"></param>
-        /// <param name="tmpOpenDoor"></param>
-        /// <param name="tmpMana"></param>
-        public TmpJournal(int tmpJournalID, int tmpInventoryID, int tmpHealth, int tmpPositionX, int tmpPositionY, int tmpOpenDoor, int tmpMana)
-        {
-            TmpJournalID = tmpJournalID;
-            TmpInventoryID = tmpInventoryID;
-            TmpHealth = tmpHealth;
-            TmpPositionX = tmpPositionX;
-            TmpPositionY = tmpPositionY;
-            TmpOpenDoor = tmpOpenDoor;
-            TmpMana = tmpMana;
-        }
     }
 }
