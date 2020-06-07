@@ -62,6 +62,7 @@ namespace ExamProjectFirstYear
 		public List<LightSource> LightSources { get; set; } = new List<LightSource>();
 		public float DeltaTime { get; set; }
 		public float TimeElapsed { get; set; }
+		public TimeSpan ElapsedGameTime { get; set; }
 		public TwoDimensionalSize ScreenSize { get; private set; }
 		public bool GameIsRunning { get => gameIsRunning; set => gameIsRunning = value; }
 		public SpriteBatch SpriteBatch { get; set; }
@@ -268,6 +269,9 @@ namespace ExamProjectFirstYear
 			base.Update(gameTime);
 		}
 
+		#endregion
+
+		#region DRAW
 		/// <summary>
 		/// This is called when the game should draw itself.
 		/// </summary>
@@ -283,12 +287,14 @@ namespace ExamProjectFirstYear
 			GraphicsDevice.Clear(Color.BlanchedAlmond);
 
 			DrawGameObjectsWithCameraCulling();
-
+			
 			GraphicsDevice.SetRenderTarget(null);
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			lightEffect.Parameters["lightMask"].SetValue(lightTarget);
+			
+			lightEffect.Parameters["lightMaskTexture"].SetValue(lightTarget);
 			lightEffect.CurrentTechnique.Passes[0].Apply();
 			spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
+			
 			spriteBatch.End();
 
 			DrawUIObjects();
@@ -371,6 +377,7 @@ namespace ExamProjectFirstYear
 		private void DrawGameObjectsWithCameraCulling()
 		{
 			spriteBatch.Begin(transformMatrix: camera.TransformCamera);
+			NodeManager.Instance.Draw(spriteBatch);
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{
@@ -428,6 +435,8 @@ namespace ExamProjectFirstYear
 			DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			TimeElapsed += DeltaTime;
+
+			ElapsedGameTime = gameTime.ElapsedGameTime;
 		}
 
 		/// <summary>

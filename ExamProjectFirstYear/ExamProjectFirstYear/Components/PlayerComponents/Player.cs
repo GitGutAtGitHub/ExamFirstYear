@@ -31,11 +31,12 @@ namespace ExamProjectFirstYear
         private float invulnerabilityTimer;
         private float invulnerabilityFrames = 0.8f;
         private byte fullMana = 5;
+        private bool canShoot = true;
 
-        private SpriteRenderer spriteRenderer;
-        private RangedAttack rangedAttack;
-        private Jump jump;
-        private Player player = GameWorld.Instance.player;
+        //private SpriteRenderer spriteRenderer;
+        //private RangedAttack rangedAttack;
+        //private Jump jump;
+        //private Player player = GameWorld.Instance.player; Tror ikke vi behøver denne her
 
         #endregion
 
@@ -52,6 +53,7 @@ namespace ExamProjectFirstYear
         public bool AllMaterialsCollected { get; set; }
         public bool PlayerCollidingWithDoor { get => playerCollidingWithDoor; set => playerCollidingWithDoor = value; }
         public Vector2 Direction { get; set; } = new Vector2(1, 0);
+        public Vector2 Velocity { get; set; } = new Vector2(1, 0);
         public Movement Movement { get; private set; }
         public TmpJournal TmpJournal { get; private set; }
 
@@ -68,6 +70,11 @@ namespace ExamProjectFirstYear
             PlayerID = playerID;
         }
 
+        //empty constructor used for unittesting
+        public Player()
+        {
+
+        }
         #endregion
 
 
@@ -110,6 +117,36 @@ namespace ExamProjectFirstYear
 
         #region Other methods
 
+        public void Attack(int attackNumber)
+		{
+			if (attackNumber == 1)
+			{
+                AttackMelee playerAttackMelee = (AttackMelee)GameObject.GetComponent(Tag.ATTACKMELEE);
+				playerAttackMelee.MeleeAttack(this.GameObject, Tag.PLAYERMELEEATTACK, Velocity);
+			}
+
+			else if (attackNumber == 2)
+			{
+                if (Mana > 0 && canShoot == true)
+				{
+                    RangedAttack rangedAttack = (RangedAttack)GameObject.GetComponent(Tag.RANGEDATTACK);
+                    rangedAttack.RangedAttackMethod(this.GameObject, Tag.PLAYERPROJECTILE, Velocity);
+                    Mana--;
+                    CanRegenerateMana = false;
+                    ManagePlayerLight(-0.5f);
+                    canShoot = false;
+                }
+			}
+        }
+
+        /// <summary>
+        /// Methods used when the ranged attack button is released. Sets CanShoot to true.
+        /// </summary>
+        public void PlayerReleaseRangedAttack()
+        {
+			canShoot = true;
+		}
+
         /// <summary>
         /// Method used when the player takes damage.
         /// Invulnerability frames have been added so the player has a chance to get away
@@ -130,7 +167,7 @@ namespace ExamProjectFirstYear
         public void Notify(GameEvent gameEvent, Component component)
         {
             //Players collect materials when they collide with them.
-            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MATERIAL)
+            if (gameEvent.Title == "Colliding" && (component.GameObject.Tag == Tag.SPIDERFILAMENT || component.GameObject.Tag == Tag.MOTHWING || component.GameObject.Tag == Tag.MATCHHEAD))
             {
                 Material componentMaterial = (Material)component.GameObject.GetComponent(Tag.MATERIAL);
                 component.GameObject.Destroy();
@@ -140,7 +177,9 @@ namespace ExamProjectFirstYear
             // Player looses health when colliding with an enemy.
             if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.FLYINGENEMY ||
                 gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.MEELEEENEMY ||
-                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.RANGEDENEMY)
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.RANGEDENEMY ||
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.ENEMYPROJECTILE ||
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.ENEMYMELEEATTACK)
             {
                 TakeDamage();
             }
@@ -232,7 +271,7 @@ namespace ExamProjectFirstYear
                 {
                     // Adds one mana.
                     Mana++;
-
+                    ManagePlayerLight(+0.5f);
                     // Resets the timer.
                     manaRegenerateTimer = regenerationTimer;
                 }
@@ -253,6 +292,12 @@ namespace ExamProjectFirstYear
                 // Once mana is full, the timer is resat to 0.
                 manaRegenerateTimer = 0;
             }
+        }
+
+        private void ManagePlayerLight(float value)
+		{
+            LightSource lightSource = (LightSource)GameObject.GetComponent(Tag.LIGHTSOURCE);
+            lightSource.LightRadiusScale += value;
         }
 
         #endregion

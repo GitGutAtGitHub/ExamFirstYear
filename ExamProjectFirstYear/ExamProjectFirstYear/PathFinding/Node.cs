@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.PathFinding
 {
-    class Node
+    /// <summary>
+    /// This class is public to make Unit Testing possible.
+    /// </summary>
+    public class Node
     {
         #region FIELDS
         private Node parent;

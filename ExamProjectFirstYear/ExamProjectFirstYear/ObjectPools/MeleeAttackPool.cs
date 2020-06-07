@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProjectFirstYear
+namespace ExamProjectFirstYear.ObjectPools
 {
-	class EnemyProjectilePool : ObjectPool
-	{
-		private static EnemyProjectilePool instance;
+    class MeleeAttackPool : ObjectPool
+    {
+		private static MeleeAttackPool instance;
 
-		public static EnemyProjectilePool Instance
+		public static MeleeAttackPool Instance
 		{
 			get
 			{
 				if (instance == null)
 				{
-					instance = new EnemyProjectilePool();
+					instance = new MeleeAttackPool();
 				}
 
 				return instance;
@@ -29,7 +29,8 @@ namespace ExamProjectFirstYear
 
 		protected override GameObject Create(Tag sender)
 		{
-			return ProjectileFactory.Instance.Create(Tag.ENEMYPROJECTILE);
+			return ProjectileFactory.Instance.Create(Tag.MELEEATTACK);
 		}
 	}
 }
+

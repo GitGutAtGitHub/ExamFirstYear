@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    class MeleeEnemy : Enemy, IGameListener
+    /// <summary>
+    /// public for unit testing
+    /// </summary>
+    public class MeleeEnemy : Enemy, IGameListener
     {
         public override void Awake()
         {
@@ -74,7 +77,7 @@ namespace ExamProjectFirstYear.Components
             {
                 GameObject.Destroy();
                 // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                DropMaterialUponDeath(1);
+                DropMaterialUponDeath(Tag.SPIDERFILAMENT);
             }
         }
 

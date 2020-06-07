@@ -46,8 +46,7 @@ namespace ExamProjectFirstYear.CommandPattern
 			}
 			else if (releaseNumber == 2)
 			{
-				RangedAttack rangedAttack = (RangedAttack)player.GameObject.GetComponent(Tag.RANGEDATTACK);
-				rangedAttack.PlayerReleaseRangedAttack();
+				player.PlayerReleaseRangedAttack();
 			}
 			else if (releaseNumber == 3)
 			{
