@@ -65,10 +65,7 @@ namespace ExamProjectFirstYear.Components
                 {
                     if (SO.soundInstance.State != SoundState.Playing)
                     {
-
-
                         SO.soundInstance.Play();
-
                     }
 
                 }
