@@ -42,7 +42,6 @@ namespace ExamProjectFirstYear.Components
             speed = 200f;
             GameObject.Tag = Tag.MEELEEENEMY;
             SwitchState(new EnemyIdleState());
-            enemyID = 3;
         }
 
         public override void Start()
@@ -101,10 +100,7 @@ namespace ExamProjectFirstYear.Components
             {
                 GameObject.Destroy();
                 // 1 is the material ID for ?  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                DropMaterialUponDeath(enemyID);
-
-                GameWorld.Instance.sQLiteHandler.AddRecordedCreature(enemyID, GameWorld.Instance.player.PlayerID);
+                DropMaterialUponDeath(Tag.MOTHWING);
             }
         }
 

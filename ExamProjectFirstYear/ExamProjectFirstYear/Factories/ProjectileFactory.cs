@@ -1,6 +1,5 @@
 ﻿using ExamProjectFirstYear.Components;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +61,7 @@ namespace ExamProjectFirstYear
 		{
 			projectile = new Projectile();
 			renderer = new SpriteRenderer(spriteName);
+			renderer.Origin = new Vector2(renderer.Sprite.Width / 2, renderer.Sprite.Height / 2);
 		}
 
 		public GameObject Create(Tag type)
