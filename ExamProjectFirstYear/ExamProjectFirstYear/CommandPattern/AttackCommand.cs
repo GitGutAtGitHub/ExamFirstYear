@@ -39,7 +39,14 @@ namespace ExamProjectFirstYear.CommandPattern
 
         public void Execute(Player player)
         {
-            player.Attack(attackNumber);
+			if (attackNumber == 1)
+			{
+                player.CallMeleeAttack();
+            }
+			else if (attackNumber == 2)
+			{
+                player.CallRangedAttack();
+			}
         }
 
         public CommandTag GetCommandTag()

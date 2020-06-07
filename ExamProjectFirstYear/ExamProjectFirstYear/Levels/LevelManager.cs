@@ -153,7 +153,7 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(new Movement(true, 900));
                     createdObject.AddComponent(new LightSource(2.75f, true));
                     createdObject.AddComponent(new Jump(35));
-                    createdObject.AddComponent(new RangedAttack());
+                    createdObject.AddComponent(new RangedAttack(0.3f));
                     createdObject.AddComponent(new AttackMelee());
                     break;
 
@@ -234,7 +234,7 @@ namespace ExamProjectFirstYear
             {
                 spriteRenderer.Origin = new Vector2(spriteRenderer.Sprite.Width / 2, spriteRenderer.Sprite.Height / 2 - 20);
                 collider = new Collider(spriteRenderer, (RangedEnemy)createdObject.GetComponent(Tag.RANGEDENEMY)) { CheckCollisionEvents = true };
-                createdObject.AddComponent(new RangedAttack());
+                createdObject.AddComponent(new RangedAttack(0.6f));
             }
 
             //else if (tag != Tag.PLATFORM)
