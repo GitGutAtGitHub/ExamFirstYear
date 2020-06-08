@@ -71,10 +71,10 @@ namespace ExamProjectFirstYear.MenuStatePattern
             spriteBatch.Begin();
 
             spriteBatch.Draw(startScreenSprite, startScreenPosition, null, Color.White, 0f,
-                             startScreenOrigin, 1, SpriteEffects.None, 0.98f);
+                             startScreenOrigin, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.98f);
 
             spriteBatch.DrawString(startText, "PRESS 'S' TO START\n\n PRESS 'E' TO EXIT", startTextPosition,
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
+                                   Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.99f);
 
             spriteBatch.End();
         }

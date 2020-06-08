@@ -22,7 +22,7 @@ namespace ExamProjectFirstYear.Components
 
         protected float speed;
         protected int health;
-        private int sightRadius;
+        private float sightRadius;
         //it is a public variable, to be able to edit the specific X and Y values, it has to be a variable.
         public Vector2 Velocity;
         private bool hasPath = false;
@@ -41,7 +41,7 @@ namespace ExamProjectFirstYear.Components
         #region PROPERTIES
 
         public Vector2 TargetPosition { get; set; }
-        public int SightRadius { get => sightRadius; set => sightRadius = value; }
+        public float SightRadius { get => sightRadius; set => sightRadius = value; }
         public GameObject Target { get => target; set => target = value; }
         public bool HasPath { get => hasPath; set => hasPath = value; }
 

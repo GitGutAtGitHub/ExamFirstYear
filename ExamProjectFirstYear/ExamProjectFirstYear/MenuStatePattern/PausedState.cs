@@ -101,13 +101,13 @@ namespace ExamProjectFirstYear.MenuStatePattern
             spriteBatch.Begin();
 
             spriteBatch.Draw(pausedScreenSprite, pausedScreenPosition, null, Color.White, 0f,
-                             pausedScreenOrigin, 1, SpriteEffects.None, 0.98f);
+                             pausedScreenOrigin, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.98f);
 
             spriteBatch.DrawString(pausedHeading, "PAUSED", pausedHeadingPosition,
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
+                                   Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.99f);
 
             spriteBatch.DrawString(pausedText, "PRESS 'P' TO UNPAUSE\n\n    PRESS 'E' TO EXIT", pausedTextPosition,
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
+                                   Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.99f);
 
             spriteBatch.End();
         }

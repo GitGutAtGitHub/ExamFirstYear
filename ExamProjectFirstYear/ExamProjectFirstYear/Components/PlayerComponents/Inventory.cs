@@ -91,7 +91,7 @@ namespace ExamProjectFirstYear.Components
             {
                 inventoryRenderer.SetSprite("InventoryOpen");
                 spriteBatch.Draw(inventoryRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 330), 
-                            null, Color.White, 0, inventoryRenderer.Origin, 1, SpriteEffects.None, inventoryRenderer.SpriteLayer);
+                            null, Color.White, 0, inventoryRenderer.Origin, 1 * GameWorld.Instance.Scale, SpriteEffects.None, inventoryRenderer.SpriteLayer);
 
                 //Draws the text field.
                 DrawStoredMaterialStrings(spriteBatch);
@@ -101,7 +101,7 @@ namespace ExamProjectFirstYear.Components
             {
                 inventoryRenderer.SetSprite("InventoryClosed");
                 spriteBatch.Draw(inventoryRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 330), 
-                            null, Color.White, 0, inventoryRenderer.Origin, 1, SpriteEffects.None, inventoryRenderer.SpriteLayer);
+                            null, Color.White, 0, inventoryRenderer.Origin, 1 * GameWorld.Instance.Scale, SpriteEffects.None, inventoryRenderer.SpriteLayer);
             }
         }
 
@@ -150,7 +150,7 @@ namespace ExamProjectFirstYear.Components
         private void DrawStoredMaterialStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(inventoryHeading, "Inventory", new Vector2(playerPositionX - 890, playerPositionY - 300),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.72f);
+                                   Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.72f);
 
             float positionX = playerPositionX - 890;
             float positionY = (playerPositionY - 310) + 90;
@@ -169,7 +169,7 @@ namespace ExamProjectFirstYear.Components
                 spriteBatch.DrawString(inventoryText,
                                        $"{materialName}: {storedAmount}",
                                        new Vector2(positionX, positionY),
-                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.72f);
+                                       Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.72f);
 
                 positionY += 60;
             }

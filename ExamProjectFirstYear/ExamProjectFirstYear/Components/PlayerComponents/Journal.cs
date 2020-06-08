@@ -94,7 +94,7 @@ namespace ExamProjectFirstYear.Components
             if (journalOpen == true)
             {
                 journalRenderer.SetSprite("OpenJournal");
-                spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
+                spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1 * GameWorld.Instance.Scale, SpriteEffects.None, journalRenderer.SpriteLayer);
 
                 //If the page is 1, draws the text field for RecordedBP.
                 if (page == 1)
@@ -112,7 +112,7 @@ namespace ExamProjectFirstYear.Components
             else if (journalOpen == false)
             {
                 journalRenderer.SetSprite("ClosedJournal");
-                spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
+                spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1 * GameWorld.Instance.Scale, SpriteEffects.None, journalRenderer.SpriteLayer);
             }
 
         }
@@ -184,7 +184,7 @@ namespace ExamProjectFirstYear.Components
         private void DrawRecordedBlueprintStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(journalHeading, "Recorded Blueprints", new Vector2(playerPositionX - 800, playerPositionY - 450),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                                   Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.92f);
 
             float positionX = playerPositionX - 800;
             float positionY = (playerPositionY - 450) + 100;
@@ -206,7 +206,7 @@ namespace ExamProjectFirstYear.Components
                                        $"\nDescription: {blueprintDesciption}" +
                                        $"\nMaterials:",
                                        new Vector2(positionX, positionY),
-                                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                                       Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.92f);
                 positionY += 75;
                 positionX += 150;
 
@@ -223,7 +223,7 @@ namespace ExamProjectFirstYear.Components
 
                     spriteBatch.DrawString(journalText, $"{materialName} ({materialAmount})",
                                            new Vector2(positionX, positionY),
-                                           Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                                           Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.92f);
 
                     positionY += 40;
                 }
@@ -238,7 +238,7 @@ namespace ExamProjectFirstYear.Components
         private void DrawRecordedCreatureStrings(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(journalHeading, "Recorded Creatures", new Vector2(playerPositionX - 800, playerPositionY - 450),
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                                   Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.92f);
 
             float positionX = playerPositionX - 800;
             float positionY = (playerPositionY - 450) + 100;
@@ -268,7 +268,7 @@ namespace ExamProjectFirstYear.Components
                                         $"\nDrops: {materialName}" +
                                         $"\nLocation: {creatureLocation}",
                                         new Vector2(positionX, positionY),
-                                        Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
+                                        Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.92f);
 
                 positionY += 190;
             }

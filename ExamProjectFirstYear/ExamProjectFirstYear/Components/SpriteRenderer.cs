@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExamProjectFirstYear.PathFinding;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -62,7 +63,7 @@ namespace ExamProjectFirstYear
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color.White, 0, Origin, 1, spriteEffect, SpriteLayer);
+			spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color.White, 0, Origin, 1 * GameWorld.Instance.Scale, spriteEffect, SpriteLayer);
 		}
 
 		public override Tag ToEnum()

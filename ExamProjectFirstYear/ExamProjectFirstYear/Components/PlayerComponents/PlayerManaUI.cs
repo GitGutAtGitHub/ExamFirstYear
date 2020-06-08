@@ -63,7 +63,7 @@ namespace ExamProjectFirstYear.Components
             for (int i = 0; i < GameWorld.Instance.Player.Mana; i++)
             {
                 spriteBatch.Draw(playerManaUIRenderer.Sprite, new Vector2(positionX, playerPositionY - 300), null,
-                                 Color.White, 0, playerManaUIRenderer.Origin, 1, SpriteEffects.None, playerManaUIRenderer.SpriteLayer);
+                                 Color.White, 0, playerManaUIRenderer.Origin, 1 * GameWorld.Instance.Scale, SpriteEffects.None, playerManaUIRenderer.SpriteLayer);
 
                 positionX -= 180;
             }

@@ -76,7 +76,8 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
         private void LoadGame()
         {
-            Thread.Sleep(10000);
+            //           10000
+            Thread.Sleep(100);
 
             MenuHandler.Instance.CurrentMenuHandler.SwitchState(new StartState());
 
@@ -93,10 +94,10 @@ namespace ExamProjectFirstYear.MenuStatePattern
             spriteBatch.Begin();
 
             spriteBatch.Draw(loadingScreenSprite, loadingScreenPosition, null, Color.White, 0f,
-                             loadingScreenOrigin, 1, SpriteEffects.None, 0.98f);
+                             loadingScreenOrigin, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.98f);
 
             spriteBatch.DrawString(loadingHeading, "LOADING", loadingHeadingPosition,
-                                   Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
+                                   Color.Black, 0, Vector2.Zero, 1 * GameWorld.Instance.Scale, SpriteEffects.None, 0.99f);
 
             spriteBatch.End();
         }

@@ -63,7 +63,7 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
             for (int i = 0; i < GameWorld.Instance.Player.Health; i++)
             {
                 spriteBatch.Draw(playerHealthUIRenderer.Sprite, new Vector2(positionX, playerPositionY - 500), null, 
-                                 Color.White, 0, playerHealthUIRenderer.Origin, 1, SpriteEffects.None, playerHealthUIRenderer.SpriteLayer);
+                                 Color.White, 0, playerHealthUIRenderer.Origin, 1 * GameWorld.Instance.Scale, SpriteEffects.None, playerHealthUIRenderer.SpriteLayer);
 
                 positionX -= 180;
             }

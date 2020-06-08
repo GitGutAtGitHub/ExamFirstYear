@@ -30,7 +30,7 @@ namespace ExamProjectFirstYear.PathFinding
         //private static int cellRowCount = 200;
         private static TwoDimensionalSize cellRowCount;
         //private int cellRowCountWidth = Bitmap.GetPixelFormatSize();
-        private int cellSize = 96;
+        private float cellSize = 96 * GameWorld.Instance.Scale;
         private Stack<Node> path;
         public int debugcount = 0;
 
@@ -58,7 +58,7 @@ namespace ExamProjectFirstYear.PathFinding
 
         // Needed to access it from the PathFinder class.
         public Node[,] Nodes { get => nodes; }
-        public int CellSize { get => cellSize; set => cellSize = value; }
+        public float CellSize { get => cellSize; set => cellSize = value; }
 
         //public int CellRowCount { get => cellRowCount; set => cellRowCount = value; }
         public TwoDimensionalSize CellRowCountTwo { get => cellRowCount; set => cellRowCount = value; }
@@ -132,7 +132,6 @@ namespace ExamProjectFirstYear.PathFinding
 
         public void Draw(SpriteBatch spriteBatch)
         {
-
             foreach (Node node in Nodes)
             {
                 if (node.Walkable == true)
@@ -147,11 +146,7 @@ namespace ExamProjectFirstYear.PathFinding
                 spriteBatch.DrawString(spriteFont, $"G: {node.GCost}", new Vector2((node.Position.X), (node.Position.Y)), Color.DarkRed, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
                 spriteBatch.DrawString(spriteFont, $"H: {node.HCost}", new Vector2((node.Position.X + 60), (node.Position.Y)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
                 spriteBatch.DrawString(spriteFont, $"F: {node.FCost}", new Vector2((node.Position.X), (node.Position.Y + 80)), Color.DarkBlue, 0, Vector2.Zero, 1, SpriteEffects.None, 0.92f);
-
             }
-
-
-
         }
         #endregion 
     }

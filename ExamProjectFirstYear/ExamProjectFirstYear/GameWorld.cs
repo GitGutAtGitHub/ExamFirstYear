@@ -69,7 +69,7 @@ namespace ExamProjectFirstYear
         public bool GameIsRunning { get => gameIsRunning; set => gameIsRunning = value; }
         public SpriteBatch SpriteBatch { get; set; }
         public SQLiteHandler SQLiteHandler { get; set; }
-
+        public float Scale { get; private set; }
 
         #endregion
 
@@ -78,15 +78,9 @@ namespace ExamProjectFirstYear
 
         private GameWorld()
         {
-            graphics = new GraphicsDeviceManager(this)
-            {
-                PreferredBackBufferHeight = 1080,
-                PreferredBackBufferWidth = 1920
-            };
-            graphics.ApplyChanges();
+            graphics = new GraphicsDeviceManager(this);
 
             Content.RootDirectory = "Content";
-            GetScreenSize();
         }
 
         #endregion
@@ -102,6 +96,16 @@ namespace ExamProjectFirstYear
         /// </summary>
         protected override void Initialize()
         {
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+
+            graphics.ApplyChanges();
+
+            GetScreenSize();
+
+            // Sets the scale value
+            Scale = ((1f / 1920f) * GraphicsDevice.DisplayMode.Width);
+
             SQLiteHandler = new SQLiteHandler();
 
             SQLiteHandler.BuildDatabase();
@@ -143,8 +147,6 @@ namespace ExamProjectFirstYear
             //exitButton = Content.Load<Texture2D>("OopPlayerSprite2");
 
             //loadingScreen = Content.Load<Texture2D>("OopGameScreen");
-
-
 
             for (int i = 0; i < GameObjects.Count; i++)
             {
@@ -216,7 +218,6 @@ namespace ExamProjectFirstYear
                         GameObjects[i].Update(gameTime);
                     }
 
-
                     else if ((GameObjects[i].Transform.Position.X - Player.GameObject.Transform.Position.X) < (ScreenSize.width) &&
                         (Player.GameObject.Transform.Position.X - GameObjects[i].Transform.Position.X) < (ScreenSize.width) &&
                         (GameObjects[i].Transform.Position.Y - Player.GameObject.Transform.Position.Y) < (ScreenSize.height) &&
@@ -224,7 +225,6 @@ namespace ExamProjectFirstYear
                     {
                         GameObjects[i].Update(gameTime);
                     }
-
                 }
 
                 //Makes a copy of the collider list, to avoid any exception when removing from the collider list.

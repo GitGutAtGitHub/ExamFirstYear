@@ -43,8 +43,8 @@ namespace ExamProjectFirstYear
 
                     (int)(GameObject.Transform.Position.Y - origin.Y),
 
-                    (int)size.X,
-                    (int)size.Y
+                    (int)(size.X * GameWorld.Instance.Scale),
+                    (int)(size.Y * GameWorld.Instance.Scale)
                 );
             }
         }
