@@ -1,4 +1,5 @@
 ﻿using ExamProjectFirstYear.CommandPattern;
+using ExamProjectFirstYear.CommandPattern.MenuCommandPattern;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -61,15 +62,24 @@ namespace ExamProjectFirstYear
 			// Player interacts when pressing a.
 			keyBinds.Add(Keys.A, new InteractCommand());
 
+			// Opens/closes the journal.
+			keyBinds.Add(Keys.J, new JournalCommand(1));
+			// Changes the page of the journal.
+			keyBinds.Add(Keys.K, new JournalCommand(2));
 
+			keyBinds.Add(Keys.I, new InventoryCommand());
+
+
+			releaseKeyBinds.Add(Keys.J, new ReleaseCommand(6));
+			releaseKeyBinds.Add(Keys.K, new ReleaseCommand(7));
+			releaseKeyBinds.Add(Keys.I, new ReleaseCommand(8));
 
 			// Player releases the meleeattack
 			releaseKeyBinds.Add(Keys.X, new ReleaseCommand(1));
 			// Player releases the rangedattack
 			releaseKeyBinds.Add(Keys.Z, new ReleaseCommand(2));
-
+			// Player jump
 			releaseKeyBinds.Add(Keys.Space, new ReleaseCommand(3));
-
 			releaseKeyBinds.Add(Keys.Right, new ReleaseCommand(4));
 			releaseKeyBinds.Add(Keys.Left, new ReleaseCommand(5));
 		}

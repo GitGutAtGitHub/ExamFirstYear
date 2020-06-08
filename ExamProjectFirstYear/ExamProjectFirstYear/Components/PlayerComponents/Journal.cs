@@ -18,9 +18,8 @@ namespace ExamProjectFirstYear.Components
         #region Fields
 
         private bool journalOpen;
-
-        private KeyboardState previousKeyboardState;
-        private KeyboardState currentKeyboardState;
+        private bool canOperateJournal = true;
+        private bool canChangePage = true;
 
         private SpriteRenderer journalRenderer;
 
@@ -40,6 +39,8 @@ namespace ExamProjectFirstYear.Components
         #region Properties
 
         public int JournalID { get; set; }
+        public bool CanOperateJournal { get => canOperateJournal; set => canOperateJournal = value; }
+        public bool CanChangePage { get => canChangePage; set => canChangePage = value; }
 
         #endregion
 
@@ -78,13 +79,12 @@ namespace ExamProjectFirstYear.Components
 
         public override void Start()
         {
-            
+
         }
 
         public override void Update(GameTime gameTime)
         {
             HandlePosition();
-            HandleJournal();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -115,12 +115,6 @@ namespace ExamProjectFirstYear.Components
                 spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
             }
 
-            else if (journalOpen == false)
-            {
-                journalRenderer.SetSprite("ClosedJournal");
-                spriteBatch.Draw(journalRenderer.Sprite, new Vector2(playerPositionX - 920, playerPositionY - 500), 
-                            null, Color.White, 0, journalRenderer.Origin, 1, SpriteEffects.None, journalRenderer.SpriteLayer);
-            }
         }
 
         #endregion
@@ -138,60 +132,49 @@ namespace ExamProjectFirstYear.Components
         }
 
         /// <summary>
-        /// Checks whether Journal is open or closed.
+        /// Checks whether Journal is open or closed and closes or opens the journal
+        /// depending on whether it's already open or not.
         /// </summary>
-        private void HandleJournal()
+        public void HandleJournal()
         {
-            previousKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-
-            //If Journal is closed, it can be opened.
-            if (journalOpen == false)
+            if (canOperateJournal == true)
             {
-                OpenJournal();
-            }
+                //If Journal is closed, it can be opened.
+                if (journalOpen == false)
+                {
+                    journalOpen = true;
+                    //Makes sure a page is set when the Journal opens.
+                    page = 1;
+                }
 
-            //If Journal is open, it can be closed.
-            else if (journalOpen == true)
-            {
-                CloseJournal();
-            }
+                //If Journal is open, it can be closed.
+                else if (journalOpen == true)
+                {
+                    journalOpen = false;
+                    journalRenderer.SetSprite("ClosedJournal");
+                }
 
-            //For changing the Journal page.
-            if (currentKeyboardState.IsKeyUp(Keys.D1) && previousKeyboardState.IsKeyDown(Keys.D1))
-            {
-                page = 1;
-            }
-
-            else if (currentKeyboardState.IsKeyUp(Keys.D2) && previousKeyboardState.IsKeyDown(Keys.D2))
-            {
-                page = 2;
+                canOperateJournal = false;
             }
         }
 
         /// <summary>
-        /// If J key is pressed, open Journal.
+        /// For changing the Journal page.
         /// </summary>
-        private void OpenJournal()
+        public void ChangePage()
         {
-            if (currentKeyboardState.IsKeyUp(Keys.J) && previousKeyboardState.IsKeyDown(Keys.J))
+            if (canChangePage == true)
             {
-                journalOpen = true;
+                if (page == 1)
+                {
+                    page = 2;
+                }
+                else
+                {
+                    page = 1;
+                }
 
-                //Makes sure a page is set when the Journal opens.
-                page = 1;
-            }
-        }
-
-        /// <summary>
-        /// If J key is pressed, close Journal.
-        /// </summary>
-        private void CloseJournal()
-        {
-            if (currentKeyboardState.IsKeyUp(Keys.J) && previousKeyboardState.IsKeyDown(Keys.J))
-            {
-                journalOpen = false;
-                journalRenderer.SetSprite("ClosedJournal");
+                canChangePage = false;
             }
         }
 
@@ -213,7 +196,7 @@ namespace ExamProjectFirstYear.Components
             //Create a text field for every RecordedBP in the ID list.
             foreach (int blueprintID in blueprintIDs)
             {
-                string blueprintName       = sQLiteHandler.SelectStringValuesWhere("Name", "Blueprint",
+                string blueprintName = sQLiteHandler.SelectStringValuesWhere("Name", "Blueprint",
                                            $"ID={blueprintID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
                 string blueprintDesciption = sQLiteHandler.SelectStringValuesWhere("Description",
                                             "Blueprint", $"ID={blueprintID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
@@ -233,9 +216,9 @@ namespace ExamProjectFirstYear.Components
 
                 foreach (int materialTypeID in materialTypeIDs)
                 {
-                    string materialName = sQLiteHandler.SelectStringValuesWhere("Name", "MaterialType", $"ID={materialTypeID}", 
+                    string materialName = sQLiteHandler.SelectStringValuesWhere("Name", "MaterialType", $"ID={materialTypeID}",
                                           new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-                    int materialAmount  = sQLiteHandler.SelectIntValuesWhere("Amount", "RequiredMaterial", $"MaterialTypeID={materialTypeID} " +
+                    int materialAmount = sQLiteHandler.SelectIntValuesWhere("Amount", "RequiredMaterial", $"MaterialTypeID={materialTypeID} " +
                                         $"AND BlueprintID={blueprintID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
 
                     spriteBatch.DrawString(journalText, $"{materialName} ({materialAmount})",
@@ -266,17 +249,17 @@ namespace ExamProjectFirstYear.Components
             //Create a text field for every RecordedCreature in the ID list.
             foreach (int creatureID in creatureIDs)
             {
-                string creatureName        = sQLiteHandler.SelectStringValuesWhere("Name", "Creature",
+                string creatureName = sQLiteHandler.SelectStringValuesWhere("Name", "Creature",
                                            $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-                string creatureType        = sQLiteHandler.SelectStringValuesWhere("Type",
+                string creatureType = sQLiteHandler.SelectStringValuesWhere("Type",
                                             "Creature", $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
                 string creatureDescription = sQLiteHandler.SelectStringValuesWhere("Description",
                                             "Creature", $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-                string creatureLocation    = sQLiteHandler.SelectStringValuesWhere("Location",
+                string creatureLocation = sQLiteHandler.SelectStringValuesWhere("Location",
                                             "Creature", $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-                int materialTypeID         = sQLiteHandler.SelectIntValuesWhere("MaterialTypeID",
+                int materialTypeID = sQLiteHandler.SelectIntValuesWhere("MaterialTypeID",
                                             "Creature", $"ID={creatureID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-                string materialName        = sQLiteHandler.SelectStringValuesWhere("Name", "MaterialType",
+                string materialName = sQLiteHandler.SelectStringValuesWhere("Name", "MaterialType",
                                            $"ID={materialTypeID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
 
                 spriteBatch.DrawString(journalText,

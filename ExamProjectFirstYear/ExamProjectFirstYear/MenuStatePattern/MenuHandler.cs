@@ -20,7 +20,14 @@ namespace ExamProjectFirstYear
     {
         #region Fields
 
+        private MenuHandler currentMenuHandler;
+
         private static MenuHandler instance;
+        private bool startGameAtStartMenu = false;
+        private bool exitGameAtMenu = false;
+        private bool gameShouldBePaused = false;
+        //private bool gameHasBeenExited = false;
+        private bool canUseMenu = true;
 
         #endregion
 
@@ -41,8 +48,21 @@ namespace ExamProjectFirstYear
         }
 
         public IMenuState CurrentState { get; set; }
-
         public GameState GameState { get; set; }
+        public MenuHandler CurrentMenuHandler { get => currentMenuHandler; set => currentMenuHandler = value; }
+
+        // used in StartState class and StartMenuCommand class. To decide what happens when certain buttons are pressed.
+        public bool StartGameAtStartMenu { get => startGameAtStartMenu; set => startGameAtStartMenu = value; }
+
+        // Used to exit the game while using menus.
+        public bool ExitGameAtMenu { get => exitGameAtMenu; set => exitGameAtMenu = value; }
+
+        // used in PausedState class and PauseMenuCommand class. When a certain button is pressed,
+        // this bool becomes true and the game pauses.
+        public bool GameShouldBePaused { get => gameShouldBePaused; set => gameShouldBePaused = value; }
+
+        // Used to make sure the pause menu is only popped once at a time.
+        public bool CanUseMenu { get => canUseMenu; set => canUseMenu = value; }
 
         #endregion
 

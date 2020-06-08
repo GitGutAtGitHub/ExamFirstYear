@@ -17,11 +17,6 @@ namespace ExamProjectFirstYear.MenuStatePattern
     {
         #region Fields
 
-        private KeyboardState currentKeyBoardState;
-        private KeyboardState previousKeyBoardState;
-
-        private MenuHandler menuHandler;
-
         private Vector2 startScreenPosition;
         private Vector2 startTextPosition;
         private Vector2 startScreenOrigin;
@@ -41,7 +36,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
         {
             MenuHandler.Instance.GameState = GameState.StartState;
 
-            menuHandler = entity as MenuHandler;
+            MenuHandler.Instance.CurrentMenuHandler = entity as MenuHandler;
 
             startScreenSprite = GameWorld.Instance.Content.Load<Texture2D>("OopGameScreen");
             startText = GameWorld.Instance.Content.Load<SpriteFont>("MenuHandlerHeading");
@@ -58,7 +53,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
         public void Execute()
         {
-            HandleInput();
+            StartGameMenuHandler();
         }
 
         public void Exit()
@@ -66,6 +61,9 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
         }
 
+        /// <summary>
+        /// Method used to draw the start screen.
+        /// </summary>
         private void Draw()
         {
             spriteBatch = new SpriteBatch(GameWorld.Instance.GraphicsDevice);
@@ -81,18 +79,22 @@ namespace ExamProjectFirstYear.MenuStatePattern
             spriteBatch.End();
         }
 
-        private void HandleInput()
+        /// <summary>
+        /// Depending on the button the player presses, the game switches to a new state or the game shuts down.
+        /// This has been set up with bools, which becomes true in the StartMenuCommand class,
+        /// when the correct buttons are pressed.
+        /// </summary>
+        private void StartGameMenuHandler()
         {
-            previousKeyBoardState = currentKeyBoardState;
-            currentKeyBoardState = Keyboard.GetState();
-
-            if (currentKeyBoardState.IsKeyUp(Keys.S) && previousKeyBoardState.IsKeyDown(Keys.S))
+            if (MenuHandler.Instance.StartGameAtStartMenu == true)
             {
-                menuHandler.SwitchState(new PlayingState());
+                // Starts the game. Enters PlayingState.
+                MenuHandler.Instance.CurrentMenuHandler.SwitchState(new PlayingState());
             }
 
-            if (currentKeyBoardState.IsKeyUp(Keys.E) && previousKeyBoardState.IsKeyDown(Keys.E))
+            if (MenuHandler.Instance.ExitGameAtMenu == true)
             {
+                // Exits/closes the game.
                 GameWorld.Instance.GameIsRunning = false;
                 GameWorld.Instance.Exit();
             }
