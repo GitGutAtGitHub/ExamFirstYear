@@ -47,7 +47,7 @@ namespace ExamProjectFirstYear.Components
         public override void Update(GameTime gameTime)
         {
             updateDistance();
-            Console.WriteLine((volume));
+            //Console.WriteLine((volume));
 
             KeepAudioLooping();
 

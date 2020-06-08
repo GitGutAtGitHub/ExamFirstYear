@@ -35,6 +35,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
         public void Execute()
         {
             HandleInput();
+            GameWorld.Instance.CheckIfWonOrLost();
         }
 
         public void Exit()

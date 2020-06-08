@@ -62,10 +62,10 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>79F41980F6FC92AA63FE4A236B0A6237812729B3</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>8FCC8C097DFC66AED107EA4333C4DCCA6CC81F51</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ExamProjectFirstYear_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ExamProjectFirstYear_3_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -91,6 +91,7 @@
     <Compile Include="Components\LightSource.cs" />
     <Compile Include="Components\PlayerComponents\PlayerHealthUI.cs" />
     <Compile Include="MenuStatePattern\IMenuState.cs" />
+    <Compile Include="MenuStatePattern\LostState.cs" />
     <Compile Include="MenuStatePattern\MenuHandler.cs" />
     <Compile Include="Components\RangedAttack.cs" />
     <Compile Include="Components\SoundComponent.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="MenuStatePattern\PausedState.cs" />
     <Compile Include="MenuStatePattern\PlayingState.cs" />
     <Compile Include="MenuStatePattern\StartState.cs" />
+    <Compile Include="MenuStatePattern\WonState.cs" />
     <Compile Include="ObjectPools\EnemyProjectilePool.cs" />
     <Compile Include="ObjectPools\BossProjectilePool.cs" />
     <Compile Include="CommandPattern\AttackCommand.cs" />
@@ -174,7 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
-    <None Include="ExamProjectFirstYear_TemporaryKey.pfx" />
+    <None Include="ExamProjectFirstYear_3_TemporaryKey.pfx" />
     <None Include="SQLite\App.config" />
     <None Include="app.manifest" />
     <None Include="packages.config" />

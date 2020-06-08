@@ -17,6 +17,9 @@ namespace ExamProjectFirstYear
     {
         #region Constructors
 
+        /// <summary>
+        /// Constructor for SQLiteHandler.
+        /// </summary>
         public SQLiteHandler()
         {
 
@@ -28,7 +31,7 @@ namespace ExamProjectFirstYear
         #region Generic methods
 
         /// <summary>
-        /// Returns connectionsstring for the database.
+        /// Returns the connectionsstring for the database. Check App.config for details.
         /// </summary>
         /// <returns></returns>
         public string LoadSQLiteConnectionString()
@@ -37,7 +40,7 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-        /// Method for simplifying SQLiteCommands as NonQuery. The commandText is the command to be executed.
+        /// Method for simplifying and executing SQLiteCommands as NonQuery. The commandText is the command to be executed.
         /// </summary>
         /// <param name="commandText"></param>
         public void ExecuteNonQuerySQLiteCommand(SQLiteCommand command, SQLiteConnection connection)
@@ -50,7 +53,8 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-        /// Method for simplifying SQLiteCommands as Scalar. The commandText is the command to be executed.
+        /// Method for simplifying and executing SQLiteCommands as Scalar. The commandText is the command to be executed.
+        ///Returns the result as an integer.
         /// </summary>
         /// <param name="commandText"></param>
         public int ExecuteScalarInt(SQLiteCommand command, SQLiteConnection connection)
@@ -68,6 +72,7 @@ namespace ExamProjectFirstYear
 
         /// <summary>
         /// Method for simplifying SQLiteCommands as Scalar. The commandText is the command to be executed.
+        /// Returns the result as a string.
         /// </summary>
         /// <param name="commandText"></param>
         public string ExecuteScalarString(SQLiteCommand command, SQLiteConnection connection)
@@ -83,6 +88,14 @@ namespace ExamProjectFirstYear
             return value;
         }
 
+        /// <summary>
+        /// Execute a read on a selected column from a table.
+        /// Returns the read as a list of integers.
+        /// </summary>
+        /// <param name="selectedColumn"></param>
+        /// <param name="fromTable"></param>
+        /// <param name="whereDefinition"></param>
+        /// <returns></returns>
         public List<int> ExecuteIntReader(string selectedColumn, string fromTable, string whereDefinition)
         {
             List<int> values = new List<int>();
@@ -106,6 +119,12 @@ namespace ExamProjectFirstYear
             return values;
         }
 
+        /// <summary>
+        /// Creates a specified table.
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="columns"></param>
+        /// <param name="connection"></param>
         public void CreateTable(string tableName, string columns, SQLiteConnection connection)
         {
             ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"CREATE TABLE IF NOT EXISTS {tableName} ({columns})", connection), connection);
@@ -121,7 +140,7 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-        /// Fill out a table row.
+        /// Fill out one or more table rows.
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="tableValues"></param>
@@ -132,7 +151,7 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-        /// Fill out a table row with specified WHERE.
+        /// Fill out one or more table rows with a specified WHERE condition.
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="tableValues"></param>
@@ -146,7 +165,8 @@ namespace ExamProjectFirstYear
         }
 
         /// <summary>
-        /// Update a table row. Useful for updating inventory amounts.
+        /// Update a table row with a specified WHERE condition. 
+        /// Useful for updating inventory amounts.
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="updateDefinition"></param>
@@ -185,9 +205,11 @@ namespace ExamProjectFirstYear
 
         /// <summary>
         /// Method used when building the database.
+        /// This is run once initialization (GameWorld.Instance.Initialize).
         /// </summary>
         public void BuildDatabase()
         {
+            //Creates all the necessary tables for the game, if they haven't already been created.
             CreateTable("Inventory", "ID INTEGER PRIMARY KEY", new SQLiteConnection(LoadSQLiteConnectionString()));
             CreateTable("Journal", "ID INTEGER PRIMARY KEY, InventoryID INTEGER, Health INTEGER, OpenDoor BOOLEAN, " +
                         "PositionX INTEGER, PositionY INTEGER, Mana INTEGER, FOREIGN KEY (InventoryID) REFERENCES Inventory(ID)",
@@ -215,6 +237,9 @@ namespace ExamProjectFirstYear
                         "UNIQUE (BlueprintID, JournalID)", new SQLiteConnection(LoadSQLiteConnectionString()));
 
 
+            //Fills out the specified tables with necessary values for the game. 
+            //Ignore if an identical row with unique values already exists.
+            //This ensures the table won't be filled with duplicates if the game is loaded more than once.
             InsertIntoTable("Inventory", "1", new SQLiteConnection(LoadSQLiteConnectionString()));
             InsertIntoTableWhere("Journal", "ID, InventoryID, Health, OpenDoor, PositionX, PositionY, Mana",
                                  "SELECT 1, Inventory.ID, 5, 0, 50, 50, 5 FROM Inventory", "Inventory.ID=ID",
@@ -252,15 +277,19 @@ namespace ExamProjectFirstYear
         /// <param name="materialName"></param>
         public void IncreaseAmountStoredMaterial(int materialTypeID, int inventoryID)
         {
+            //Get a list of allt the inventoryIDs.
             List<int> inventoryIDs = ExecuteIntReader("InventoryID", "StoredMaterial",
                                    $"MaterialTypeID={materialTypeID}");
 
+            //Insert the material into the table if the ID isn't present.
+            //This ensures that materials are only shown in the onscreen Inventory if the player has at least 1 of the material.
             if (!inventoryIDs.Contains(inventoryID))
             {
                 InsertIntoTable("StoredMaterial", $"{materialTypeID}, {inventoryID}, 1, {materialTypeID}",
                                  new SQLiteConnection(LoadSQLiteConnectionString()));
             }
 
+            //If a player already has that material, add it by one.
             if (inventoryIDs.Contains(inventoryID))
             {
                 UpdateTableWhere("StoredMaterial", "Amount=Amount+1", $"MaterialTypeID={materialTypeID} " +
@@ -270,6 +299,7 @@ namespace ExamProjectFirstYear
 
         /// <summary>
         /// Records a new Blueprint to the Journal in RecordedBP.
+        /// This isn't currently used, but can be used to include multiple BP records in the game.
         /// </summary>
         /// <param name="blueprintName"></param>
         public void AddRecordedBP(int blueprintID, int journalID)
@@ -295,6 +325,8 @@ namespace ExamProjectFirstYear
 
         /// <summary>
         /// Method for saving the game in a specific JournalID (save slot).
+        /// Not currently in used since the game is very small.
+        /// Define the parameters as the player current Health, OpenDoor and Mana.
         /// </summary>
         /// <param name="health"></param>
         /// <param name="openDoor"></param>
@@ -303,10 +335,6 @@ namespace ExamProjectFirstYear
         /// <param name="ID"></param>
         public void SaveGame(int health, int openDoor, int ID, int mana)
         {
-            //Her skal man også definere at parametrene er tilsvarende properties som er defineret for spiller.
-            //Altså at f.eks.  positionX = Player.Position.X
-            //Eller at  openDoor = Door.Open
-
             int positionX = (int)GameWorld.Instance.Player.GameObject.Transform.Position.X;
             int positionY = (int)GameWorld.Instance.Player.GameObject.Transform.Position.Y;
 

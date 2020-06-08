@@ -31,7 +31,6 @@ namespace ExamProjectFirstYear
         public Player Player;
         public Journal Journal;
         public Inventory Inventory;
-        private Camera camera;
         private Song bgAmbience;
 
         //Following used for the lighteffects.
@@ -61,14 +60,20 @@ namespace ExamProjectFirstYear
         public List<GameObject> GameObjects { get; private set; } = new List<GameObject>();
         public List<Collider> Colliders { get; set; } = new List<Collider>();
         public List<LightSource> LightSources { get; set; } = new List<LightSource>();
+
         public float DeltaTime { get; set; }
         public float TimeElapsed { get; set; }
-        public TimeSpan ElapsedGameTime { get; set; }
-        public TwoDimensionalSize ScreenSize { get; private set; }
-        public bool GameIsRunning { get => gameIsRunning; set => gameIsRunning = value; }
-        public SpriteBatch SpriteBatch { get; set; }
-        public SQLiteHandler SQLiteHandler { get; set; }
+        public static float Scale { get; private set; }
 
+        public TimeSpan ElapsedGameTime { get; set; }
+
+        public TwoDimensionalSize ScreenSize { get; private set; }
+
+        public bool GameIsRunning { get => gameIsRunning; set => gameIsRunning = value; }
+
+        public SpriteBatch SpriteBatch { get; set; }
+
+        public SQLiteHandler SQLiteHandler { get; set; }
 
         #endregion
 
@@ -106,6 +111,8 @@ namespace ExamProjectFirstYear
             SQLiteHandler.BuildDatabase();
 
             MenuHandler.Instance.SwitchState(new LoadingState());
+
+            Scale = ((1f / 1920f) * GraphicsDevice.DisplayMode.Width);
 
             TimeElapsed = 0;
 
@@ -188,12 +195,12 @@ namespace ExamProjectFirstYear
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                gameIsRunning = false;
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //{
+            //    gameIsRunning = false;
 
-                Exit();
-            }
+            //    Exit();
+            //}
 
             MenuHandler.Instance.CurrentState.Execute();
 
@@ -442,6 +449,66 @@ namespace ExamProjectFirstYear
             createdObject.Start();
 
             GameObjects.Add(createdObject);
+        }
+
+        private void RestartGame()
+        {
+            LightSources.Clear();
+            Colliders.Clear();
+            GameObjects.Clear();
+
+            //Initialize
+            TimeElapsed = 0;
+            Journal = new Journal(1);
+            Player = new Player(Journal.JournalID);
+            Inventory = new Inventory(Player.PlayerID);
+
+            //LoadContent
+            for (int i = 0; i < GameObjects.Count; i++)
+            {
+                GameObjects[i].Awake();
+            }
+
+            for (int i = 0; i < GameObjects.Count; i++)
+            {
+                GameObjects[i].Start();
+            }
+
+            CreateUIObject(Tag.JOURNAL);
+            CreateUIObject(Tag.INVENTORY);
+            CreateUIObject(Tag.PLAYERHEALTHUI);
+            CreateUIObject(Tag.PLAYERMANAUI);
+
+            LevelManager.Instance.InitializeLevel();
+
+            NodeManager.Instance.InitializeGrid();
+            NodeManager.Instance.UpdateGrid();
+            NodeManager.Instance.LoadContent(Content);
+
+            //Following is used for the light effect.
+            lightEffect = Content.Load<Effect>("LightEffect");
+            var pp = GraphicsDevice.PresentationParameters;
+            mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+            lightTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+        }
+
+        public void CheckIfWonOrLost()
+        {
+            if (Player.Health <= 0)
+            {
+                MenuHandler.Instance.SwitchState(new LostState());
+                RestartGame();
+                Player.SaveLoaded = false;
+                Player.LoadSave();
+            }
+
+            if (Player.AllMaterialsCollected == true)
+            {
+                MenuHandler.Instance.SwitchState(new WonState());
+                RestartGame();
+                Player.SaveLoaded = false;
+                Player.LoadSave();
+            }
         }
 
         #endregion

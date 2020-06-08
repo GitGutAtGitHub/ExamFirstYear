@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-    public enum GameState { StartState, LoadingState, PlayingState, PausedState }
+    public enum GameState { StartState, LoadingState, PlayingState, PausedState, WonState, LostState }
     /// <summary>
     /// Class for handling menu and loadscreen logic.
     /// </summary>

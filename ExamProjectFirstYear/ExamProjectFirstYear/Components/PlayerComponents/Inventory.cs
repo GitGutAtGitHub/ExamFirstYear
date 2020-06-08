@@ -201,21 +201,4 @@ namespace ExamProjectFirstYear.Components
 
         #endregion
     }
-
-    /// <summary>
-    /// Used when fetching the MaterialType table from SQLite.
-    /// </summary>
-    public struct TmpMaterialType
-    {
-        public string TmpName { get; set; }
-
-        /// <summary>
-        /// Constructor for the TmpMaterialType struct.
-        /// </summary>
-        /// <param name="tmpName"></param>
-        public TmpMaterialType(string tmpName)
-        {
-            TmpName = tmpName;
-        }
-    }
 }
