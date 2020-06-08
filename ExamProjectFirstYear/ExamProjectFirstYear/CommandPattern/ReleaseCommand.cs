@@ -39,7 +39,7 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		public void Execute(Player player)
 		{
-			// releaseNumber is used to make sure this method is only called, when a certain attack button is released.
+			// releaseNumber is used to make sure this method is only called, when a certain button is released.
 			if (releaseNumber == 1)
 			{
 				AttackMelee playerMelee = (AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE);
@@ -53,6 +53,16 @@ namespace ExamProjectFirstYear.CommandPattern
 			{
 				Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
 				playerJump.ReleaseJump();
+			}
+			else if (releaseNumber == 4)
+			{
+				AnimationHandler playerAnimation = (AnimationHandler)player.GameObject.GetComponent(Tag.ANIMATIONHANDLER);
+				playerAnimation.MovingRight = false;
+			}
+			else if (releaseNumber == 5)
+			{
+				AnimationHandler playerAnimation = (AnimationHandler)player.GameObject.GetComponent(Tag.ANIMATIONHANDLER);
+				playerAnimation.MovingLeft = false;
 			}
 			else if (releaseNumber == 6)
 			{

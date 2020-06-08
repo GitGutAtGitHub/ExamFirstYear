@@ -62,7 +62,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>29869524C2FF497F01C9B59015CDE2979E6E9427</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>85D5AC8A7973CEFA3F7C572BC4FE3D02A1586D68</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>ExamProjectFirstYear_TemporaryKey.pfx</ManifestKeyFile>
@@ -87,6 +87,7 @@
     <Compile Include="CommandPattern\MenuCommandPattern\PauseMenuCommand.cs" />
     <Compile Include="CommandPattern\MenuCommandPattern\StartMenuCommand.cs" />
     <Compile Include="CommandPattern\ReleaseCommand.cs" />
+    <Compile Include="Components\AnimationHandler.cs" />
     <Compile Include="Components\AttackMelee.cs" />
     <Compile Include="Components\Door.cs" />
     <Compile Include="Components\IAttack.cs" />

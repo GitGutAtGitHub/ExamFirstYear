@@ -1,5 +1,6 @@
 ﻿using ExamProjectFirstYear.CommandPattern;
 using ExamProjectFirstYear.CommandPattern.MenuCommandPattern;
+using ExamProjectFirstYear.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -99,6 +100,8 @@ namespace ExamProjectFirstYear
 
 			foreach (Keys key in keyBinds.Keys)
 			{
+				// HVIS GODMODE ER SLÅET TIL
+
 				//if (keyBinds[key].GetCommandTag() == CommandTag.KEYUP)
 				//{
 				//	if (keyState.IsKeyUp(key))

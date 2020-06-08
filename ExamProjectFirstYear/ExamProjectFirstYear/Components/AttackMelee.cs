@@ -49,7 +49,7 @@ namespace ExamProjectFirstYear.Components
                     attackDirection = new Vector2(sender.Transform.Position.X +
                                                                 (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange), sender.Transform.Position.Y);
 
-                    tmpMeleeRenderer.spriteEffect = SpriteEffects.None;
+                    tmpMeleeRenderer.SpriteEffect = SpriteEffects.None;
                 }
                 // Makes sure the attack appears on the left side of the player.
                 if (velocity.X < 0)
@@ -57,7 +57,7 @@ namespace ExamProjectFirstYear.Components
                     attackDirection = new Vector2(sender.Transform.Position.X -
                                                                 (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange), sender.Transform.Position.Y);
 
-                    tmpMeleeRenderer.spriteEffect = SpriteEffects.FlipHorizontally;
+                    tmpMeleeRenderer.SpriteEffect = SpriteEffects.FlipHorizontally;
                 }
 
                 tmpMeleeObject.Transform.Position = attackDirection;
