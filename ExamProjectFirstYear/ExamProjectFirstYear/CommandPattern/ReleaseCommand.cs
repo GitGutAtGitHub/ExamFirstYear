@@ -54,8 +54,20 @@ namespace ExamProjectFirstYear.CommandPattern
 				Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
 				playerJump.ReleaseJump();
 			}
+			else if (releaseNumber == 6)
+			{
+				GameWorld.Instance.Journal.CanOperateJournal = true;
+			}
+			else if (releaseNumber == 7)
+			{
+				GameWorld.Instance.Journal.CanChangePage = true;
+			}
+			else if (releaseNumber == 8)
+			{
+				GameWorld.Instance.Inventory.CanOperateInventory = true;
+			}
 
-        }
+		}
 
 		public CommandTag GetCommandTag()
 		{

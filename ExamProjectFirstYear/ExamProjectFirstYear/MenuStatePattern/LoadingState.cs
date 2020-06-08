@@ -17,8 +17,6 @@ namespace ExamProjectFirstYear.MenuStatePattern
     {
         #region Fields
 
-        private MenuHandler menuHandler;
-
         private Vector2 loadingScreenOrigin;
         private Vector2 loadingScreenPosition;
         private Vector2 loadingHeadingPosition;
@@ -34,13 +32,19 @@ namespace ExamProjectFirstYear.MenuStatePattern
         #endregion
 
 
+        #region PROPERTIES
+
+
+        #endregion
+
+
         #region Methods
 
         public void Enter(IEntity entity)
         {
             MenuHandler.Instance.GameState = GameState.LoadingState;
 
-            menuHandler = entity as MenuHandler;
+            MenuHandler.Instance.CurrentMenuHandler = entity as MenuHandler;
 
             backgroundThread = new Thread(LoadGame);
 
@@ -74,11 +78,14 @@ namespace ExamProjectFirstYear.MenuStatePattern
         {
             Thread.Sleep(10000);
 
-            menuHandler.SwitchState(new StartState());
+            MenuHandler.Instance.CurrentMenuHandler.SwitchState(new StartState());
 
             backgroundThread.Abort();
         }
 
+        /// <summary>
+        /// Method used to draw the loading screen.
+        /// </summary>
         public void Draw()
         {
             spriteBatch = new SpriteBatch(GameWorld.Instance.GraphicsDevice);

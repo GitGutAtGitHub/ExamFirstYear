@@ -11,6 +11,7 @@ using ExamProjectFirstYear.Components;
 using ExamProjectFirstYear.Components.PlayerComponents;
 using Microsoft.Xna.Framework.Media;
 using ExamProjectFirstYear.MenuStatePattern;
+using ExamProjectFirstYear.CommandPattern.MenuCommandPattern;
 
 namespace ExamProjectFirstYear
 {
@@ -105,6 +106,7 @@ namespace ExamProjectFirstYear
 
             SQLiteHandler.BuildDatabase();
 
+            // Makes sure the game loads first thing, when it starts.
             MenuHandler.Instance.SwitchState(new LoadingState());
 
             TimeElapsed = 0;
@@ -197,6 +199,8 @@ namespace ExamProjectFirstYear
 
             MenuHandler.Instance.CurrentState.Execute();
 
+            MenuInputHandler.Instance.Execute();
+
             if (MenuHandler.Instance.GameState == GameState.PlayingState && MenuHandler.Instance.GameState != GameState.PausedState)
             {
                 TimeHandler(gameTime);
@@ -245,6 +249,9 @@ namespace ExamProjectFirstYear
 
                 base.Update(gameTime);
             }
+
+            // This is outside of the pause loop, to ensure the menu still runs,
+            // so the game can be unpaused or exited.
         }
 
         #endregion

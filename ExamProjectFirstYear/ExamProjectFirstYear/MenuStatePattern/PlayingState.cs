@@ -15,10 +15,6 @@ namespace ExamProjectFirstYear.MenuStatePattern
     {
         #region Fields
 
-        private KeyboardState currentKeyBoardState;
-        private KeyboardState previousKeyBoardState;
-
-        private MenuHandler menuHandler;
 
         #endregion
 
@@ -29,12 +25,12 @@ namespace ExamProjectFirstYear.MenuStatePattern
         {
             MenuHandler.Instance.GameState = GameState.PlayingState;
 
-            menuHandler = entity as MenuHandler;
+            MenuHandler.Instance.CurrentMenuHandler = entity as MenuHandler;
         }
 
         public void Execute()
         {
-            HandleInput();
+            HandlePlayingState();
         }
 
         public void Exit()
@@ -42,19 +38,16 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
         }
 
-        private void HandleInput()
+        /// <summary>
+        /// Handles the playing state.
+        /// If GameShouldBePaused becomes true, the game switches to PausedState and the game pauses.
+        /// </summary>
+        private void HandlePlayingState()
         {
-            previousKeyBoardState = currentKeyBoardState;
-            currentKeyBoardState = Keyboard.GetState();
-
-            if (currentKeyBoardState.IsKeyUp(Keys.P) && previousKeyBoardState.IsKeyDown(Keys.P))
+            if (MenuHandler.Instance.GameShouldBePaused == true && MenuHandler.Instance.CanUseMenu == true)
             {
-                menuHandler.SwitchState(new PausedState());
-            }
-
-            if (currentKeyBoardState.IsKeyUp(Keys.E) && previousKeyBoardState.IsKeyDown(Keys.E))
-            {
-                GameWorld.Instance.Exit();
+                MenuHandler.Instance.CurrentMenuHandler.SwitchState(new PausedState());
+                MenuHandler.Instance.CanUseMenu = false;
             }
         }
 
