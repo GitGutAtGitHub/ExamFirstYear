@@ -8,5 +8,6 @@ namespace ExamProjectFirstYear
 {
     public interface IEntity
     {
+
     }
 }

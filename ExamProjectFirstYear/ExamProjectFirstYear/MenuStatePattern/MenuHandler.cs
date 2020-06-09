@@ -46,7 +46,7 @@ namespace ExamProjectFirstYear
             }
         }
 
-        public IMenuState CurrentState { get; set; }
+        public StatePattern.IState CurrentState { get; set; }
         public GameState GameState { get; set; }
         public MenuHandler CurrentMenuHandler { get => currentMenuHandler; set => currentMenuHandler = value; }
 
@@ -82,7 +82,7 @@ namespace ExamProjectFirstYear
 
         #region Methods
 
-        public void SwitchState(IMenuState newState)
+        public void SwitchState(StatePattern.IState newState)
         {
             // Makes sure the state isn't null when exiting a state.
             // This is done to avoid an exception.
@@ -111,6 +111,26 @@ namespace ExamProjectFirstYear
                 PauseButtonReleased = false;
 			}
 		}
+
+        public void Enter(IEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Execute()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Exit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Tag ToTag()
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
     }

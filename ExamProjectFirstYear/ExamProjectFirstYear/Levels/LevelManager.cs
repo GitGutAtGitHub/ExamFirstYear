@@ -9,32 +9,22 @@ using System.Drawing;
 
 namespace ExamProjectFirstYear
 {
-    /// <summary>
-    /// public because of unitTest
-    /// </summary>
-    public class LevelManager
+    class LevelManager
     {
         //event for checking if the level is done populating.
         //Used for setting the enemies target, and making sure the player is intantiated when the target filed is set.
         public delegate void LevelInitializationDoneHandler();
         public event LevelInitializationDoneHandler LevelInitializationDoneEvent;
 
-        public Door Door { get; private set; }
+        //public for unit testing
+        public Bitmap testLevel;
 
-        protected virtual void OnLevelInitializationDoneEvent()
-        {
-            if (LevelInitializationDoneEvent != null)
-            {
-                LevelInitializationDoneEvent();
-            }
-        }
-
-
-
-        //string path2 = "..\\..\\" + "Levels\\TestLevel.bmp";
+        private Bitmap platformSection;
 
         private static LevelManager instance;
-        private bool[,] SpotOccupied;
+        private bool[,] spotOccupied;
+
+        public Door Door { get; private set; }
 
         public static LevelManager Instance
         {
@@ -49,34 +39,38 @@ namespace ExamProjectFirstYear
             }
         }
 
+        private void OnLevelInitializationDoneEvent()
+        {
+            if (LevelInitializationDoneEvent != null)
+            {
+                LevelInitializationDoneEvent();
+            }
+        }
+
         public string GetPath(string filename)
         {
             return Environment.CurrentDirectory + ($"\\Levels\\{filename}.bmp");
 
         }
 
-        //public for unit testing
-        public Bitmap TestLevel;
-        public Bitmap BigTestLevel;
-
-        Bitmap PlatformSection;
 
         //public because of unit tests
         public void LoadBitmap()
         {
-            TestLevel = (Bitmap)Image.FromFile(GetPath("TestLevel"));
-            BigTestLevel = (Bitmap)Image.FromFile(GetPath("BigTestLevel"));
-            PlatformSection = (Bitmap)Image.FromFile(GetPath("PlatformSection"));
+            testLevel = (Bitmap)Image.FromFile(GetPath("TestLevel"));
+            platformSection = (Bitmap)Image.FromFile(GetPath("PlatformSection"));
         }
 
         public void InitializeLevel()
         {
             LoadBitmap();
-            PopulateLevel(PlatformSection);
+            PopulateLevel(platformSection);
+
+            //Used for debug only.
             //PopulateLevel(TestLevel);
 
 
-            NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(PlatformSection.Width, PlatformSection.Height);
+            NodeManager.Instance.CellRowCountTwo = new TwoDimensionalSize(platformSection.Width, platformSection.Height);
         }
 
         /// <summary>
@@ -86,7 +80,7 @@ namespace ExamProjectFirstYear
         private void PopulateLevel(Bitmap level)
         {
 
-            SpotOccupied = new bool[level.Width, level.Width];
+            spotOccupied = new bool[level.Width, level.Width];
 
             for (int y = 0; y < level.Height; y++)
             {
@@ -96,26 +90,18 @@ namespace ExamProjectFirstYear
                     System.Drawing.Color input = level.GetPixel(x, y);
 
                     //if the pixel is black - Place platform
-                    if (input.R == 0 && input.G == 0 && input.B == 0 && SpotOccupied[x, y] == false)
+                    if (input.R == 0 && input.G == 0 && input.B == 0 && spotOccupied[x, y] == false)
                     {
                         //add a platform
                         CreateObject(Tag.PLATFORM, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
 
                     //if the pixel is black - Place platform
-                    if (input.R == 156 && input.G == 156 && input.B == 156 && SpotOccupied[x, y] == false)
+                    if (input.R == 156 && input.G == 156 && input.B == 156 && spotOccupied[x, y] == false)
                     {
                         //add a platform
                         CreateObject(Tag.WALL, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
                     }
-
-                    //if the pixel is black - Place platform
-                    if (input.R == 99 && input.G == 99 && input.B == 99 && SpotOccupied[x, y] == false)
-                    {
-                        //add a platform
-                        CreateDecoration(Tag.WALL, x * (int)NodeManager.Instance.CellSize, y * (int)NodeManager.Instance.CellSize, x, y);
-                    }
-
 
                     //if the pixel is Red
                     if (input.R == 255 && input.G == 0 && input.B == 0)
@@ -155,11 +141,7 @@ namespace ExamProjectFirstYear
             // The event is raised. It calls the method AddTarget,
             // which is added to each enemy in the CreateObject method.
 
-            if (LevelInitializationDoneEvent!= null)
-            {
-                LevelInitializationDoneEvent();
-            }
-
+            OnLevelInitializationDoneEvent();
         }
 
 
@@ -303,46 +285,7 @@ namespace ExamProjectFirstYear
             //Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.
             for (int x = 0; x < (int)Math.Round(createdObject.GetObjectWidthInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); x++)
             {
-                SpotOccupied[forLoopX + x, forLoopY] = true;
-
-                //for (int y = 0; y <= (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
-                //{
-                //    SpotOccupied[forLoopX + x, forLoopY + y] = true;
-                //}
-            }
-        }
-
-        public void CreateDecoration(Tag tag, int posX, int posY, int forLoopX, int forLoopY)
-        {
-            GameObject createdObject = new GameObject();
-            SpriteRenderer spriteRenderer = new SpriteRenderer();
-
-
-            switch (tag)
-            {
-
-
-                case Tag.WALL:
-                    //spriteRenderer.Origin = new Vector2(createdObject.Transform.Position.X, createdObject.Transform.Position.Y);
-                    createdObject.AddComponent(new Wall());
-                    break;
-
-
-            }
-
-            createdObject.AddComponent(spriteRenderer);
-            createdObject.Awake();
-            createdObject.Start();
-
-            createdObject.Transform.Position = new Vector2(posX, posY);
-
-
-            GameWorld.Instance.GameObjects.Add(createdObject);
-
-            //Makes sure that it doesn't create a new object right next to it, if the object is bigger than one cell.
-            for (int x = 0; x < (int)Math.Round(createdObject.GetObjectWidthInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); x++)
-            {
-                SpotOccupied[forLoopX + x, forLoopY] = true;
+                spotOccupied[forLoopX + x, forLoopY] = true;
 
                 //for (int y = 0; y <= (int)Math.Round(createdObject.GetObjectHeightInCellSize((SpriteRenderer)createdObject.GetComponent(Tag.SPRITERENDERER))); y++)
                 //{

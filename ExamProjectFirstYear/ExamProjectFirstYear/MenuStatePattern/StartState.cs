@@ -13,7 +13,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
     /// <summary>
     /// The state that determines what happens when the game is in the start screen.
     /// </summary>
-    public class StartState : IMenuState
+    public class StartState : IState
     {
         #region Fields
 
@@ -59,6 +59,11 @@ namespace ExamProjectFirstYear.MenuStatePattern
         public void Exit()
         {
 
+        }
+
+        public Tag ToTag()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

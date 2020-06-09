@@ -15,19 +15,15 @@ namespace ExamProjectFirstYear.Components
     /// <summary>
     /// Flying Enemy component class.
     /// </summary>
-    class FlyingEnemy : Enemy, IGameListener
+    class FlyingEnemy : Enemy
     {
         #region Fields
 
-        private Stack<Node> flyingPath;
 
         #endregion
 
 
         #region PROPERTIES
-
-        public Stack<Node> FlyingPath { get => flyingPath; set => flyingPath = value; }
-
 
 
         #endregion
@@ -42,8 +38,8 @@ namespace ExamProjectFirstYear.Components
             speed = 200f;
             GameObject.Tag = Tag.MEELEEENEMY;
             SwitchState(new EnemyIdleState());
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("MothDeath", false);
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("MothMove", true);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("MothDeath", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("MothMove", true);
             enemyID = 3;
         }
 
@@ -111,23 +107,22 @@ namespace ExamProjectFirstYear.Components
             }
         }
 
-        public void Notify(GameEvent gameEvent, Component other)
-        {
-            // If the enemy is hit by players projectile from the ranged attack or the melee attack,
-            // the projectile is removed from the game and enemy looses 1 hp.
-            if (gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERPROJECTILE ||
-                gameEvent.Title == "Colliding" && other.GameObject.Tag == Tag.PLAYERMELEEATTACK)
-            {
-                other.GameObject.Destroy();
-                health--;
-            }
-        }
-
         public override Tag ToEnum()
         {
             return Tag.FLYINGENEMY;
         }
 
+        public override void Notify(GameEvent gameEvent, Component component)
+        {
+            // If the enemy is hit by players projectile from the ranged attack or the melee attack,
+            // the projectile is removed from the game and enemy looses 1 hp.
+            if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLAYERPROJECTILE ||
+                gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLAYERMELEEATTACK)
+            {
+                component.GameObject.Destroy();
+                health--;
+            }
+        }
 
         #endregion
     }

@@ -13,7 +13,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
     /// <summary>
     /// The state that determines what happens when the game is loading.
     /// </summary>
-    public class LoadingState : IMenuState
+    public class LoadingState : IState
     {
         #region Fields
 
@@ -99,6 +99,11 @@ namespace ExamProjectFirstYear.MenuStatePattern
                                    Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
 
             spriteBatch.End();
+        }
+
+        public Tag ToTag()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

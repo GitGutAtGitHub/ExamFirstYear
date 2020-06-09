@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ExamProjectFirstYear.StatePattern;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.MenuStatePattern
 {
-	public class LostState : IMenuState
-	{
+	public class LostState : IState
+    {
         private MenuHandler menuHandler;
 
         private Texture2D lostScreenSprite;
@@ -62,6 +63,11 @@ namespace ExamProjectFirstYear.MenuStatePattern
         public void Exit()
         {
 
+        }
+
+        public Tag ToTag()
+        {
+            throw new NotImplementedException();
         }
 
         private void Draw()

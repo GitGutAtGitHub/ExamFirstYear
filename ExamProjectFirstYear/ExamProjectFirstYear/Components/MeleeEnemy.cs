@@ -12,7 +12,7 @@ namespace ExamProjectFirstYear.Components
     /// <summary>
     /// public for unit testing
     /// </summary>
-    public class MeleeEnemy : Enemy, IGameListener
+    public class MeleeEnemy : Enemy
     {
         public override void Awake()
         {
@@ -23,9 +23,9 @@ namespace ExamProjectFirstYear.Components
             SwitchState(new EnemyIdleState());
             //((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("footstepsLouder");
 
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("SpiderFootsteps_01", true);
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Whoosh m. reverb", false);
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("SpiderDeath", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("SpiderFootsteps_01", true);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("Whoosh m. reverb", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("SpiderDeath", false);
             enemyID = 1;
         }
 
@@ -92,7 +92,7 @@ namespace ExamProjectFirstYear.Components
             }
         }
 
-        public void Notify(GameEvent gameEvent, Component component)
+        public override void Notify(GameEvent gameEvent, Component component)
         {
             // If the enemy is hit by players projectile from the ranged attack or the melee attack,
             // the projectile is removed from the game and enemy looses 1 hp.
@@ -124,24 +124,7 @@ namespace ExamProjectFirstYear.Components
                         GameObject.Transform.Translate(new Vector2(0, +intersection.Height - 2));
                     }
                 }
-
-                //// Left and right platform.
-                //else if (intersection.Width < intersection.Height)
-                //{
-                //    //Right platform.
-                //    if (component.GameObject.Transform.Position.X < GameObject.Transform.Position.X)
-                //    {
-                //        GameObject.Transform.Translate(new Vector2(+intersection.Width, 0));
-                //    }
-
-                //    //Left platform.
-                //    if ((component.GameObject.Transform.Position.X > GameObject.Transform.Position.X))
-                //    {
-                //        GameObject.Transform.Translate(new Vector2(-intersection.Width, 0));
-                //    }
-                //}
             }
         }
-
     }
 }

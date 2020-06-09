@@ -13,7 +13,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
     /// <summary>
     /// The state that determines what happens when the game is paused.
     /// </summary>
-    public class PausedState : IMenuState
+    public class PausedState : IState
     {
         #region Fields
 
@@ -109,6 +109,11 @@ namespace ExamProjectFirstYear.MenuStatePattern
                                    Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
 
             spriteBatch.End();
+        }
+
+        public Tag ToTag()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -18,23 +18,15 @@ namespace ExamProjectFirstYear.PathFinding
     {
         #region FIELDS
 
-        public List<Node> DebugPath = new List<Node>();
         private static NodeManager instance;
         public Texture2D gridSprite;
         public Texture2D searchedSprite;
         public Texture2D chosenPathgridSprite;
         Texture2D unwalkableSprite;
         SpriteFont spriteFont;
-        private List<Node> grid;
-        //fix så det ikke nødve´ndigvis er uniform
-        //private static int cellRowCount = 200;
-        private static TwoDimensionalSize cellRowCount;
-        //private int cellRowCountWidth = Bitmap.GetPixelFormatSize();
-        private int cellSize = 96;
-        private Stack<Node> path;
-        public int debugcount = 0;
 
-        //SKAL RETTES TIL GAMEWORLD ELLER ANDET SENERE, SÅ DET ER NEMMERE AT REDIGERE STØRRELSE SENERE.
+        private static TwoDimensionalSize cellRowCount;
+        private int cellSize = 96;
         private Node[,] nodes;
 
         #endregion

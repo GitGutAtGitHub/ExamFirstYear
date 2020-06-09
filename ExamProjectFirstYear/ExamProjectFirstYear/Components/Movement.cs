@@ -18,7 +18,6 @@ namespace ExamProjectFirstYear.Components
         private float force;
         private float speed;
 
-
         #endregion
 
 
@@ -88,12 +87,12 @@ namespace ExamProjectFirstYear.Components
         /// </summary>
         public void GravityHandling()
         {
-            /// If the GameObjects position is above the bottom of the screen and Grounded is false (if the GameObject is not on a platform) it will be pulled
-            /// down by the value of force.
+            // If the GameObjects position is above the bottom of the screen and Grounded is false (if the GameObject is not on a platform) it will be pulled
+            // down by the value of force.
             if (Grounded == false)
             {
-                /// As long as force is a higher value than -20 it will be lowered.
-                /// This ensures that force will not become so low that it can pull the GameObject through a platform in a single frame.
+                // As long as force is a higher value than -20 it will be lowered.
+                // This ensures that force will not become so low that it can pull the GameObject through a platform in a single frame.
                 if (force >= -20f)
                 {
                     force--;

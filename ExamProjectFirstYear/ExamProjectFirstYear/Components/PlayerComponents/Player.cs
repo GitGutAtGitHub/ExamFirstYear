@@ -20,10 +20,6 @@ namespace ExamProjectFirstYear
 	{
 		#region Fields
 
-		private MouseState previousMouseState;
-		private MouseState currentMouseState;
-
-		private bool saveLoaded;
 		private float manaRegenerateTimer;
 		private bool playerCollidingWithDoor = false;
 		// First wait is sat high, as to ensure the mana doesn't regenerate until after a short while from when the last time they used mana.
@@ -104,10 +100,10 @@ namespace ExamProjectFirstYear
 			GameObject.Tag = Tag.PLAYER;
 
 			// Kan dette flyttes ned i start efter SoundComponent er sat? Hilsen Emma
-			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("footstepsLouder", false);
-			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Whoosh m. reverb", false);
-			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Jump_04", false);
-			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("RangedAttack3", false);
+			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("footstepsLouder", false);
+			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("Whoosh m. reverb", false);
+			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("Jump_04", false);
+			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("RangedAttack3", false);
 
 			GameObject.SpriteName = "OopPlayerSprite2";
 
@@ -132,7 +128,6 @@ namespace ExamProjectFirstYear
 
 		public override void Update(GameTime gameTime)
 		{
-			TestMethod();
 			RegenerateMana();
 		}
 
@@ -395,28 +390,5 @@ namespace ExamProjectFirstYear
         }
 
         #endregion
-
-        public void TestMethod()
-		{
-			previousMouseState = currentMouseState;
-			currentMouseState = Mouse.GetState();
-
-            if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
-            {
-                //Health--;
-            }
-
-            else if (currentMouseState.RightButton == ButtonState.Released && previousMouseState.RightButton == ButtonState.Pressed)
-			{
-                sQLiteHandler.IncreaseAmountStoredMaterial(1, GameWorld.Instance.Inventory.InventoryID);
-                sQLiteHandler.IncreaseAmountStoredMaterial(2, GameWorld.Instance.Inventory.InventoryID);
-                sQLiteHandler.IncreaseAmountStoredMaterial(3, GameWorld.Instance.Inventory.InventoryID);
-
-                if (CheckBlueprint(1) == true)
-                {
-                    AllMaterialsCollected = true;
-                }
-            }
-		}
 	}
 }

@@ -11,7 +11,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
     /// <summary>
     /// The state that determines what happens when the game is playing.
     /// </summary>
-    public class PlayingState : IMenuState
+    public class PlayingState : IState
     {
         #region Fields
 
@@ -37,6 +37,11 @@ namespace ExamProjectFirstYear.MenuStatePattern
         public void Exit()
         {
 
+        }
+
+        public Tag ToTag()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

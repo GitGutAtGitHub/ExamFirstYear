@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    class RangedEnemy : Enemy, IGameListener
+    class RangedEnemy : Enemy
     {
 
         public override void Awake()
@@ -19,9 +19,9 @@ namespace ExamProjectFirstYear.Components
             health = 1;
             GameObject.Tag = Tag.RANGEDENEMY;
             SwitchState(new EnemyIdleState());
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("footstepsLouder", true);
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("RangedAttack3", false);
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("WaterOnStove", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("footstepsLouder", true);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("RangedAttack3", false);
+            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound("WaterOnStove", false);
             enemyID = 2;
         }
 
@@ -79,8 +79,12 @@ namespace ExamProjectFirstYear.Components
             }
         }
 
+        public override Tag ToEnum()
+        {
+            return Tag.RANGEDENEMY;
+        }
 
-        public void Notify(GameEvent gameEvent, Component component)
+        public override void Notify(GameEvent gameEvent, Component component)
         {
             // If the enemy is hit by players projectile from the ranged attack or the melee attack,
             // the projectile is removed from the game and enemy looses 1 hp.
@@ -91,14 +95,5 @@ namespace ExamProjectFirstYear.Components
                 health--;
             }
         }
-        //protected override void Notify()
-        //{
-        //    throw new NotImplementedException();
-        //}
-        public override Tag ToEnum()
-        {
-            return Tag.RANGEDENEMY;
-        }
-
     }
 }

@@ -11,12 +11,7 @@ namespace ExamProjectFirstYear.Components
 {
     public class SoundComponent : Component
     {
-        private SoundEffect sound;
-        private SoundEffectInstance soundEffectinstance;
-
-        private List<SoundEffect> sounds = new List<SoundEffect>();
         private List<SoundObject> soundObjects = new List<SoundObject>();
-        private List<SoundEffectInstance> soundInstances = new List<SoundEffectInstance>();
 
         private float distance2;
         private float pan;
@@ -27,7 +22,7 @@ namespace ExamProjectFirstYear.Components
 
         public float Volume { get => volume; set => volume = value; }
 
-        public void updateDistance()
+        public void UpdateDistance()
         {
             distance2 = (int)Math.Sqrt((Camera.Instance.Position.X - GameObject.Transform.Position.X) * (Camera.Instance.Position.X - GameObject.Transform.Position.X) +
                                   (Camera.Instance.Position.Y - GameObject.Transform.Position.Y) * (Camera.Instance.Position.Y - GameObject.Transform.Position.Y));
@@ -46,8 +41,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void Update(GameTime gameTime)
         {
-            updateDistance();
-            Console.WriteLine((volume));
+            UpdateDistance();
 
             KeepAudioLooping();
 
@@ -163,7 +157,7 @@ namespace ExamProjectFirstYear.Components
         }
        
 
-        public void AddSound2(string soundName, bool repeat)
+        public void AddSound(string soundName, bool repeat)
         {
             soundObjects.Add(new SoundObject(soundName, repeat));
         }

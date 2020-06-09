@@ -27,12 +27,11 @@ namespace ExamProjectFirstYear
 		//For singleton pattern
 		private static GameWorld instance;
 
-		GraphicsDeviceManager graphics;
+		private GraphicsDeviceManager graphics;
 
 		public Player Player;
 		public Journal Journal;
 		public Inventory Inventory;
-		private Camera camera;
 		private Song bgAmbience;
 
 		//Following used for the lighteffects.
@@ -125,9 +124,6 @@ namespace ExamProjectFirstYear
 			//graphics.ApplyChanges();
 			IsMouseVisible = true;
 
-
-			//camera = new Camera();
-
 			base.Initialize();
 		}
 
@@ -147,8 +143,6 @@ namespace ExamProjectFirstYear
 			//exitButton = Content.Load<Texture2D>("OopPlayerSprite2");
 
 			//loadingScreen = Content.Load<Texture2D>("OopGameScreen");
-
-
 
 			for (int i = 0; i < GameObjects.Count; i++)
 			{

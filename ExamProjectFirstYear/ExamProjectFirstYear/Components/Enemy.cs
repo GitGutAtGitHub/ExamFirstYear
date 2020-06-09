@@ -16,17 +16,16 @@ namespace ExamProjectFirstYear.Components
     /// Abstract Enemy class for different enemy types.
     /// This class is public to make Unit Testing possible.
     /// </summary>
-    public abstract class Enemy : Component, IEntity
+    public abstract class Enemy : Component, IEntity, IGameListener
     {
         #region FIELDS
 
         protected float speed;
         protected int health;
         private int sightRadius;
+
         //it is a public variable, to be able to edit the specific X and Y values, it has to be a variable.
         public Vector2 Velocity;
-        private bool hasPath = false;
-
         private Vector2 prevNode = new Vector2(0, 0);
 
         private Stack<Node> path = new Stack<Node>();
@@ -43,10 +42,7 @@ namespace ExamProjectFirstYear.Components
         public Vector2 TargetPosition { get; set; }
         public int SightRadius { get => sightRadius; set => sightRadius = value; }
         public GameObject Target { get => target; set => target = value; }
-        public bool HasPath { get => hasPath; set => hasPath = value; }
-
         public Stack<Node> Path { get => path; set => path = value; }
-
         public Vector2 PrevTargetNode { get => prevNode; set => prevNode = value; }
         public IState CurrentState { get => currentState; set => currentState = value; }
 
@@ -146,8 +142,7 @@ namespace ExamProjectFirstYear.Components
             }
         }
 
-      
-
+        public abstract void Notify(GameEvent gameEvent, Component component);
 
         #endregion
     }
