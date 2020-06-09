@@ -18,9 +18,7 @@ namespace ExamProjectFirstYear.Components
         #region Fields
 
         private bool inventoryOpen;
-
-        private KeyboardState previousKeyboardState;
-        private KeyboardState currentKeyboardState;
+        private bool canOperateInventory = true;
 
         private SpriteRenderer inventoryRenderer;
 
@@ -38,6 +36,7 @@ namespace ExamProjectFirstYear.Components
         #region Properties
 
         public int InventoryID { get; set; }
+        public bool CanOperateInventory { get => canOperateInventory; set => canOperateInventory = value; }
 
         #endregion
 
@@ -82,7 +81,6 @@ namespace ExamProjectFirstYear.Components
         public override void Update(GameTime gameTime)
         {
             HandlePosition();
-            HandleInventory();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -122,48 +120,26 @@ namespace ExamProjectFirstYear.Components
         }
 
         /// <summary>
-        /// Checks whether Journal is open or closed.
+        /// Checks whether Journal is open or closed,
+        /// and makes sure it can be opened or closed accordingly.
         /// </summary>
-        private void HandleInventory()
+        public void HandleInventory()
         {
-            //If Journal is closed, it can be opened.
-            if (inventoryOpen == false)
+            if (CanOperateInventory == true)
             {
-                OpenInventory();
-            }
+                //If Journal is closed, it can be opened.
+                if (inventoryOpen == false)
+                {
+                    inventoryOpen = true;
+                }
 
-            //If Journal is open, it can be closed.
-            else if (inventoryOpen == true)
-            {
-                CloseInventory();
-            }
-        }
+                //If Journal is open, it can be closed.
+                else if (inventoryOpen == true)
+                {
+                    inventoryOpen = false;
+                }
 
-        /// <summary>
-        /// If J key is pressed, open Inventory.
-        /// </summary>
-        private void OpenInventory()
-        {
-            previousKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-
-            if (currentKeyboardState.IsKeyUp(Keys.I) && previousKeyboardState.IsKeyDown(Keys.I))
-            {
-                inventoryOpen = true;
-            }
-        }
-
-        /// <summary>
-        /// If J key is pressed, close Inventory.
-        /// </summary>
-        private void CloseInventory()
-        {
-            previousKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-
-            if (currentKeyboardState.IsKeyUp(Keys.I) && previousKeyboardState.IsKeyDown(Keys.I))
-            {
-                inventoryOpen = false;
+                CanOperateInventory = false;
             }
         }
 

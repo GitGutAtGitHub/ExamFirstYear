@@ -48,12 +48,6 @@ namespace ExamProjectFirstYear.CommandPattern
                 player.CallRangedAttack();
 			}
         }
-
-        public CommandTag GetCommandTag()
-        {
-            return CommandTag.KEYDOWN;
-        }
-
         #endregion
     }
 }

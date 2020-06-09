@@ -14,6 +14,7 @@ namespace ExamProjectFirstYear
 
         private Vector2 position;
 
+        private float cameraZoom = GameWorld.Instance.Scale;
 
 
         public static Camera Instance
@@ -58,7 +59,9 @@ namespace ExamProjectFirstYear
 
             var middleOfScreen = Matrix.CreateTranslation(1920 / 2, 1080 / 2, 0);
 
-            transformCamera = playerPosition * middleOfScreen;
+            var createScale = Matrix.CreateScale(new Vector3(cameraZoom, cameraZoom, 0));
+
+            transformCamera = playerPosition * middleOfScreen * createScale;
         }
     }
 }

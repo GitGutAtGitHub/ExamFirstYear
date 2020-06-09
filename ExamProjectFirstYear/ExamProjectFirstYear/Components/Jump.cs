@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    class Jump : Component, IGameListener
+    public class Jump : Component, IGameListener
     {
 		private float maxMomentum;
         private float momentum;

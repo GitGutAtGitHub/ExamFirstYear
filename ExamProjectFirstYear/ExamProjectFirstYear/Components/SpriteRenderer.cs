@@ -13,13 +13,20 @@ namespace ExamProjectFirstYear
 	/// </summary>
 	public class SpriteRenderer : Component
 	{
-		#region PROPERTIES
+		public int CurrentIndex = 0;
+		private float elapsedTime;
+		private float fps;
 
+		public Texture2D[] Sprites { get; set; }
+		public bool AnimationOn { get; set; }
+		public bool MovingRight { get; set; }
+		public bool MovingLeft { get; set; }
+
+		#region PROPERTIES
 		public Texture2D Sprite { get; set; }
 		public Vector2 Origin { get; set; }
 		public float SpriteLayer { get; set; } = 0.4f;
-
-		public SpriteEffects SpriteEffect	 { get; set; } = SpriteEffects.None;
+		public SpriteEffects SpriteEffect { get; set; } = SpriteEffects.None;
 
 		#endregion
 
@@ -31,7 +38,7 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		public SpriteRenderer()
 		{
-			
+
 		}
 
 		/// <summary>
@@ -60,9 +67,29 @@ namespace ExamProjectFirstYear
 			//Origin = new Vector2(Sprite.Width / 2, Sprite.Height / 2);
 		}
 
+		//public override void Update(GameTime gameTime)
+		//{
+		//	if (MovingRight == false && MovingLeft == false)
+		//	{
+		//		AnimationOn = false;
+		//	}
+		//	if (AnimationOn == true)
+		//	{
+		//		RunThroughAnimationSpritesArray();
+		//	}
+		//}
+
+
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color.White, 0, Origin, 1, SpriteEffect, SpriteLayer);
+			if (AnimationOn == true)
+			{
+				spriteBatch.Draw(Sprites[CurrentIndex], GameObject.Transform.Position, null, Color.White, 0, Origin, 1, SpriteEffect, SpriteLayer);
+			}
+			else
+			{
+				spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color.White, 0, Origin, 1, SpriteEffect, SpriteLayer);
+			}
 		}
 
 		public override Tag ToEnum()
@@ -83,6 +110,18 @@ namespace ExamProjectFirstYear
 			Sprite = GameWorld.Instance.Content.Load<Texture2D>(spriteName);
 		}
 
+		public void FlipSprite(Vector2 velocity)
+		{
+			if (velocity.X > 0)
+			{
+				SpriteEffect = SpriteEffects.FlipHorizontally;
+			}
+			else
+			{
+				SpriteEffect = SpriteEffects.None;
+			}
+		}
+
 		/// <summary>
 		/// Create a SpriteRenderer clone.
 		/// </summary>
@@ -92,6 +131,6 @@ namespace ExamProjectFirstYear
 			return (SpriteRenderer)this.MemberwiseClone();
 		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

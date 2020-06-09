@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-    class SoundComponent : Component
+    public class SoundComponent : Component
     {
         private SoundEffect sound;
         private SoundEffectInstance soundEffectinstance;

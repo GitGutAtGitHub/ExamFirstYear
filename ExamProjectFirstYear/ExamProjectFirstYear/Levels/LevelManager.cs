@@ -180,6 +180,9 @@ namespace ExamProjectFirstYear
                     createdObject.AddComponent(new RangedAttack(0.3f));
                     createdObject.AddComponent(new AttackMelee());
                     createdObject.AddComponent(new SoundComponent());
+
+                    string[] walkSpritesArray = new string[2] {"FlyingEnemy", "smol" };
+                    createdObject.AddComponent(new AnimationHandler(spriteRenderer, 4.5f, walkSpritesArray));
                     break;
 
                 case Tag.PLATFORM:
