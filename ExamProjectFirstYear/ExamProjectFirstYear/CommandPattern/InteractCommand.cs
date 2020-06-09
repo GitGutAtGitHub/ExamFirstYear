@@ -42,12 +42,6 @@ namespace ExamProjectFirstYear.CommandPattern
 				//}
 			}
 		}
-
-		public CommandTag GetCommandTag()
-		{
-			return CommandTag.KEYDOWN;
-		}
-
         #endregion
     }
 }

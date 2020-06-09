@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Factories
 {
-	class MaterialFactory
+	class MaterialFactory : IFactory
 	{
 		private Material spiderFilament;
 		private SpriteRenderer spiderFilamentRenderer;

@@ -14,7 +14,5 @@ namespace ExamProjectFirstYear.CommandPattern
 	interface ICommand
 	{
 		void Execute(Player player);
-
-		CommandTag GetCommandTag();
 	}
 }

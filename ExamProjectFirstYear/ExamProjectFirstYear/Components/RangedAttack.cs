@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components.PlayerComponents
 {
-    class RangedAttack : Component
+    public class RangedAttack : Component
     {
         #region FIELDS
 
@@ -47,11 +47,11 @@ namespace ExamProjectFirstYear.Components.PlayerComponents
 
                 if (velocity.X < 0)
                 {
-                    ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).spriteEffect = SpriteEffects.None;
+                    ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).SpriteEffect = SpriteEffects.None;
                 }
                 if (velocity.X > 0)
                 {
-                    ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).spriteEffect = SpriteEffects.FlipHorizontally;
+                    ((SpriteRenderer)tmpProjectileObject.GetComponent(Tag.SPRITERENDERER)).SpriteEffect = SpriteEffects.FlipHorizontally;
                 }
                 //tmpMovement.Speed = 1000f;
                 GameWorld.Instance.Colliders.Add(tmpProjectileCollider);

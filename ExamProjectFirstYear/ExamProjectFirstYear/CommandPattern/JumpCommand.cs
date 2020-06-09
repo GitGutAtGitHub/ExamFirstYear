@@ -30,16 +30,10 @@ namespace ExamProjectFirstYear.CommandPattern
 
 		public void Execute(Player player)
 		{
-			((SoundComponent)player.GameObject.GetComponent(Tag.SOUNDCOMPONENT)).StartPlayingSoundInstance("Jump_04");
-			Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
-			playerJump.PlayerJump((Movement)player.GameObject.GetComponent(Tag.MOVEMENT));
+			player.SoundComponent.StartPlayingSoundInstance("Jump_04");
+			player.Jump.PlayerJump(player.Movement);
+			player.SpriteRenderer.SetSprite("smol");
 		}
-
-		public CommandTag GetCommandTag()
-		{
-			return CommandTag.KEYDOWN;
-		}
-
         #endregion
     }
 }

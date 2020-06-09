@@ -1,5 +1,6 @@
 ﻿using ExamProjectFirstYear.Components;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,21 +43,26 @@ namespace ExamProjectFirstYear.CommandPattern
 		/// <param name="player"></param>
 		public void Execute(Player player)
 		{
-			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
-			player.Velocity = velocity;
-			playerMovement.Move(velocity);
+			player.PlayerVelocity = velocity;
+			player.Movement.Move(velocity);
 
-		
-			//((SoundComponent)player.GameObject.GetComponent(Tag.SOUNDCOMPONENT)).ChangeRepeat("footstepsLouder", true);
+			player.SpriteRenderer.FlipSprite(velocity);
+			if (player.Movement.Grounded == true)
+			{
+				player.SpriteRenderer.AnimationOn = true;
+			}
+			if (velocity.X > 0)
+			{
+				player.AnimationHandler.MovingRight = true;
+			}
+			if (velocity.X < 0)
+			{
+				player.AnimationHandler.MovingLeft = true;
+			}
+
+			//player.SoundComponent.ChangeRepeat("footstepsLouder", true);
 			//SoundEngine.Instance.AddSoundEffect(SoundEngine.Instance.Footsteps);
-
 		}
-
-		public CommandTag GetCommandTag()
-		{
-			return CommandTag.KEYDOWN;
-		}
-
 		#endregion
 	}
 }

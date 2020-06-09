@@ -12,10 +12,5 @@ namespace ExamProjectFirstYear.CommandPattern
         {
             GameWorld.Instance.Inventory.HandleInventory();
         }
-
-        public CommandTag GetCommandTag()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
