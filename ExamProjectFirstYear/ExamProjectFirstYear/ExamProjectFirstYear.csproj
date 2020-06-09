@@ -62,10 +62,10 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>85D5AC8A7973CEFA3F7C572BC4FE3D02A1586D68</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>C072738479E72A27DE84BC30E95413B2B5192F76</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ExamProjectFirstYear_3_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ExamProjectFirstYear_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -183,7 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
-    <None Include="ExamProjectFirstYear_3_TemporaryKey.pfx" />
+    <None Include="ExamProjectFirstYear_TemporaryKey.pfx" />
     <None Include="SQLite\App.config" />
     <None Include="app.manifest" />
     <None Include="packages.config" />
