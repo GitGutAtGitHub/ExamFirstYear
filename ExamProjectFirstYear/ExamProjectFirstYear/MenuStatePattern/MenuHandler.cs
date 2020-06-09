@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-    public enum GameState { StartState, LoadingState, PlayingState, PausedState }
+    public enum GameState { StartState, LoadingState, PlayingState, PausedState, WonState, LostState }
     /// <summary>
     /// Class for handling menu and loadscreen logic.
     /// </summary>
@@ -27,7 +27,6 @@ namespace ExamProjectFirstYear
         private bool exitGameAtMenu = false;
         private bool gameShouldBePaused = false;
         //private bool gameHasBeenExited = false;
-        private bool canUseMenu = true;
 
         #endregion
 
@@ -61,8 +60,9 @@ namespace ExamProjectFirstYear
         // this bool becomes true and the game pauses.
         public bool GameShouldBePaused { get => gameShouldBePaused; set => gameShouldBePaused = value; }
 
+        public bool PauseButtonReleased { get; set; }
+
         // Used to make sure the pause menu is only popped once at a time.
-        public bool CanUseMenu { get => canUseMenu; set => canUseMenu = value; }
 
         #endregion
 
@@ -95,6 +95,22 @@ namespace ExamProjectFirstYear
             // "This" means the MenuHandler.
             CurrentState.Enter(this);
         }
+
+        public void PauseOrUnPauseGame()
+		{
+			if (PauseButtonReleased == true)
+			{
+				if (GameShouldBePaused == true)
+				{
+                    GameShouldBePaused = false;
+				}
+				else
+				{
+                    GameShouldBePaused = true;
+				}
+                PauseButtonReleased = false;
+			}
+		}
 
         #endregion
     }

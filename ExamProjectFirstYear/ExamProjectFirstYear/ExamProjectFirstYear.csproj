@@ -98,6 +98,7 @@
     <Compile Include="Components\LightSource.cs" />
     <Compile Include="Components\PlayerComponents\PlayerHealthUI.cs" />
     <Compile Include="MenuStatePattern\IMenuState.cs" />
+    <Compile Include="MenuStatePattern\LostState.cs" />
     <Compile Include="MenuStatePattern\MenuHandler.cs" />
     <Compile Include="Components\RangedAttack.cs" />
     <Compile Include="Components\SoundComponent.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="MenuStatePattern\PausedState.cs" />
     <Compile Include="MenuStatePattern\PlayingState.cs" />
     <Compile Include="MenuStatePattern\StartState.cs" />
+    <Compile Include="MenuStatePattern\WonState.cs" />
     <Compile Include="ObjectPools\EnemyProjectilePool.cs" />
     <Compile Include="ObjectPools\BossProjectilePool.cs" />
     <Compile Include="CommandPattern\AttackCommand.cs" />

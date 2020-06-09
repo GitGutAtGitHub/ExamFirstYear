@@ -57,7 +57,8 @@ namespace ExamProjectFirstYear
 		public bool CanRegenerateMana { get; set; }
 		public bool AllMaterialsCollected { get; set; }
 		public bool PlayerCollidingWithDoor { get => playerCollidingWithDoor; set => playerCollidingWithDoor = value; }
-		public Vector2 PlayerVelocity { get; set; } = new Vector2(1, 0);
+        public bool SaveLoaded { get; set; }
+        public Vector2 PlayerVelocity { get; set; } = new Vector2(1, 0);
 		public SpriteRenderer SpriteRenderer { get; private set; }
 		public Movement Movement { get; private set; }
 		public Jump Jump { get; private set; }
@@ -110,8 +111,10 @@ namespace ExamProjectFirstYear
 
 			GameObject.SpriteName = "OopPlayerSprite2";
 
-			saveLoaded = false;
-		}
+            SaveLoaded = false;
+
+            AllMaterialsCollected = false;
+        }
 
 		public override void Start()
 		{
@@ -129,7 +132,6 @@ namespace ExamProjectFirstYear
 
 		public override void Update(GameTime gameTime)
 		{
-			LoadSave();
 			TestMethod();
 			RegenerateMana();
 		}
@@ -244,33 +246,35 @@ namespace ExamProjectFirstYear
 			}
 		}
 
-		private void LoadSave()
-		{
-			if (saveLoaded == false)
-			{
-				InventoryID = sQLiteHandler.SelectIntValuesWhere("InventoryID", "Journal",
-							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-				Health = sQLiteHandler.SelectIntValuesWhere("Health", "Journal",
-							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-				OpenDoor = sQLiteHandler.SelectIntValuesWhere("OpenDoor", "Journal",
-							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-				Mana = sQLiteHandler.SelectIntValuesWhere("Mana", "Journal",
-							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+        public void LoadSave()
+        {
+            if (SaveLoaded == false)
+            {
+                InventoryID = sQLiteHandler.SelectIntValuesWhere("InventoryID", "Journal",
+                            $"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                Health = sQLiteHandler.SelectIntValuesWhere("Health", "Journal",
+                            $"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                OpenDoor = sQLiteHandler.SelectIntValuesWhere("OpenDoor", "Journal",
+                            $"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                Mana = sQLiteHandler.SelectIntValuesWhere("Mana", "Journal",
+                            $"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
 
-				sQLiteHandler.ClearTable("StoredMaterial", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-				sQLiteHandler.ClearTable("RecordedCreature", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-			}
+                sQLiteHandler.ClearTable("StoredMaterial", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+                sQLiteHandler.ClearTable("RecordedCreature", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
 
-			saveLoaded = true;
-		}
+                AllMaterialsCollected = false;
+            }
 
-		/// <summary>
-		/// Method used to regenerate mana when needed and under certain conditions.
-		/// A timer is used to make sure mana regenerates over time. Once the first mana point has regenerated,
-		/// the rest regenerates faster. However, if the player fires another ranged attack, the timer is resat to 0,
-		/// and the regeneration will be slow to get the first next mana point back, and then mana starts regenerating faster once again.
-		/// </summary>
-		private void RegenerateMana()
+            SaveLoaded = true;
+        }
+
+        /// <summary>
+        /// Method used to regenerate mana when needed and under certain conditions.
+        /// A timer is used to make sure mana regenerates over time. Once the first mana point has regenerated,
+        /// the rest regenerates faster. However, if the player fires another ranged attack, the timer is resat to 0,
+        /// and the regeneration will be slow to get the first next mana point back, and then mana starts regenerating faster once again.
+        /// </summary>
+        private void RegenerateMana()
 		{
 			// Once mana is lower than the full amount of mana, a timer starts and regeneration of mana can begin.
 			if (Mana < fullMana)
@@ -310,22 +314,109 @@ namespace ExamProjectFirstYear
 			LightSource.LightRadiusScale += value;
 		}
 
-		#endregion
+        private bool CheckBlueprint(int blueprintID)
+        {
+            bool areEqual;
 
-		public void TestMethod()
+
+            int storedSpiderFilamentAmount = sQLiteHandler.SelectIntValuesWhere("Amount", "StoredMaterial",
+                                             $"InventoryID={GameWorld.Instance.Inventory.InventoryID} AND MaterialTypeID=1",
+                                               new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+            int requiredSpiderFilamentAmount = sQLiteHandler.SelectIntValuesWhere("Amount", "RequiredMaterial",
+                                             $"BlueprintID={blueprintID} AND MaterialTypeID=1",
+                                               new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+
+            int storedMatchHeadAmount = sQLiteHandler.SelectIntValuesWhere("Amount", "StoredMaterial",
+                                             $"InventoryID={GameWorld.Instance.Inventory.InventoryID} AND MaterialTypeID=2",
+                                               new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+            int requiredMatchHeadAmount = sQLiteHandler.SelectIntValuesWhere("Amount", "RequiredMaterial",
+                                             $"BlueprintID={blueprintID} AND MaterialTypeID=2",
+                                               new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+
+            int storedMothWingAmount = sQLiteHandler.SelectIntValuesWhere("Amount", "StoredMaterial",
+                                             $"InventoryID={GameWorld.Instance.Inventory.InventoryID} AND MaterialTypeID=3",
+                                               new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+            int requiredMothWingAmount = sQLiteHandler.SelectIntValuesWhere("Amount", "RequiredMaterial",
+                                             $"BlueprintID={blueprintID} AND MaterialTypeID=3",
+                                               new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+
+            if (storedSpiderFilamentAmount >= requiredSpiderFilamentAmount &&
+                storedMatchHeadAmount >= requiredMatchHeadAmount &&
+                storedMothWingAmount >= requiredMothWingAmount)
+            {
+                areEqual = true;
+            }
+
+            else
+            {
+                areEqual = false;
+            }
+
+            return areEqual;
+
+
+            //bool areEqual = false;
+
+            //Dictionary<int, int> storedMaterials = new Dictionary<int, int>();
+            //Dictionary<int, int> requiredMaterials = new Dictionary<int, int>();
+
+            //List<int> storedMaterialTypeIDs = new List<int>(sQLiteHandler.ExecuteIntReader("MaterialTypeID", "StoredMaterial",
+            //    $"InventoryID = {GameWorld.Instance.Inventory.InventoryID}"));
+
+            //List<int> requiredMaterialTypeIDs = new List<int>(sQLiteHandler.ExecuteIntReader("MaterialTypeID", "RequiredMaterial",
+            //        $"BlueprintID = {blueprintID}"));
+
+
+            ////Fill out dictionary with stored materials.
+            //foreach (int storedMaterialTypeID in storedMaterialTypeIDs)
+            //{
+            //    int storedMaterialAmount = sQLiteHandler.SelectIntValuesWhere("Amount", "StoredMaterial", $"MaterialTypeID={storedMaterialTypeID} " +
+            //                           $"AND InventoryID={GameWorld.Instance.Inventory.InventoryID}",
+            //                           new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+
+            //    storedMaterials.Add(storedMaterialTypeID, storedMaterialAmount);
+            //}
+
+            ////Fill out dictionary with required materials.
+            //foreach(int requiredMaterilTypeID in requiredMaterialTypeIDs)
+            //{
+            //    int requiredMaterialAmount = sQLiteHandler.SelectIntValuesWhere("Amount", "RequiredMaterial", $"MaterialTypeID={requiredMaterilTypeID} " +
+            //                            $"AND BlueprintID={blueprintID}",
+            //                            new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
+
+            //    requiredMaterials.Add(requiredMaterilTypeID, requiredMaterialAmount);
+            //}
+
+
+            //if (storedMaterials == requiredMaterials)
+            //{
+            //    areEqual = true;
+            //}
+        }
+
+        #endregion
+
+        public void TestMethod()
 		{
 			previousMouseState = currentMouseState;
 			currentMouseState = Mouse.GetState();
 
-			if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
-			{
-				Health--;
-			}
+            if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
+            {
+                //Health--;
+            }
 
-			else if (currentMouseState.RightButton == ButtonState.Released && previousMouseState.RightButton == ButtonState.Pressed)
+            else if (currentMouseState.RightButton == ButtonState.Released && previousMouseState.RightButton == ButtonState.Pressed)
 			{
-				Mana--;
-			}
+                sQLiteHandler.IncreaseAmountStoredMaterial(1, GameWorld.Instance.Inventory.InventoryID);
+                sQLiteHandler.IncreaseAmountStoredMaterial(2, GameWorld.Instance.Inventory.InventoryID);
+                sQLiteHandler.IncreaseAmountStoredMaterial(3, GameWorld.Instance.Inventory.InventoryID);
+
+                if (CheckBlueprint(1) == true)
+                {
+                    AllMaterialsCollected = true;
+                }
+            }
 		}
 	}
 }

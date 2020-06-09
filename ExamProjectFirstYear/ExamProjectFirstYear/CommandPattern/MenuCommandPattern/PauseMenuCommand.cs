@@ -16,15 +16,16 @@ namespace ExamProjectFirstYear.CommandPattern.MenuCommandPattern
 
         public void Execute()
         {
-            if (MenuHandler.Instance.GameState == GameState.PlayingState)
-            {
-                MenuHandler.Instance.GameShouldBePaused = true;
-            }
+            MenuHandler.Instance.PauseOrUnPauseGame();
+            //if (MenuHandler.Instance.GameState == GameState.PlayingState)
+            //{
+            //    MenuHandler.Instance.GameShouldBePaused = true;
+            //}
 
-            else if (MenuHandler.Instance.GameState == GameState.PausedState)
-            {
-                MenuHandler.Instance.GameShouldBePaused = false;
-            }
+            //else if (MenuHandler.Instance.GameState == GameState.PausedState)
+            //{
+            //    MenuHandler.Instance.GameShouldBePaused = false;
+            //}
 
             //if (MenuHandler.Instance.GameState == GameState.PlayingState)
             //{

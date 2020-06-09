@@ -455,6 +455,66 @@ namespace ExamProjectFirstYear
 			GameObjects.Add(createdObject);
 		}
 
-		#endregion
-	}
+        private void RestartGame()
+        {
+            LightSources.Clear();
+            Colliders.Clear();
+            GameObjects.Clear();
+
+            //Initialize
+            TimeElapsed = 0;
+            Journal = new Journal(1);
+            Player = new Player(Journal.JournalID);
+            Inventory = new Inventory(Player.PlayerID);
+
+            //LoadContent
+            for (int i = 0; i < GameObjects.Count; i++)
+            {
+                GameObjects[i].Awake();
+            }
+
+            for (int i = 0; i < GameObjects.Count; i++)
+            {
+                GameObjects[i].Start();
+            }
+
+            CreateUIObject(Tag.JOURNAL);
+            CreateUIObject(Tag.INVENTORY);
+            CreateUIObject(Tag.PLAYERHEALTHUI);
+            CreateUIObject(Tag.PLAYERMANAUI);
+
+            LevelManager.Instance.InitializeLevel();
+
+            NodeManager.Instance.InitializeGrid();
+            NodeManager.Instance.UpdateGrid();
+            NodeManager.Instance.LoadContent(Content);
+
+            //Following is used for the light effect.
+            lightEffect = Content.Load<Effect>("LightEffect");
+            var pp = GraphicsDevice.PresentationParameters;
+            mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+            lightTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+        }
+
+        public void CheckIfWonOrLost()
+        {
+            if (Player.Health <= 0)
+            {
+                MenuHandler.Instance.SwitchState(new LostState());
+                RestartGame();
+                Player.SaveLoaded = false;
+                Player.LoadSave();
+            }
+
+            if (Player.AllMaterialsCollected == true)
+            {
+                MenuHandler.Instance.SwitchState(new WonState());
+                RestartGame();
+                Player.SaveLoaded = false;
+                Player.LoadSave();
+            }
+        }
+
+        #endregion
+    }
 }
