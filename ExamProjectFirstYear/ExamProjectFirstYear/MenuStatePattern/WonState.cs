@@ -19,10 +19,10 @@ namespace ExamProjectFirstYear.MenuStatePattern
         private Vector2 wonScreenPosition;
         //private Vector2 wonTextPosition;
         private Vector2 wonScreenOrigin;
-        private Vector2 wonHeaderPosition;
+        private Vector2 wonHeadingPosition;
 
         //private SpriteFont wonText;
-        private SpriteFont wonHeader;
+        private SpriteFont wonHeading;
 
         private SpriteBatch spriteBatch;
 
@@ -39,13 +39,13 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
             wonScreenSprite = GameWorld.Instance.Content.Load<Texture2D>("OopGameScreen");
             //wonText = GameWorld.Instance.Content.Load<SpriteFont>("MenuHandlerText");
-            wonHeader = GameWorld.Instance.Content.Load<SpriteFont>("MenuHandlerHeading");
+            wonHeading = GameWorld.Instance.Content.Load<SpriteFont>("MenuHandlerHeading");
 
             wonScreenOrigin = new Vector2(wonScreenSprite.Width / 2, wonScreenSprite.Height / 2);
 
             wonScreenPosition = new Vector2(GameWorld.Instance.GraphicsDevice.Viewport.Width / 2,
                                               GameWorld.Instance.GraphicsDevice.Viewport.Height / 2);
-            wonHeaderPosition = new Vector2((GameWorld.Instance.GraphicsDevice.Viewport.Width / 2) - 240,
+            wonHeadingPosition = new Vector2((GameWorld.Instance.GraphicsDevice.Viewport.Width / 2) - 240,
                                                 (GameWorld.Instance.GraphicsDevice.Viewport.Height / 2) - 65);
             //wonTextPosition = new Vector2((GameWorld.Instance.GraphicsDevice.Viewport.Width / 2) - 275,
                                              //(GameWorld.Instance.GraphicsDevice.Viewport.Height / 2) + 40);
@@ -74,7 +74,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
             spriteBatch.Draw(wonScreenSprite, wonScreenPosition, null, Color.White, 0f,
                              wonScreenOrigin, 1, SpriteEffects.None, 0.98f);
 
-            spriteBatch.DrawString(wonHeader, "YOU WON", wonHeaderPosition,
+            spriteBatch.DrawString(wonHeading, "YOU WON", wonHeadingPosition,
                                    Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
             //spriteBatch.DrawString(wonText, "PRESS 'S' TO START\n\n PRESS 'E' TO EXIT", wonTextPosition,
             //                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);

@@ -25,9 +25,11 @@ namespace ExamProjectFirstYear.Components
 
         private float range = 1000;
 
+
         public float Volume { get => volume; set => volume = value; }
 
-        public void updateDistance()
+
+        public void UpdateDistance()
         {
             distance2 = (int)Math.Sqrt((Camera.Instance.Position.X - GameObject.Transform.Position.X) * (Camera.Instance.Position.X - GameObject.Transform.Position.X) +
                                   (Camera.Instance.Position.Y - GameObject.Transform.Position.Y) * (Camera.Instance.Position.Y - GameObject.Transform.Position.Y));
@@ -46,7 +48,7 @@ namespace ExamProjectFirstYear.Components
 
         public override void Update(GameTime gameTime)
         {
-            updateDistance();
+            UpdateDistance();
             //Console.WriteLine((volume));
 
             KeepAudioLooping();

@@ -58,24 +58,7 @@ namespace ExamProjectFirstYear
 			}
         }
 
-        private bool OutOfBounds()
-		{
-            Vector2 playerPosition = GameWorld.Instance.Player.GameObject.Transform.Position;
-            Vector2 position = GameObject.Transform.Position;
-
-            if ((position.X - playerPosition.X < GameWorld.Instance.ScreenSize.width/2) &&
-                    (playerPosition.X-position.X < GameWorld.Instance.ScreenSize.width/2) &&
-                    (position.Y - playerPosition.Y < GameWorld.Instance.ScreenSize.height/2) &&
-                    (playerPosition.Y - position.Y < GameWorld.Instance.ScreenSize.height/2))
-			{
-                return false;
-			}
-			else
-			{
-                return true;
-			}
-            
-        }
+       
 
         //public void MoveToObjectPool()
         //{
@@ -110,6 +93,25 @@ namespace ExamProjectFirstYear
 
 
         #region Other methods
+
+        private bool OutOfBounds()
+        {
+            Vector2 playerPosition = GameWorld.Instance.Player.GameObject.Transform.Position;
+            Vector2 position = GameObject.Transform.Position;
+
+            if ((position.X - playerPosition.X < GameWorld.Instance.ScreenSize.width / 2) &&
+                    (playerPosition.X - position.X < GameWorld.Instance.ScreenSize.width / 2) &&
+                    (position.Y - playerPosition.Y < GameWorld.Instance.ScreenSize.height / 2) &&
+                    (playerPosition.Y - position.Y < GameWorld.Instance.ScreenSize.height / 2))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
 
         /// <summary>
         /// Create a projectile clone.

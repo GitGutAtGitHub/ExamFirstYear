@@ -23,19 +23,19 @@ namespace ExamProjectFirstYear.Components
         #endregion
 
 
-        public bool canAttack { get; set; } = true;
+        public bool CanAttack { get; set; } = true;
 
 
         #region METHODS
 
         public void ReleaseMeleeMeleeAttack()
         {
-            canAttack = true;
+            CanAttack = true;
         }
 
         public void MeleeAttack(GameObject sender, Tag meleeAttackType, Vector2 velocity)
         {
-            if (canAttack)
+            if (CanAttack)
             {
                 GameObject tmpMeleeObject = ProjectileFactory.Instance.Create(meleeAttackType);
                 SpriteRenderer tmpMeleeRenderer = (SpriteRenderer)tmpMeleeObject.GetComponent(Tag.SPRITERENDERER);
@@ -49,7 +49,7 @@ namespace ExamProjectFirstYear.Components
                     attackDirection = new Vector2(sender.Transform.Position.X +
                                                                 (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange), sender.Transform.Position.Y);
 
-                    tmpMeleeRenderer.spriteEffect = SpriteEffects.None;
+                    tmpMeleeRenderer.SpriteEffect = SpriteEffects.None;
                 }
                 // Makes sure the attack appears on the left side of the player.
                 if (velocity.X < 0)
@@ -57,7 +57,7 @@ namespace ExamProjectFirstYear.Components
                     attackDirection = new Vector2(sender.Transform.Position.X -
                                                                 (((SpriteRenderer)sender.GetComponent(Tag.SPRITERENDERER)).Sprite.Width * attackRange), sender.Transform.Position.Y);
 
-                    tmpMeleeRenderer.spriteEffect = SpriteEffects.FlipHorizontally;
+                    tmpMeleeRenderer.SpriteEffect = SpriteEffects.FlipHorizontally;
                 }
 
                 tmpMeleeObject.Transform.Position = attackDirection;
@@ -65,7 +65,7 @@ namespace ExamProjectFirstYear.Components
                 GameWorld.Instance.Colliders.Add(tmpMeleeCollider);
                 GameWorld.Instance.GameObjects.Add(tmpMeleeObject);
 
-                canAttack = false;
+                CanAttack = false;
             }
         }
 

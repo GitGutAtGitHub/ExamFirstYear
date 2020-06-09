@@ -79,7 +79,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
             backgroundThread.Abort();
         }
 
-        public void Draw()
+        private void Draw()
         {
             spriteBatch = new SpriteBatch(GameWorld.Instance.GraphicsDevice);
 

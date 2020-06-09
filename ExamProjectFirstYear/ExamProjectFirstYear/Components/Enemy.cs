@@ -24,7 +24,7 @@ namespace ExamProjectFirstYear.Components
         protected int health;
         private int sightRadius;
         //it is a public variable, to be able to edit the specific X and Y values, it has to be a variable.
-        public Vector2 Velocity;
+        
         private bool hasPath = false;
 
         private Vector2 prevNode = new Vector2(0, 0);
@@ -41,6 +41,7 @@ namespace ExamProjectFirstYear.Components
         #region PROPERTIES
 
         public Vector2 TargetPosition { get; set; }
+        public Vector2 Velocity { get; set; }
         public int SightRadius { get => sightRadius; set => sightRadius = value; }
         public GameObject Target { get => target; set => target = value; }
         public bool HasPath { get => hasPath; set => hasPath = value; }
@@ -72,9 +73,9 @@ namespace ExamProjectFirstYear.Components
         public void DropMaterialUponDeath(Tag materialType)
         {
             GameObject droppedMaterial = MaterialFactory.Instance.Create(materialType);
-			droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
+            droppedMaterial.Transform.Position = new Vector2(GameObject.Transform.Position.X, GameObject.Transform.Position.Y);
 
-			GameWorld.Instance.Colliders.Add((Collider)droppedMaterial.GetComponent(Tag.COLLIDER));
+            GameWorld.Instance.Colliders.Add((Collider)droppedMaterial.GetComponent(Tag.COLLIDER));
             GameWorld.Instance.GameObjects.Add(droppedMaterial);
         }
 
@@ -100,7 +101,7 @@ namespace ExamProjectFirstYear.Components
             }
         }
 
-        public virtual void FollowPath(bool XAndY)
+        public virtual void FollowPath(bool xAndY)
         {
             float dstX;
             float dstY;
@@ -112,28 +113,29 @@ namespace ExamProjectFirstYear.Components
                 {
                     TargetPosition = new Vector2((Path.Peek().Position.X + NodeManager.Instance.CellSize / 2),
                                                                         (Path.Peek().Position.Y + NodeManager.Instance.CellSize / 2));
-                   
+
                     //calculating the direction-vector between the enemy and its target position
                     float vectorX = (TargetPosition.X) - (GameObject.Transform.Position.X);
                     float vectorY = (TargetPosition.Y) - (GameObject.Transform.Position.Y);
 
-                    if (XAndY == true)
+                    if (xAndY == true)
                     {
                         Velocity = new Vector2(vectorX, vectorY);
-                    } else
+                    }
+                    else
                     {
                         Velocity = new Vector2(vectorX, 0);
 
                     }
 
-                  
+
 
                     //checking the distance between the enemy and the targetposition.
                     dstX = Math.Abs(GameObject.Transform.Position.X - TargetPosition.X);
                     dstY = Math.Abs(GameObject.Transform.Position.Y - TargetPosition.Y);
 
                     //it has reached the end of the node, and is ready to get instructions for the next node.
-                    if (dstX < 8 && dstY < 8 || dstX < 16 && XAndY == false)
+                    if (dstX < 8 && dstY < 8 || dstX < 16 && xAndY == false)
                     {
                         //if there is still path nodes, then pop the current
                         if (Path.Count > 0)
@@ -146,7 +148,7 @@ namespace ExamProjectFirstYear.Components
             }
         }
 
-      
+
 
 
         #endregion

@@ -37,6 +37,8 @@ namespace ExamProjectFirstYear
         private SQLiteHandler sQLiteHandler = GameWorld.Instance.SQLiteHandler;
         private Journal journal = GameWorld.Instance.Journal;
 
+        private int inventoryID;
+
         //private SpriteRenderer spriteRenderer;
         //private RangedAttack rangedAttack;
         //private Jump jump;
@@ -47,13 +49,12 @@ namespace ExamProjectFirstYear
 
         #region Properties
         public int PlayerID { get; set; }
-        public int InventoryID { get; set; }
         public int Health { get; set; }
         public int Mana { get; set; }
         public int OpenDoor { get; set; }
 
-        public float PositionX { get; set; }
-        public float PositionY { get; set; }
+        //public float PositionX { get; set; }
+        //public float PositionY { get; set; }
 
         public bool CanRegenerateMana { get; set; }
         public bool AllMaterialsCollected { get; set; }
@@ -61,7 +62,7 @@ namespace ExamProjectFirstYear
         public bool SaveLoaded { get; set; }
 
         public Vector2 Velocity { get; set; } = new Vector2(1, 0);
-        public Movement Movement { get; private set; }
+        //public Movement Movement { get; private set; }
 
         #endregion
 
@@ -163,7 +164,7 @@ namespace ExamProjectFirstYear
         /// Invulnerability frames have been added so the player has a chance to get away
         /// before taking more damage.
         /// </summary>
-        public void TakeDamage()
+        private void TakeDamage()
         {
             invulnerabilityTimer -= GameWorld.Instance.DeltaTime;
 
@@ -319,7 +320,7 @@ namespace ExamProjectFirstYear
         {
             if (SaveLoaded == false)
             {
-                InventoryID = sQLiteHandler.SelectIntValuesWhere("InventoryID", "Journal",
+                inventoryID = sQLiteHandler.SelectIntValuesWhere("InventoryID", "Journal",
                             $"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
                 Health = sQLiteHandler.SelectIntValuesWhere("Health", "Journal",
                             $"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
@@ -411,7 +412,7 @@ namespace ExamProjectFirstYear
                 sQLiteHandler.IncreaseAmountStoredMaterial(2, GameWorld.Instance.Inventory.InventoryID);
                 sQLiteHandler.IncreaseAmountStoredMaterial(3, GameWorld.Instance.Inventory.InventoryID);
 
-                if (CheckBlueprint(1) == true)
+                if (CheckBlueprint(1)  == true)
                 {
                     AllMaterialsCollected = true;
                 }

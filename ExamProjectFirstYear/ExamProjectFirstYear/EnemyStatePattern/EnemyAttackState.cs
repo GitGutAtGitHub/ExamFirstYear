@@ -85,7 +85,7 @@ namespace ExamProjectFirstYear.StatePattern
         {
             if (enemy.Path.Count <= 2)
             {
-                if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack == true)
+                if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).CanAttack == true)
                 {
 
                     ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).MeleeAttack(enemy.GameObject, Tag.ENEMYMELEEATTACK, enemy.Velocity);
@@ -93,13 +93,13 @@ namespace ExamProjectFirstYear.StatePattern
                     cooldownTimer = new TimeSpan(0, 0, 0, 0, 500);
                 }
 
-                if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack == false)
+                if (((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).CanAttack == false)
                 {
                     cooldownTimer -= GameWorld.Instance.ElapsedGameTime;
 
                     if (cooldownTimer <= TimeSpan.Zero)
                     {
-                        ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).canAttack = true;
+                        ((AttackMelee)enemy.GameObject.GetComponent(Tag.ATTACKMELEE)).CanAttack = true;
                     }
                 }
             }

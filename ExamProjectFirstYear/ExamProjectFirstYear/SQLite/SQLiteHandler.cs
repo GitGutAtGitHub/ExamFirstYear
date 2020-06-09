@@ -43,7 +43,7 @@ namespace ExamProjectFirstYear
         /// Method for simplifying and executing SQLiteCommands as NonQuery. The commandText is the command to be executed.
         /// </summary>
         /// <param name="commandText"></param>
-        public void ExecuteNonQuerySQLiteCommand(SQLiteCommand command, SQLiteConnection connection)
+        private void ExecuteNonQuerySQLiteCommand(SQLiteCommand command, SQLiteConnection connection)
         {
             using (connection)
             {
@@ -57,7 +57,7 @@ namespace ExamProjectFirstYear
         ///Returns the result as an integer.
         /// </summary>
         /// <param name="commandText"></param>
-        public int ExecuteScalarInt(SQLiteCommand command, SQLiteConnection connection)
+        private int ExecuteScalarInt(SQLiteCommand command, SQLiteConnection connection)
         {
             int value;
 
@@ -75,7 +75,7 @@ namespace ExamProjectFirstYear
         /// Returns the result as a string.
         /// </summary>
         /// <param name="commandText"></param>
-        public string ExecuteScalarString(SQLiteCommand command, SQLiteConnection connection)
+        private string ExecuteScalarString(SQLiteCommand command, SQLiteConnection connection)
         {
             string value;
 
@@ -125,7 +125,7 @@ namespace ExamProjectFirstYear
         /// <param name="tableName"></param>
         /// <param name="columns"></param>
         /// <param name="connection"></param>
-        public void CreateTable(string tableName, string columns, SQLiteConnection connection)
+        private void CreateTable(string tableName, string columns, SQLiteConnection connection)
         {
             ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"CREATE TABLE IF NOT EXISTS {tableName} ({columns})", connection), connection);
         }
@@ -144,7 +144,7 @@ namespace ExamProjectFirstYear
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="tableValues"></param>
-        public void InsertIntoTable(string tableName, string tableValues, SQLiteConnection connection)
+        private void InsertIntoTable(string tableName, string tableValues, SQLiteConnection connection)
         {
             ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"INSERT OR IGNORE INTO {tableName} VALUES ({tableValues});",
                                          connection), connection);
@@ -158,7 +158,7 @@ namespace ExamProjectFirstYear
         /// <param name="definedValues"></param>
         /// <param name="compareFrom"></param>
         /// <param name="compareTo"></param>
-        public void InsertIntoTableWhere(string tableName, string tableValues, string definedValues, string whereDefinition, SQLiteConnection connection)
+        private void InsertIntoTableWhere(string tableName, string tableValues, string definedValues, string whereDefinition, SQLiteConnection connection)
         {
             ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"INSERT OR IGNORE INTO {tableName} ({tableValues}) {definedValues} " +
                                        $"WHERE {whereDefinition};", connection), connection);
@@ -171,7 +171,7 @@ namespace ExamProjectFirstYear
         /// <param name="tableName"></param>
         /// <param name="updateDefinition"></param>
         /// <param name="whereDefinition"></param>
-        public void UpdateTableWhere(string tableName, string updateDefinition, string whereDefinition, SQLiteConnection connection)
+        private void UpdateTableWhere(string tableName, string updateDefinition, string whereDefinition, SQLiteConnection connection)
         {
             ExecuteNonQuerySQLiteCommand(new SQLiteCommand($"UPDATE {tableName} SET {updateDefinition} WHERE " +
                                       $"{whereDefinition};", connection), connection);
@@ -332,14 +332,14 @@ namespace ExamProjectFirstYear
         /// <param name="openDoor"></param>
         /// <param name="positionX"></param>
         /// <param name="positionY"></param>
-        /// <param name="ID"></param>
-        public void SaveGame(int health, int openDoor, int ID, int mana)
+        /// <param name="iD"></param>
+        public void SaveGame(int health, int openDoor, int iD, int mana)
         {
             int positionX = (int)GameWorld.Instance.Player.GameObject.Transform.Position.X;
             int positionY = (int)GameWorld.Instance.Player.GameObject.Transform.Position.Y;
 
             UpdateTableWhere("Journal", $"Health={health}, OpenDoor={openDoor}, PositionX={positionX}, " +
-                       $"PositionY={positionY}, Mana={mana}", $"ID={ID}",
+                       $"PositionY={positionY}, Mana={mana}", $"ID={iD}",
                          new SQLiteConnection(LoadSQLiteConnectionString()));
         }
 

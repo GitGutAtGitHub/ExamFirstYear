@@ -19,10 +19,10 @@ namespace ExamProjectFirstYear.MenuStatePattern
         private Vector2 lostScreenPosition;
         //private Vector2 lostTextPosition;
         private Vector2 lostScreenOrigin;
-        private Vector2 lostHeaderPosition;
+        private Vector2 lostHeadingPosition;
 
         //private SpriteFont lostText;
-        private SpriteFont lostHeader;
+        private SpriteFont lostHeading;
 
         private SpriteBatch spriteBatch;
 
@@ -39,13 +39,13 @@ namespace ExamProjectFirstYear.MenuStatePattern
 
             lostScreenSprite = GameWorld.Instance.Content.Load<Texture2D>("OopGameScreen");
             //lostText = GameWorld.Instance.Content.Load<SpriteFont>("MenuHandlerText");
-            lostHeader = GameWorld.Instance.Content.Load<SpriteFont>("MenuHandlerHeading");
+            lostHeading = GameWorld.Instance.Content.Load<SpriteFont>("MenuHandlerHeading");
 
             lostScreenOrigin = new Vector2(lostScreenSprite.Width / 2, lostScreenSprite.Height / 2);
 
             lostScreenPosition = new Vector2(GameWorld.Instance.GraphicsDevice.Viewport.Width / 2,
                                               GameWorld.Instance.GraphicsDevice.Viewport.Height / 2);
-            lostHeaderPosition = new Vector2((GameWorld.Instance.GraphicsDevice.Viewport.Width / 2) - 250,
+            lostHeadingPosition = new Vector2((GameWorld.Instance.GraphicsDevice.Viewport.Width / 2) - 250,
                                                 (GameWorld.Instance.GraphicsDevice.Viewport.Height / 2) - 65);
             //lostTextPosition = new Vector2((GameWorld.Instance.GraphicsDevice.Viewport.Width / 2) - 275,
             //                                 (GameWorld.Instance.GraphicsDevice.Viewport.Height / 2) + 40);
@@ -74,7 +74,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
             spriteBatch.Draw(lostScreenSprite, lostScreenPosition, null, Color.White, 0f,
                              lostScreenOrigin, 1, SpriteEffects.None, 0.98f);
 
-            spriteBatch.DrawString(lostHeader, "YOU LOST", lostHeaderPosition,
+            spriteBatch.DrawString(lostHeading, "YOU LOST", lostHeadingPosition,
                                    Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
             //spriteBatch.DrawString(lostText, "PRESS 'S' TO START\n\n PRESS 'E' TO EXIT", lostTextPosition,
             //                       Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.99f);
