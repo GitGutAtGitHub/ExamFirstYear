@@ -31,6 +31,7 @@ namespace ExamProjectFirstYear.MenuStatePattern
         public void Execute()
         {
             HandlePlayingState();
+            GameWorld.Instance.CheckIfWonOrLost();
         }
 
         public void Exit()
@@ -44,10 +45,9 @@ namespace ExamProjectFirstYear.MenuStatePattern
         /// </summary>
         private void HandlePlayingState()
         {
-            if (MenuHandler.Instance.GameShouldBePaused == true && MenuHandler.Instance.CanUseMenu == true)
+            if (MenuHandler.Instance.GameShouldBePaused == true)
             {
                 MenuHandler.Instance.CurrentMenuHandler.SwitchState(new PausedState());
-                MenuHandler.Instance.CanUseMenu = false;
             }
         }
 

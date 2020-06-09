@@ -80,7 +80,6 @@ namespace ExamProjectFirstYear.MenuStatePattern
             if (MenuHandler.Instance.GameShouldBePaused == false)
             {
                 MenuHandler.Instance.CurrentMenuHandler.SwitchState(new PlayingState());
-                MenuHandler.Instance.CanUseMenu = false;
             }
 
             // If ExitGameAtMenu becomes true while at the pause menu, the game is shut down.

@@ -14,8 +14,8 @@ namespace ExamProjectFirstYear.CommandPattern.MenuCommandPattern
         }
 
         public void Execute()
-        {           
-            MenuHandler.Instance.CanUseMenu = true;
+        {
+			MenuHandler.Instance.PauseButtonReleased = true;
         }
     }
 }
