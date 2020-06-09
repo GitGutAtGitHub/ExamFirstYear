@@ -25,10 +25,5 @@ namespace ExamProjectFirstYear.CommandPattern.MenuCommandPattern
                 GameWorld.Instance.Journal.ChangePage();
             }
         }
-
-        public CommandTag GetCommandTag()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -13,27 +13,27 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear
 {
-    /// <summary>
-    /// The Player Character class.
-    /// </summary>
-    public class Player : Component, IGameListener
-    {
-        #region Fields
+	/// <summary>
+	/// The Player Character class.
+	/// </summary>
+	public class Player : Component, IGameListener
+	{
+		#region Fields
 
-        private MouseState previousMouseState;
-        private MouseState currentMouseState;
+		private MouseState previousMouseState;
+		private MouseState currentMouseState;
 
-        private bool saveLoaded;
-        private float manaRegenerateTimer;
-        private bool playerCollidingWithDoor = false;
-        // First wait is sat high, as to ensure the mana doesn't regenerate until after a short while from when the last time they used mana.
-        private float initialRegenerationTimer = 2.5f;
-        // After the first wait, the timer is not sat to 0, so it takes less time for mana to regenerate once the regeneration has begun.
-        private float regenerationTimer = 1.5f;
-        private float invulnerabilityTimer;
-        private float invulnerabilityFrames = 0.8f;
-        private byte fullMana = 5;
-        private bool canShoot = true;
+		private bool saveLoaded;
+		private float manaRegenerateTimer;
+		private bool playerCollidingWithDoor = false;
+		// First wait is sat high, as to ensure the mana doesn't regenerate until after a short while from when the last time they used mana.
+		private float initialRegenerationTimer = 2.5f;
+		// After the first wait, the timer is not sat to 0, so it takes less time for mana to regenerate once the regeneration has begun.
+		private float regenerationTimer = 1.5f;
+		private float invulnerabilityTimer;
+		private float invulnerabilityFrames = 0.8f;
+		private byte fullMana = 5;
+		private bool canShoot = true;
 
 		private SQLiteHandler sQLiteHandler = GameWorld.Instance.SQLiteHandler;
 		private Journal journal = GameWorld.Instance.Journal;
@@ -48,27 +48,37 @@ namespace ExamProjectFirstYear
 
 		#region Properties
 		public int PlayerID { get; set; }
-        public int InventoryID { get; set; }
-        public int Health { get; set; }
-        public int Mana { get; set; }
-        public int OpenDoor { get; set; }
-        public float PositionX { get; set; }
-        public float PositionY { get; set; }
-        public bool CanRegenerateMana { get; set; }
-        public bool AllMaterialsCollected { get; set; }
-        public bool PlayerCollidingWithDoor { get => playerCollidingWithDoor; set => playerCollidingWithDoor = value; }
-        public Vector2 Velocity { get; set; } = new Vector2(1, 0);
-        public Movement Movement { get; private set; }
+		public int InventoryID { get; set; }
+		public int Health { get; set; }
+		public int Mana { get; set; }
+		public int OpenDoor { get; set; }
+		public float PositionX { get; set; }
+		public float PositionY { get; set; }
+		public bool CanRegenerateMana { get; set; }
+		public bool AllMaterialsCollected { get; set; }
+		public bool PlayerCollidingWithDoor { get => playerCollidingWithDoor; set => playerCollidingWithDoor = value; }
+		public Vector2 PlayerVelocity { get; set; } = new Vector2(1, 0);
+		public SpriteRenderer SpriteRenderer { get; private set; }
+		public Movement Movement { get; private set; }
+		public Jump Jump { get; private set; }
+		public RangedAttack RangedAttack { get; private set; }
+		public AttackMelee AttackMelee { get; private set; }
+		public SoundComponent SoundComponent { get; private set; }
+		public LightSource LightSource { get; private set; }
+		public AnimationHandler AnimationHandler { get; private set; }
+		//public string[] WalkSpritesNames { get; } = new string[2] { "", "" };
+		//public string[] AttackSpritesNames { get; } = new string[2] { "", "" };
+		//public string[] JumpSpritesNames { get; } = new string[1] { " " };
 
-        #endregion
+		#endregion
 
 
-        #region Constructors
+		#region Constructors
 
-        /// <summary>
-        /// Constructor for the Player Character component.
-        /// </summary>
-        public Player(int playerID)
+		/// <summary>
+		/// Constructor for the Player Character component.
+		/// </summary>
+		public Player(int playerID)
 		{
 			PlayerID = playerID;
 		}
@@ -88,60 +98,57 @@ namespace ExamProjectFirstYear
 			return Tag.PLAYER;
 		}
 
-        public override void Awake()
-        {
-            GameObject.Tag = Tag.PLAYER;
+		public override void Awake()
+		{
+			GameObject.Tag = Tag.PLAYER;
 
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("footstepsLouder", false);
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Whoosh m. reverb", false);
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Jump_04", false);
-            ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("RangedAttack3", false);
+			// Kan dette flyttes ned i start efter SoundComponent er sat? Hilsen Emma
+			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("footstepsLouder", false);
+			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Whoosh m. reverb", false);
+			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("Jump_04", false);
+			((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).AddSound2("RangedAttack3", false);
 
-            GameObject.SpriteName = "OopPlayerSprite2";
+			GameObject.SpriteName = "OopPlayerSprite2";
 
 			saveLoaded = false;
 		}
 
 		public override void Start()
 		{
-			//Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
-			//spriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
-			//jump = (Jump)GameObject.GetComponent(Tag.JUMP);
-    ((SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT)).Volume = 1;
+			SpriteRenderer = (SpriteRenderer)GameObject.GetComponent(Tag.SPRITERENDERER);
+			Movement = (Movement)GameObject.GetComponent(Tag.MOVEMENT);
+			Jump = (Jump)GameObject.GetComponent(Tag.JUMP);
+			RangedAttack = (RangedAttack)GameObject.GetComponent(Tag.RANGEDATTACK);
+			AttackMelee = (AttackMelee)GameObject.GetComponent(Tag.ATTACKMELEE);
+			SoundComponent = (SoundComponent)GameObject.GetComponent(Tag.SOUNDCOMPONENT);
+			LightSource = (LightSource)GameObject.GetComponent(Tag.LIGHTSOURCE);
+			AnimationHandler = (AnimationHandler)GameObject.GetComponent(Tag.ANIMATIONHANDLER);
+			SoundComponent.Volume = 1;
 			LoadSave();
 		}
 
-
-
-
-
-        public override void Update(GameTime gameTime)
-        {
-            LoadSave();
-            TestMethod();
-            RegenerateMana();
-            //Console.WriteLine(Velocity);
-
-
-        }
-
-        #endregion
-
-        #region Other methods
-
-        public void CallMeleeAttack()
+		public override void Update(GameTime gameTime)
 		{
-			AttackMelee playerAttackMelee = (AttackMelee)GameObject.GetComponent(Tag.ATTACKMELEE);
-			playerAttackMelee.MeleeAttack(this.GameObject, Tag.PLAYERMELEEATTACK, Velocity);
+			LoadSave();
+			TestMethod();
+			RegenerateMana();
+		}
+
+		#endregion
+
+		#region Other methods
+
+		public void CallMeleeAttack()
+		{
+			AttackMelee.MeleeAttack(this.GameObject, Tag.PLAYERMELEEATTACK, PlayerVelocity);
 
 		}
 		public void CallRangedAttack()
 		{
-			RangedAttack rangedAttack = (RangedAttack)GameObject.GetComponent(Tag.RANGEDATTACK);
 			if (Mana > 0 && canShoot == true)
 			{
-				rangedAttack.RangedAttackMethod(this.GameObject, Tag.PLAYERPROJECTILE, Velocity);
-				if (rangedAttack.HasShot == true)
+				RangedAttack.RangedAttackMethod(this.GameObject, Tag.PLAYERPROJECTILE, PlayerVelocity);
+				if (RangedAttack.HasShot == true)
 				{
 					Mana--;
 					CanRegenerateMana = false;
@@ -199,6 +206,7 @@ namespace ExamProjectFirstYear
 			//Players hit platforms when they collide with them.
 			if (gameEvent.Title == "Colliding" && component.GameObject.Tag == Tag.PLATFORM)
 			{
+				SpriteRenderer.SetSprite("OopPlayerSprite2");
 				Rectangle intersection = Rectangle.Intersect(((Collider)(component.GameObject.GetComponent(Tag.COLLIDER))).CollisionBox,
 										((Collider)(GameObject.GetComponent(Tag.COLLIDER))).CollisionBox);
 
@@ -242,11 +250,11 @@ namespace ExamProjectFirstYear
 			{
 				InventoryID = sQLiteHandler.SelectIntValuesWhere("InventoryID", "Journal",
 							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-				Health		= sQLiteHandler.SelectIntValuesWhere("Health", "Journal",
+				Health = sQLiteHandler.SelectIntValuesWhere("Health", "Journal",
 							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-				OpenDoor	= sQLiteHandler.SelectIntValuesWhere("OpenDoor", "Journal",
+				OpenDoor = sQLiteHandler.SelectIntValuesWhere("OpenDoor", "Journal",
 							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
-				Mana		= sQLiteHandler.SelectIntValuesWhere("Mana", "Journal",
+				Mana = sQLiteHandler.SelectIntValuesWhere("Mana", "Journal",
 							$"ID={journal.JournalID}", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
 
 				sQLiteHandler.ClearTable("StoredMaterial", new SQLiteConnection(sQLiteHandler.LoadSQLiteConnectionString()));
@@ -264,8 +272,6 @@ namespace ExamProjectFirstYear
 		/// </summary>
 		private void RegenerateMana()
 		{
-			//Console.WriteLine(manaRegenerateTimer);
-
 			// Once mana is lower than the full amount of mana, a timer starts and regeneration of mana can begin.
 			if (Mana < fullMana)
 			{
@@ -301,8 +307,7 @@ namespace ExamProjectFirstYear
 
 		private void ManagePlayerLight(float value)
 		{
-			LightSource lightSource = (LightSource)GameObject.GetComponent(Tag.LIGHTSOURCE);
-			lightSource.LightRadiusScale += value;
+			LightSource.LightRadiusScale += value;
 		}
 
 		#endregion

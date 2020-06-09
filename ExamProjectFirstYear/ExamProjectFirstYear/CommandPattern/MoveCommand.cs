@@ -43,29 +43,26 @@ namespace ExamProjectFirstYear.CommandPattern
 		/// <param name="player"></param>
 		public void Execute(Player player)
 		{
-			Movement playerMovement = (Movement)player.GameObject.GetComponent(Tag.MOVEMENT);
-			player.Velocity = velocity;
-			playerMovement.Move(velocity);
+			player.PlayerVelocity = velocity;
+			player.Movement.Move(velocity);
 
-			SpriteRenderer playerRenderer = (SpriteRenderer)player.GameObject.GetComponent(Tag.SPRITERENDERER);
-			playerRenderer.FlipSprite(velocity);
-			playerRenderer.AnimationOn = true;
+			player.SpriteRenderer.FlipSprite(velocity);
+			if (player.Movement.Grounded == true)
+			{
+				player.SpriteRenderer.AnimationOn = true;
+			}
+			if (velocity.X > 0)
+			{
+				player.AnimationHandler.MovingRight = true;
+			}
+			if (velocity.X < 0)
+			{
+				player.AnimationHandler.MovingLeft = true;
+			}
 
-			AnimationHandler playerAnimation = (AnimationHandler)player.GameObject.GetComponent(Tag.ANIMATIONHANDLER);
-			playerAnimation.MovingRight = true;
-			playerAnimation.MovingLeft = true;
-			//playerRenderer.SpriteEffect = SpriteEffects.FlipHorizontally;
-
-			//((SoundComponent)player.GameObject.GetComponent(Tag.SOUNDCOMPONENT)).ChangeRepeat("footstepsLouder", true);
+			//player.SoundComponent.ChangeRepeat("footstepsLouder", true);
 			//SoundEngine.Instance.AddSoundEffect(SoundEngine.Instance.Footsteps);
-
 		}
-
-		public CommandTag GetCommandTag()
-		{
-			return CommandTag.KEYDOWN;
-		}
-
 		#endregion
 	}
 }

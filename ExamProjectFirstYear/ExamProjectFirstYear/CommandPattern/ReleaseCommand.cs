@@ -42,8 +42,7 @@ namespace ExamProjectFirstYear.CommandPattern
 			// releaseNumber is used to make sure this method is only called, when a certain button is released.
 			if (releaseNumber == 1)
 			{
-				AttackMelee playerMelee = (AttackMelee)player.GameObject.GetComponent(Tag.ATTACKMELEE);
-				playerMelee.ReleaseMeleeMeleeAttack();
+				player.AttackMelee.ReleaseMeleeMeleeAttack();
 			}
 			else if (releaseNumber == 2)
 			{
@@ -51,18 +50,15 @@ namespace ExamProjectFirstYear.CommandPattern
 			}
 			else if (releaseNumber == 3)
 			{
-				Jump playerJump = (Jump)player.GameObject.GetComponent(Tag.JUMP);
-				playerJump.ReleaseJump();
+				player.Jump.ReleaseJump();
 			}
 			else if (releaseNumber == 4)
 			{
-				AnimationHandler playerAnimation = (AnimationHandler)player.GameObject.GetComponent(Tag.ANIMATIONHANDLER);
-				playerAnimation.MovingRight = false;
+				player.AnimationHandler.MovingRight = false;
 			}
 			else if (releaseNumber == 5)
 			{
-				AnimationHandler playerAnimation = (AnimationHandler)player.GameObject.GetComponent(Tag.ANIMATIONHANDLER);
-				playerAnimation.MovingLeft = false;
+				player.AnimationHandler.MovingLeft = false;
 			}
 			else if (releaseNumber == 6)
 			{
@@ -76,14 +72,7 @@ namespace ExamProjectFirstYear.CommandPattern
 			{
 				GameWorld.Instance.Inventory.CanOperateInventory = true;
 			}
-
 		}
-
-		public CommandTag GetCommandTag()
-		{
-			return CommandTag.KEYUP;
-		}
-
         #endregion
     }
 }

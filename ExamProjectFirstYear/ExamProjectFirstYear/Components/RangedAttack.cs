@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components.PlayerComponents
 {
-    class RangedAttack : Component
+    public class RangedAttack : Component
     {
         #region FIELDS
 

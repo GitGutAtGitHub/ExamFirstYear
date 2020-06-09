@@ -78,7 +78,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
-    <Compile Include="CommandPattern\CommandTag.cs" />
     <Compile Include="CommandPattern\InventoryCommand.cs" />
     <Compile Include="CommandPattern\MenuCommandPattern\IMenuCommand.cs" />
     <Compile Include="CommandPattern\JournalCommand.cs" />

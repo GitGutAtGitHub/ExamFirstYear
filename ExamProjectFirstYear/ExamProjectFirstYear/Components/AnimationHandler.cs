@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ExamProjectFirstYear.Components
 {
-	class AnimationHandler : Component
+	public class AnimationHandler : Component
 	{
 		private SpriteRenderer spriteRenderer;
 		private int currentIndex = 0;
